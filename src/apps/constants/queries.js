@@ -1,1 +1,3 @@
-export const QUERIES = {};
+export const QUERIES_KEYS = {
+    GET_PRODUCTS:"GET_PRODUCTS"
+};

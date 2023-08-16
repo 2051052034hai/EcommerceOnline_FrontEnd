@@ -11,8 +11,14 @@ import Header from "./apps/components/organisms/Header";
 // Modules
 import { Root } from "apps/modules";
 
-// Create a client
-const queryClient = new QueryClient();
+// Turn off fresh data onfocus
+const queryClient = new QueryClient({
+  defaultOptions:{
+    queries: {
+      refetchOnWindowFocus:false, 
+    }
+  }
+});
 
 function App() {
   return (
