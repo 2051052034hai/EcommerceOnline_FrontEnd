@@ -23,5 +23,17 @@ export const ROUTER = {
       path: "/notfoundpage",
       isPrivate: false,
     },
+    PRODUCTDETAIL: {
+      key: "productDetail",
+      name: "productDetail",
+      path: '/product/:id',
+      isPrivate: false,
+    },
+    CART: {
+      key: "cart",
+      name: "cart",
+      path: '/cart',
+      isPrivate: false,
+    },
   };
   

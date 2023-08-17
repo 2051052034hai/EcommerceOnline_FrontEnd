@@ -16,5 +16,7 @@ export const useGetDataProduct=()=>{
         staleTime: 5*1000,
     });
 
+   
     return {data:data, isLoading}
 }
+

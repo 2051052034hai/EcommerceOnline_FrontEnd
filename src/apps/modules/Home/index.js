@@ -1,4 +1,7 @@
+// Components
 import CardItem from "apps/components/molecules/CardItem";
+
+// Queries
 import { useGetDataProduct } from "apps/queries/product/useGetDataProduct";
 
 const Home =  () => {
@@ -14,8 +17,8 @@ const Home =  () => {
         <section className="mt-12 mx-auto px-4 max-w-screen-xl md:px-8 sm:px-4">
         <div className="mt-12 grid gap-2 sm:grid-cols-2 lg:grid-cols-4 md:grid-cols-3 ">
             {
-                data?.map((items, key) => (
-                    <CardItem items={items}/>
+                data?.map((items, index) => (
+                    <CardItem key = { index } items={items}/>
                 ))
             }
         </div>

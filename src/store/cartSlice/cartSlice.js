@@ -1,31 +1,46 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
+import Cart from "apps/modules/Cart";
 
 const initialState = {
-  value: 0,
-}
+  products: [],
+  count: 0,
+};
 
 export const cartSlice = createSlice({
-  name: 'cart',
-
+  name: "cart",
   initialState,
+
   reducers: {
-    increment: (state) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      state.value += 1
-    },
-    decrement: (state) => {
-      state.value -= 1
-    },
-    incrementByAmount: (state, action) => {
-      state.value += action.payload
+    add_cart: (state, action) => {
+     
+      const { product, quantity } = action.payload;
+
+      
+      const productsCopy = [...state.products]; // Create a new array
+      console.log("current-product:", state.products);
+
+      let existingId = product.id;
+      let existingItem = productsCopy.find((item) => item.id === existingId);
+
+      if (existingItem) {
+        let updatedItems = productsCopy.map((item) => {
+          return item.id === existingId
+            ? { ...item, quantity: item.quantity + quantity }
+            : item;
+        });
+        return { ...state, products: updatedItems };
+      } else {
+        const newItem = { ...product, quantity: quantity };
+
+        productsCopy.push(newItem); // Add the new item to the copy
+
+        state.products = productsCopy; // Update the state with the copy of the array
+      }
     },
   },
-})
+});
 
 // Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount } = cartSlice.actions
+export const { add_cart } = cartSlice.actions;
 
-export default cartSlice.reducer
+export default cartSlice.reducer;

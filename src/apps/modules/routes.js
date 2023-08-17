@@ -5,6 +5,8 @@ import { ROUTER } from "../constants/routes";
 import NotFoundPage from "./NotFoundPage";
 import Home from "./Home";
 import Login from "./Login";
+import ProductDetail from "./ProductDetail";
+import Cart from "./Cart";
 
 export const routes = [
   {
@@ -24,6 +26,18 @@ export const routes = [
     path: ROUTER.LOGIN.path,
     name: ROUTER.LOGIN.name,
     component: Login,
+  },
+  {
+    key: ROUTER.PRODUCTDETAIL.key,
+    path: ROUTER.PRODUCTDETAIL.path,
+    name: ROUTER.PRODUCTDETAIL.name,
+    component: ProductDetail,
+  },
+  {
+    key: ROUTER.CART.key,
+    path: ROUTER.CART.path,
+    name: ROUTER.CART.name,
+    component: Cart,
   },
 ];
 

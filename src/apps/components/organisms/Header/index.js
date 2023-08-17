@@ -159,7 +159,7 @@ export default function Header() {
 
         <div className=" lg:flex lg:flex-1 lg:justify-end">
           <Link
-            to={"/login"}
+            to={"/cart"}
             className="text-md font-semibold leading-6 mr-3 pl-2 pr-2 text-gray-900"
           >
             <FontAwesomeIcon icon={faCartShopping} bounce />
