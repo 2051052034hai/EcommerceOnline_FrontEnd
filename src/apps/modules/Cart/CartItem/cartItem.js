@@ -1,25 +1,36 @@
 import * as styles from "./styled";
-import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
+import {
+  decrease_cart,
+  increase_cart,
+  remove_product,
+} from "store/cartSlice/cartSlice";
 
-
-function CartItem() {
-
-  
-
+function CartItem(props) {
+  const { cart } = props;
+  const dispatch = useDispatch();
+  const handleOnClickDecrease = () => {
+    dispatch(decrease_cart({ id: cart.id }));
+  };
+  const handleOnClickIncrease = () => {
+    dispatch(increase_cart({ id: cart.id }));
+  };
+  const handleOnClickRemoveProduct = () => {
+    dispatch(remove_product({ id: cart.id }));
+  };
   return (
     <>
       <div>
-      <div className="mt-5 grid sm:grid-cols-2 lg:grid-cols-3 md:grid-cols-3">
-          <div className = ".p-0 md:grid-cols-2 lg:grid-cols-2">
+        <div className="mt-5 grid md:grid-cols-2 lg:grid-cols-12 ">
+          <div className=" lg:col-span-2 md:col-span-3 ">
             <styles.product__cart_left>
-              <img src="/logo512.png" alt="test" />
+              <img src={cart?.thumbnail} alt="test" />
             </styles.product__cart_left>
           </div>
 
-          <div className = ".p-0 md:grid-cols-8 lg:grid-cols-8">
+          <div className="lg:col-span-7 md:col-span-6 ">
             <styles.product__cart_between>
-              <styles.title>name</styles.title>
+              <styles.title>{cart.title}</styles.title>
               <styles.description>
                 <p>
                   Size: medium, Color: blue, Material: Plastic
@@ -29,7 +40,7 @@ function CartItem() {
               </styles.description>
               <styles.group__button>
                 <styles.group__button_remote>
-                  <button> Remove</button>
+                  <button onClick={handleOnClickRemoveProduct}>Remove</button>
                 </styles.group__button_remote>
                 <styles.group__button_save>
                   <button>Save for later</button>
@@ -38,26 +49,31 @@ function CartItem() {
             </styles.product__cart_between>
           </div>
 
-          <div className = ".p-0 md:grid-cols-2 lg:grid-cols-2">
-            <div style={{ textAlign: "right"}}>
+          <div className="lg:col-span-3 md:col-span-3">
+            <div style={{ textAlign: "right" }}>
               <styles.price>
-                <p>đ50.000 </p>
+                <p>{cart?.price} </p>
               </styles.price>
 
               <styles.quantity>
-                <button >-</button>
-                <input
-                  type="number"
-                  value= "1"
-                  readOnly
-                />
-                <button >+</button>
+                <button
+                  className="border border-blue-500 p-2"
+                  onClick={handleOnClickDecrease}
+                >
+                  -
+                </button>
+                <input type="number" value={cart?.quantity} readOnly />
+                <button
+                  className="border border-blue-500 p-2"
+                  onClick={handleOnClickIncrease}
+                >
+                  +
+                </button>
               </styles.quantity>
-
             </div>
           </div>
         </div>
-        <hr />
+        <hr className=" mt-2" />
       </div>
     </>
   );

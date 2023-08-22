@@ -1,8 +1,7 @@
-import axios from 'axios'
-
+import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "http://127.0.0.1:8000/",
+  baseURL: "https://dummyjson.com/",
   headers: {
     "Content-Type": "application/json",
   },
@@ -36,10 +35,4 @@ const updateMany = (url, data, config) => {
   return axiosInstance.patch(url, data, config);
 };
 
-export{
-  get,
-  create,
-  update,
-  remove,
-  updateMany,
-};
+export { get, create, update, remove, updateMany };

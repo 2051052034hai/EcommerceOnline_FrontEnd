@@ -2,9 +2,12 @@
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 export default function Header() {
+  const countCart = useSelector((state) => state.cart.count);
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const [isProductMenuOpen, setIsProductMenuOpen] = useState(false);
@@ -157,12 +160,15 @@ export default function Header() {
           </Link>
         </div>
 
-        <div className=" lg:flex lg:flex-1 lg:justify-end">
+        <div className=" lg:flex lg:flex-1  lg:justify-end">
           <Link
             to={"/cart"}
-            className="text-md font-semibold leading-6 mr-3 pl-2 pr-2 text-gray-900"
+            className="text-md relative font-semibold leading-6 mr-7 pl-2 text-gray-900"
           >
             <FontAwesomeIcon icon={faCartShopping} bounce />
+            <p className="absolute -top-3 left-7 text-xs border border-black rounded-full px-1">
+              {countCart}
+            </p>
           </Link>
 
           <Link
@@ -171,7 +177,6 @@ export default function Header() {
           >
             Log in <span aria-hidden="true">&rarr;</span>
           </Link>
-          
         </div>
       </nav>
       {/* <!-- Mobile menu, show/hide based on menu open state. --> */}

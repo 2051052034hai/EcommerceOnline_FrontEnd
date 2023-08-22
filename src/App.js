@@ -10,29 +10,50 @@ import Header from "./apps/components/organisms/Header";
 
 // Modules
 import { Root } from "apps/modules";
+import { ToastContainer } from "react-toastify";
+import { useEffect, useState } from "react";
+import LoadingPage from "apps/components/molecules/LoadingPage";
 
 // Turn off fresh data onfocus
 const queryClient = new QueryClient({
-  defaultOptions:{
+  defaultOptions: {
     queries: {
-      refetchOnWindowFocus:false, 
-    }
-  }
+      refetchOnWindowFocus: false,
+    },
+  },
 });
 
 function App() {
+  const [showApp, setShowApp] = useState(false);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setShowApp(true);
+    }, 2000);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, []);
+
   return (
     <>
-      <QueryClientProvider client={queryClient}>
-        <Router>
-          <Header />
-          <Main>
-            <Root />
-          </Main>
+      {showApp ? (
+        <QueryClientProvider client={queryClient}>
+          <Router>
+            <Header />
+            <Main>
+              <Root />
+              <ToastContainer autoClose={2000} />
+            </Main>
             <Footer />
-        </Router>
-        <ReactQueryDevtools />
-      </QueryClientProvider>
+          </Router>
+
+          <ReactQueryDevtools />
+        </QueryClientProvider>
+      ) : (
+        <LoadingPage />
+      )}
     </>
   );
 }

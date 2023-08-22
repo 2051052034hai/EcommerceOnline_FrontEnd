@@ -74,7 +74,13 @@ export const Comment = styled.div`
     padding-right: 10px;
   }
 `;
-
+export const IconRating = styled.div`
+  padding-right: 5px;
+`;
+export const TextIconRating = styled.div`
+  padding-right: 10px;
+  display: flex;
+`;
 export const Sold = styled.div`
   display: flex;
   align-items: center;
@@ -194,5 +200,14 @@ export const AddCart = styled.button`
   background-color: green;
   color: white;
   border-radius: 10px;
-  padding:10px;
+  padding: 10px;
+  &:disabled {
+    opacity: 0.5;
+  }
+`;
+
+export const RelatedProduct = styled.h4`
+  font-size: 18px;
+  font-weight: 500;
+  text-transform: uppercase;
 `;

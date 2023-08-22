@@ -3,10 +3,10 @@ import { ROUTER } from "../constants/routes";
 
 // Components
 import NotFoundPage from "./NotFoundPage";
-import Home from "./Home";
-import Login from "./Login";
-import ProductDetail from "./ProductDetail";
-import Cart from "./Cart";
+import Home from "./Dashboard/Home";
+import Login from "./Auth/Login";
+import ProductDetail from "./Dashboard/ProductDetail";
+import Cart from "apps/modules/Cart";
 
 export const routes = [
   {
@@ -40,4 +40,3 @@ export const routes = [
     component: Cart,
   },
 ];
-

@@ -1,11 +1,31 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
 export const CartImageStyle = styled.img`
-    height: 300px;
-    
+  width: 100%;
+  object-fit: contain;
+  &:hover {
+    transform: scale(1.1);
+    transition: 0.5s linear;
+  }
 `;
 
-export const ButtonStyle = styled.button`
-    border-radius : 5px;
-    color:white;
-`
+export const ProductItemStyle = styled.div`
+  height: 400px;
+  padding: 5px;
+`;
+
+export const ProductPriceDiscount = styled.span`
+  font-size: 14px;
+  padding-right: 10px;
+  text-decoration: line-through;
+`;
+export const ProductPercenDiscount = styled.span`
+  color: #ef4444;
+`;
+
+export const ProductPrice = styled.p`
+  margin-top: 10px;
+  color: #ef4444;
+  font-size: 17px;
+  font-weight: 500;
+`;
