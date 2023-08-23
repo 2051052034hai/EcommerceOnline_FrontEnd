@@ -29,7 +29,7 @@ function App() {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setShowApp(true);
-    }, 2000);
+    }, 1000);
 
     return () => {
       clearTimeout(timeout);

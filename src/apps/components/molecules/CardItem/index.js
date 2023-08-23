@@ -9,6 +9,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import Rating from "react-rating";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import { Skeleton } from "antd";
 
 const CardItem = (props) => {
   const { product } = props;
@@ -17,14 +19,15 @@ const CardItem = (props) => {
     //className="mt-12 grid gap-2 sm:grid-cols-2 lg:grid-cols-3"
     <Link to={`/product/${product?.id}`}>
       <ProductItemStyle className=" mx-auto mt-4 shadow-lg border rounded-md  duration-300 hover:shadow-sm">
-        <div style={{ overflow: "hidden" }}>
+        <div>
           <div className="relative">
-            <CartImageStyle
-              src={product.thumbnail}
-              loading="lazy"
+            <LazyLoadImage
               alt={product?.title}
-              className="w-full rounded-t-md h-56"
+              src={product?.thumbnail}
+              effect="black-and-white"
+              className="w-full rounded-t-md xl:h-56 md:h-48 sm:h-40"
             />
+
             {product.stock === 0 && (
               <span className=" absolute top-1/4">
                 <img

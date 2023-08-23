@@ -33,7 +33,10 @@ const Slider = () => {
         height: "400",
       },
       1024: {
-        height: "500",
+        height: "600",
+      },
+      1100: {
+        height: "600",
       },
 
       // Thêm các breakpoint khác nếu cần thiết
@@ -52,10 +55,7 @@ const Slider = () => {
       >
         {images.map((image, index) => (
           <SwiperSlide key={index}>
-            <img
-              src={image.path}
-              style={{ width: "100%", borderRadius: "10px" }}
-            />
+            <img src={image.path} />
           </SwiperSlide>
         ))}
       </Swiper>

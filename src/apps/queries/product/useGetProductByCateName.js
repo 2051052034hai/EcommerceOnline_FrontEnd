@@ -16,5 +16,9 @@ export const useGetDataProductByName = (name) => {
       staleTime: 5 * 1000,
     }
   );
-  return { productsCate: data?.products, isLoading, error };
+  return {
+    productsCate: data?.products,
+    isLoadingProductByName: isLoading,
+    error,
+  };
 };
