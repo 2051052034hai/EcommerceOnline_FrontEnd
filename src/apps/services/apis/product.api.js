@@ -1,17 +1,15 @@
 import { create, update, remove, get } from "./https";
 
-const pathUrl = "/products/";
+const pathUrl = "/product/";
 
-export const getProducts = async () => {
-  const result = await get(pathUrl);
-  //   console.log(result.data.products);
-  return result.data.products;
+export const getProductsPage = async (page) => {
+  const result = await get(`${pathUrl}?page=${page}&limit=5`);
+  return result.data;
 };
 
 export const getProductsById = async (id) => {
-  const result = await get(`/products/${id}`);
-  //   console.log(result);
-  return result.data;
+  const result = await get(`${pathUrl}${id}`);
+  return result.data.data;
 };
 
 export const getProductsByCateName = async (name) => {

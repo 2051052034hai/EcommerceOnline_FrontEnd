@@ -1,16 +1,22 @@
 // Libraries
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { Menu } from "antd";
+import { useGetDataCategory } from "apps/queries/category";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 export default function Header() {
+  const { data, isLoading } = useGetDataCategory();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isProductMenuOpen, setIsProductMenuOpen] = useState(false);
+  const [menuData, setMenuData] = useState([]);
   const countCart = useSelector((state) => state.cart.count);
 
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const [isProductMenuOpen, setIsProductMenuOpen] = useState(false);
+  useEffect(() => {
+    setMenuData(data);
+  }, [isLoading]);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -20,10 +26,30 @@ export default function Header() {
     setIsProductMenuOpen(!isProductMenuOpen);
   };
 
+  const [current, setCurrent] = useState([]);
+
+  const onClick = (e) => {
+    console.log("click ", e);
+    setCurrent(e.key);
+  };
+
+  const transformedData = data?.map((category) => {
+    const subcategories = category.subcategories.map((subcategory) => ({
+      label: subcategory.name,
+      key: subcategory._id,
+    }));
+
+    return {
+      label: category.name,
+      key: category._id,
+      children: subcategories,
+    };
+  });
+
   return (
     <header className="border-b border-slate-400">
       <nav
-        className="mx-auto flex max-w-7xl items-center justify-between p-6 	 lg:px-8"
+        className="mx-auto flex w-full items-center justify-between p-4 	lg:px-8"
         aria-label="Global"
       >
         <div className="flex lg:hidden md:hidden">
@@ -49,7 +75,7 @@ export default function Header() {
             </svg>
           </button>
         </div>
-        <div className="flex lg:flex-1">
+        <div className="flex ">
           <Link to={"/"} className="-m-1.5 p-1.5">
             <img
               className="h-8 w-auto"
@@ -58,109 +84,16 @@ export default function Header() {
             />
           </Link>
         </div>
-
-        <div className="hidden lg:flex md:flex lg:gap-x-12 md: gap-x-6">
-          <div className="relative">
-            <button
-              type="button"
-              className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900"
-              aria-expanded="false"
-              onClick={toggleProductMenu}
-            >
-              Product
-              <svg
-                className="h-5 w-5 flex-none text-gray-400"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </button>
-            {isProductMenuOpen && (
-              <div className="absolute -left-0 top-full z-10 mt-3 w-screen max-w-xs overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-gray-900/5">
-                <div className="p-2">
-                  <div className="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 hover:bg-gray-50">
-                    <div className="flex-auto">
-                      <Link
-                        to={"/"}
-                        className="block font-semibold text-gray-900"
-                      >
-                        Analytics
-                      </Link>
-                    </div>
-                  </div>
-                  <div className="group relative flex items-center  rounded-lg p-2 text-sm leading-6 hover:bg-gray-50">
-                    <div className="flex-auto">
-                      <Link
-                        to={"/"}
-                        className="block font-semibold text-gray-900"
-                      >
-                        Engagement
-                        <span className="absolute inset-0"></span>
-                      </Link>
-                    </div>
-                  </div>
-                  <div className="group relative flex items-center rounded-lg p-2 text-sm leading-6 hover:bg-gray-50">
-                    <div className="flex-auto">
-                      <Link
-                        to={"/"}
-                        className="block font-semibold text-gray-900"
-                      >
-                        Security
-                      </Link>
-                    </div>
-                  </div>
-                  <div className="group relative flex items-center rounded-lg p-2 text-sm leading-6 hover:bg-gray-50">
-                    <div className="flex-auto">
-                      <Link
-                        to={"/"}
-                        className="block font-semibold text-gray-900"
-                      >
-                        Integrations
-                      </Link>
-                    </div>
-                  </div>
-                  <div className="group relative flex items-center rounded-lg p-2 text-sm leading-6 hover:bg-gray-50">
-                    <div className="flex-auto">
-                      <Link
-                        to={"/"}
-                        className="block font-semibold text-gray-900"
-                      >
-                        Automations
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          <Link
-            to={"/"}
-            className="text-sm font-semibold leading-6 text-gray-900"
-          >
-            Features
-          </Link>
-          <Link
-            to={"/"}
-            className="text-sm font-semibold leading-6 text-gray-900"
-          >
-            Marketplace
-          </Link>
-          <Link
-            to={"/"}
-            className="text-sm font-semibold leading-6 text-gray-900"
-          >
-            Company
-          </Link>
+        <div className="hidden md:flex lg:flex">
+          <Menu
+            onClick={onClick}
+            selectedKeys={[current]}
+            mode="horizontal"
+            items={transformedData}
+            style={{ minWidth: "580px" }}
+          />
         </div>
-
-        <div className=" lg:flex lg:flex-1  lg:justify-end">
+        <div className=" lg:flex   lg:justify-end">
           <Link
             to={"/cart"}
             className="text-md relative font-semibold leading-6 mr-7 pl-2 text-gray-900"

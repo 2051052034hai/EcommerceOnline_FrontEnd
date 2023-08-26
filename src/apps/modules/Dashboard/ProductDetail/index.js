@@ -77,7 +77,6 @@ const ProductDetail = () => {
   useEffect(() => {
     setRelatedProduct(productsCate);
   }, [relatedProduct]);
-  console.log("isLoadingProductByName", isLoadingProductByName);
 
   return (
     <>

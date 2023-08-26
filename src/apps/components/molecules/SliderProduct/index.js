@@ -21,9 +21,18 @@ function SlideProduct(props) {
       },
       600: {
         spaceBetween: 10,
-        slidesPerView: 4,
+        slidesPerView: 3,
       },
       768: {
+        slidesPerView: 3,
+        spaceBetween: 10,
+      },
+      840: {
+        slidesPerView: 4,
+        spaceBetween: 10,
+      },
+
+      1024: {
         slidesPerView: 5,
         spaceBetween: 10,
       },
