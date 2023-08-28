@@ -6,6 +6,7 @@ import { useGetDataCategory } from "apps/queries/category";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+
 import cookie from "react-cookies";
 //UserSlice
 import { log_out } from "store/userSlice/userSlice";
@@ -13,6 +14,9 @@ import { log_out } from "store/userSlice/userSlice";
 //Antd
 import { DownOutlined } from "@ant-design/icons";
 import { Dropdown, Space } from "antd";
+
+const { SubMenu } = Menu;
+
 
 export default function Header() {
   const { data, isLoading } = useGetDataCategory();
@@ -48,6 +52,7 @@ export default function Header() {
     const subcategories = category.subcategories.map((subcategory) => ({
       label: subcategory.name,
       key: subcategory._id,
+      link: subcategory._id,
     }));
 
     return {
@@ -115,11 +120,7 @@ export default function Header() {
         </div>
         <div className="flex ">
           <Link to={"/"} className="-m-1.5 p-1.5">
-            <img
-              className="h-8 w-auto"
-              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-              alt=""
-            />
+            <img className="h-12 w-auto" src="/assets/image/logo.png" alt="" />
           </Link>
         </div>
         <div className="hidden md:flex lg:flex">
@@ -127,9 +128,21 @@ export default function Header() {
             onClick={onClick}
             selectedKeys={[current]}
             mode="horizontal"
-            items={transformedData}
             style={{ minWidth: "580px" }}
-          />
+          >
+            {transformedData?.map((menu) => {
+              console.log("menu", menu);
+              return (
+                <SubMenu key={menu.key} title={menu?.label}>
+                  {menu?.children?.map((submenu) => (
+                    <Menu.Item key={submenu.key}>
+                      <Link to={submenu?.link}>{submenu?.label}</Link>
+                    </Menu.Item>
+                  ))}
+                </SubMenu>
+              );
+            })}
+          </Menu>
         </div>
         <div className=" lg:flex   lg:justify-end">
           <Link

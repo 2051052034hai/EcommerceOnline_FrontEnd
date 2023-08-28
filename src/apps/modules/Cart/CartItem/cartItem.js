@@ -10,15 +10,17 @@ function CartItem(props) {
   const { cart } = props;
   const dispatch = useDispatch();
   const handleOnClickDecrease = () => {
-    dispatch(decrease_cart({ id: cart.id }));
+    dispatch(decrease_cart({ _id: cart._id }));
   };
   const handleOnClickIncrease = () => {
-    dispatch(increase_cart({ id: cart.id }));
+    dispatch(increase_cart({ _id: cart._id }));
   };
   const handleOnClickRemoveProduct = () => {
-    console.log(cart.id)
-    dispatch(remove_product({ id: cart.id }));
+
+    dispatch(remove_product({ _id: cart._id }));
+
   };
+
   return (
     <>
       <div>

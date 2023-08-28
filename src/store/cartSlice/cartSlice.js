@@ -12,13 +12,15 @@ export const cartSlice = createSlice({
 
   reducers: {
     add_cart: (state, action) => {
-      const { id, quantity, price } = action.payload;
+      const { _id, quantity, price } = action.payload;
 
       // Tạo một bản sao của mảng products
       const productsCopy = [...state.products];
 
       // Tìm sản phẩm đã tồn tại trong mảng
-      const existingProduct = productsCopy.find((product) => product.id === id);
+      const existingProduct = productsCopy.find(
+        (product) => product._id === _id
+      );
 
       if (existingProduct) {
         // Cập nhật số lượng nếu sản phẩm đã tồn tại
@@ -34,10 +36,10 @@ export const cartSlice = createSlice({
       state.total += price * quantity; // Cập nhật tổng tiền
     },
     decrease_cart: (state, action) => {
-      const { id } = action.payload;
+      const { _id } = action.payload;
 
       const existingProduct = state.products.find(
-        (product) => product.id === id
+        (product) => product._id === _id
       );
 
       if (existingProduct) {
@@ -47,7 +49,7 @@ export const cartSlice = createSlice({
         } else {
           // Xoá sản phẩm khỏi giỏ hàng nếu số lượng là 1
           state.products = state.products.filter(
-            (product) => product.id !== id
+            (product) => product._id !== _id
           );
           state.count -= 1;
           state.total -= existingProduct.price; // Giảm tổng tiền
@@ -55,10 +57,10 @@ export const cartSlice = createSlice({
       }
     },
     increase_cart: (state, action) => {
-      const { id } = action.payload;
+      const { _id } = action.payload;
 
       const existingProduct = state.products.find(
-        (product) => product.id === id
+        (product) => product._id === _id
       );
 
       if (existingProduct) {
@@ -67,13 +69,15 @@ export const cartSlice = createSlice({
       }
     },
     remove_product: (state, action) => {
-      const { id } = action.payload;
+      const { _id } = action.payload;
       const removedProduct = state.products.find(
-        (product) => product.id === id
+        (product) => product._id === _id
       );
 
-      if (id) {
-        state.products = state.products.filter((product) => product.id !== id);
+      if (_id) {
+        state.products = state.products.filter(
+          (product) => product._id !== _id
+        );
         state.count -= 1;
         state.total -= removedProduct.price * removedProduct.quantity;
       }
