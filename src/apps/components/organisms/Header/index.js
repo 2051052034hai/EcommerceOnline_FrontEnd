@@ -4,16 +4,30 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Menu } from "antd";
 import { useGetDataCategory } from "apps/queries/category";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+
+import cookie from "react-cookies";
+//UserSlice
+import { log_out } from "store/userSlice/userSlice";
+
+//Antd
+import { DownOutlined } from "@ant-design/icons";
+import { Dropdown, Space } from "antd";
+
 const { SubMenu } = Menu;
+
 
 export default function Header() {
   const { data, isLoading } = useGetDataCategory();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProductMenuOpen, setIsProductMenuOpen] = useState(false);
   const [menuData, setMenuData] = useState([]);
+
+  //Redux
+  const dispatch = useDispatch();
   const countCart = useSelector((state) => state.cart.count);
+  const currentUser = useSelector((state) => state.user.currentUser);
 
   useEffect(() => {
     setMenuData(data);
@@ -47,6 +61,33 @@ export default function Header() {
       children: subcategories,
     };
   });
+
+  //Log out
+  const handleLogOut = () => {
+    cookie.remove("access-token")
+    cookie.remove("refresh_token")
+    dispatch(log_out());
+    
+  };
+
+  // Item current user
+  const items = [
+    {
+      label: <Link to="/">Thông tin cá nhân</Link>,
+      key: "0",
+    },
+    {
+      label: <Link to="/">Quản lí đơn hàng</Link>,
+      key: "1",
+    },
+    {
+      type: "divider",
+    },
+    {
+      label: <Link onClick={handleLogOut}>Đăng xuất</Link>,
+      key: "3",
+    },
+  ];
 
   return (
     <header className="border-b border-slate-400">
@@ -114,12 +155,34 @@ export default function Header() {
             </p>
           </Link>
 
-          <Link
-            to={"/login"}
-            className="text-sm font-semibold leading-6 text-gray-900"
-          >
-            Log in <span aria-hidden="true">&rarr;</span>
-          </Link>
+          {currentUser ? (
+            <>
+              <Dropdown menu={{ items }} trigger={["click"]}>
+                <Link onClick={(e) => e.preventDefault()}>
+                  <Space>
+                    <div className="lg:w-7 md:w-6 sm:w-5 w-5">
+                      <img 
+                        className="rounded-full"
+                        src="/assets/image/avatar.jpg"
+                        alt="ảnh không tồn tại"
+                      ></img>
+                    </div>
+                    <div>{currentUser.username}!</div>
+                    <DownOutlined />
+                  </Space>
+                </Link>
+              </Dropdown>
+            </>
+          ) : (
+            <>
+              <Link
+                to={"/login"}
+                className="text-sm font-semibold leading-6 text-gray-900"
+              >
+                Log in <span aria-hidden="true">&rarr;</span>
+              </Link>
+            </>
+          )}
         </div>
       </nav>
       {/* <!-- Mobile menu, show/hide based on menu open state. --> */}

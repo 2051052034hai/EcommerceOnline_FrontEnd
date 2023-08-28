@@ -16,7 +16,9 @@ function CartItem(props) {
     dispatch(increase_cart({ _id: cart._id }));
   };
   const handleOnClickRemoveProduct = () => {
+
     dispatch(remove_product({ _id: cart._id }));
+
   };
 
   return (
