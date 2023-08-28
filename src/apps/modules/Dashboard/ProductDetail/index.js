@@ -36,7 +36,6 @@ import {
   RelatedProduct,
   SaveLater,
   Sold,
-  Supplier,
   SupplierButton,
   SupplierButtonProfile,
   SupplierInfoItem,
@@ -66,8 +65,10 @@ const ProductDetail = () => {
   );
 
   const handleAddToCart = () => {
+    console.log({ ...product, quantity: 1 });
+
     dispatch(add_cart({ ...product, quantity: 1 }));
-    toast.success("Bạn đã thêm thành công vào giỏ hàng");
+    // toast.success("Bạn đã thêm thành công vào giỏ hàng");
   };
 
   useEffect(() => {

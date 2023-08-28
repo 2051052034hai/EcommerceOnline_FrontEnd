@@ -10,7 +10,6 @@ export const CartImageStyle = styled.img`
 `;
 
 export const ProductItemStyle = styled.div`
-  height: 400px;
   padding: 5px;
 `;
 

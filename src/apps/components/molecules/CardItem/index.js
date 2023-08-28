@@ -18,14 +18,14 @@ const CardItem = (props) => {
   return (
     //className="mt-12 grid gap-2 sm:grid-cols-2 lg:grid-cols-3"
     <Link to={`/product/${product?._id}`}>
-      <ProductItemStyle className=" mx-auto h-96 mt-4 shadow-lg border rounded-md  duration-300 hover:shadow-sm">
+      <ProductItemStyle className=" mx-auto lg:h-96 md:h-80 mt-4 shadow-lg border rounded-md  duration-300 hover:shadow-sm">
         <div>
           <div className="relative ">
             <LazyLoadImage
               alt={product?.title}
               src={product?.thumbnail}
               effect="black-and-white"
-              className="w-full rounded-t-md  h-44 "
+              className="w-full rounded-t-md  lg:h-52 md:h-48 "
             />
 
             {product.stock === 0 && (
