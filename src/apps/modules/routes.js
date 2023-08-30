@@ -7,6 +7,8 @@ import Home from "./Dashboard/Home";
 import Login from "./Auth/Login";
 import ProductDetail from "./Dashboard/ProductDetail";
 import Cart from "apps/modules/Cart";
+import ProductCategory from "./Dashboard/ProductCategory";
+
 
 export const routes = [
   {
@@ -38,5 +40,11 @@ export const routes = [
     path: ROUTER.CART.path,
     name: ROUTER.CART.name,
     component: Cart,
+  },
+  {
+    key: ROUTER.PRODUCTBYSUB.key,
+    path: ROUTER.PRODUCTBYSUB.path,
+    name: ROUTER.PRODUCTBYSUB.name,
+    component: ProductCategory,
   },
 ];

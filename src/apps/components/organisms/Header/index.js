@@ -17,7 +17,6 @@ import { Dropdown, Space } from "antd";
 
 const { SubMenu } = Menu;
 
-
 export default function Header() {
   const { data, isLoading } = useGetDataCategory();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -44,7 +43,6 @@ export default function Header() {
   const [current, setCurrent] = useState([]);
 
   const onClick = (e) => {
-    console.log("click ", e);
     setCurrent(e.key);
   };
 
@@ -64,10 +62,9 @@ export default function Header() {
 
   //Log out
   const handleLogOut = () => {
-    cookie.remove("access-token")
-    cookie.remove("refresh_token")
+    cookie.remove("access-token");
+    cookie.remove("refresh_token");
     dispatch(log_out());
-    
   };
 
   // Item current user
@@ -92,7 +89,7 @@ export default function Header() {
   return (
     <header className="border-b border-slate-400">
       <nav
-        className="mx-auto flex w-full items-center justify-between p-4 	lg:px-8"
+        className="mx-auto flex w-full items-center justify-between p-4 lg:px-8"
         aria-label="Global"
       >
         <div className="flex lg:hidden md:hidden">
@@ -131,15 +128,16 @@ export default function Header() {
             style={{ minWidth: "580px" }}
           >
             {transformedData?.map((menu) => {
-              console.log("menu", menu);
               return (
-                <SubMenu key={menu.key} title={menu?.label}>
+                <Menu.SubMenu key={menu.key} title={menu?.label}>
                   {menu?.children?.map((submenu) => (
                     <Menu.Item key={submenu.key}>
-                      <Link to={submenu?.link}>{submenu?.label}</Link>
+                      <Link to={`/productsub/${submenu?.link}`}>
+                        {submenu?.label}
+                      </Link>
                     </Menu.Item>
                   ))}
-                </SubMenu>
+                </Menu.SubMenu>
               );
             })}
           </Menu>
@@ -161,7 +159,7 @@ export default function Header() {
                 <Link onClick={(e) => e.preventDefault()}>
                   <Space>
                     <div className="lg:w-7 md:w-6 sm:w-5 w-5">
-                      <img 
+                      <img
                         className="rounded-full"
                         src="/assets/image/avatar.jpg"
                         alt="ảnh không tồn tại"

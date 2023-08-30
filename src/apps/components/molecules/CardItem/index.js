@@ -18,7 +18,7 @@ const CardItem = (props) => {
   return (
     //className="mt-12 grid gap-2 sm:grid-cols-2 lg:grid-cols-3"
     <Link to={`/product/${product?._id}`}>
-      <ProductItemStyle className=" mx-auto lg:h-96 md:h-80 mt-4 shadow-lg border rounded-md  duration-300 hover:shadow-sm">
+      <ProductItemStyle className=" mx-auto lg:h-96 md:h-80 mt-4 shadow-lg border rounded-md  duration-300 hover:shadow-sm bg-white">
         <div>
           <div className="relative ">
             <LazyLoadImage
