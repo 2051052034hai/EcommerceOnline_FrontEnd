@@ -10,7 +10,7 @@ import { getProductsById } from "apps/services/apis/product.api";
 export const useGetDataProductById = (id) => {
   const { data, isLoading, error } = useQuery(
     [QUERIES_KEYS.GET_PRODUCTS, id],
-    () => getProductsById(id), // Truyền hàm chứa lời gọi getProductsById
+    () => getProductsById(id),
     {
       keepPreviousData: true,
       staleTime: 5 * 1000,

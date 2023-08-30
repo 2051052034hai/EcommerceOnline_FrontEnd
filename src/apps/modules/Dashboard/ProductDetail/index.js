@@ -1,7 +1,6 @@
 // Libraries
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
 import { faCheck, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -45,24 +44,33 @@ import {
 } from "./styled";
 import Rating from "react-rating";
 import { toast } from "react-toastify";
-import { useGetDataProductByName } from "apps/queries/product/useGetProductByCateName";
 import SlideProduct from "apps/components/molecules/SliderProduct";
 import ProductSkeleton from "apps/components/molecules/ProductSkeleton";
-import { Skeleton } from "antd";
+import { Col, Skeleton } from "antd";
+import { useGetProductBySubId } from "apps/queries/subcategory";
 
 const ProductDetail = () => {
   const { id } = useParams();
   const imgRef = useRef(null);
   const dispatch = useDispatch();
-
   const [product, setProduct] = useState({});
-  const [relatedProduct, setRelatedProduct] = useState([]);
 
+  const [relatedProducts, setRelatedProducts] = useState([]);
   const { data, isLoading } = useGetDataProductById(id);
 
-  const { productsCate, isLoadingProductByName } = useGetDataProductByName(
-    product?.category
-  );
+  useEffect(() => {
+    setProduct(data);
+  }, [data]);
+
+  const subcateId = product?.subcategory;
+
+  const { data: relatedProductsData } = useGetProductBySubId(subcateId);
+
+  useEffect(() => {
+    if (Array.isArray(relatedProductsData)) {
+      setRelatedProducts(relatedProductsData);
+    }
+  }, [relatedProductsData]);
 
   const handleAddToCart = () => {
     console.log({ ...product, quantity: 1 });
@@ -70,14 +78,6 @@ const ProductDetail = () => {
     dispatch(add_cart({ ...product, quantity: 1 }));
     // toast.success("Bạn đã thêm thành công vào giỏ hàng");
   };
-
-  useEffect(() => {
-    setProduct(data);
-  }, [data]);
-
-  useEffect(() => {
-    setRelatedProduct(productsCate);
-  }, [relatedProduct]);
 
   return (
     <>
@@ -93,29 +93,41 @@ const ProductDetail = () => {
               />
             ) : (
               <>
-                <div className="lg:flex-1 xs:flex-auto p-1">
-                  <ProductImage>
-                    <img
-                      src={product?.thumbnail}
-                      ref={imgRef}
-                      alt="ảnh không tồn tại"
-                    />
-                    <ProductImageThumb>
-                      {product?.images?.map((image, key) => (
-                        <div key={key}>
-                          <img
-                            src={image}
-                            onClick={() => {
-                              imgRef.current.src = image;
-                            }}
-                            alt="2"
-                          />
-                        </div>
-                      ))}
-                    </ProductImageThumb>
-                  </ProductImage>
-                </div>
-                <div className="lg:flex-2">
+                <Col
+                  lg={{ span: 6, order: 1 }}
+                  md={{ span: 11, order: 1 }}
+                  sm={{ span: 24 }}
+                  xs={{ span: 24 }}
+                >
+                  <div className="flex items-center justify-center">
+                    <ProductImage>
+                      <img
+                        src={product?.thumbnail}
+                        ref={imgRef}
+                        alt="ảnh không tồn tại"
+                      />
+                      <ProductImageThumb>
+                        {product?.images?.map((image, key) => (
+                          <div key={key}>
+                            <img
+                              src={image}
+                              onClick={() => {
+                                imgRef.current.src = image;
+                              }}
+                              alt="2"
+                            />
+                          </div>
+                        ))}
+                      </ProductImageThumb>
+                    </ProductImage>
+                  </div>
+                </Col>
+                <Col
+                  lg={{ span: 12, order: 2 }}
+                  md={{ span: 24, order: 3 }}
+                  sm={{ span: 24 }}
+                  xs={{ span: 24 }}
+                >
                   <ProductContent>
                     {product?.stock !== 0 ? (
                       <InStock>
@@ -200,8 +212,13 @@ const ProductDetail = () => {
                       </Items>
                     </ProductContentDetail>
                   </ProductContent>
-                </div>
-                <div className="lg:flex-1 md:flex-1 md:p-5 md:w-25 sm:p-1 ">
+                </Col>
+                <Col
+                  lg={{ span: 6, order: 3 }}
+                  md={{ span: 11, order: 2 }}
+                  sm={{ span: 24 }}
+                  xs={{ span: 24 }}
+                >
                   <div className="border border-gray-500 rounded-md p-3 ">
                     <SupplierTitle>
                       <img src={product?.thumbnail} alt={product?.title} />
@@ -248,7 +265,7 @@ const ProductDetail = () => {
                       </button>
                     </SaveLater>
                   </div>
-                </div>
+                </Col>
               </>
             )}
           </div>
@@ -257,14 +274,14 @@ const ProductDetail = () => {
 
       <section className="mt-10 mx-auto px-3 max-w-screen-xl md:px-0  ">
         <RelatedProduct>Sản phẩm liên quan</RelatedProduct>
-        {isLoading ? (
+        {relatedProducts.length === 0 ? (
           <div className="grid gap-5 py-4 px-2 md:px-1 grid-cols-2 md:grid-cols-4 lg:grid-cols-5">
             {Array.from(Array(5), (_, index) => (
               <ProductSkeleton />
             ))}
           </div>
         ) : (
-          <SlideProduct products={productsCate} />
+          <SlideProduct products={relatedProductsData} />
         )}
       </section>
     </>

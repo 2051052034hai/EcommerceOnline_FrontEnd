@@ -3,21 +3,13 @@ import { Col, Divider, Row } from "antd";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { AppstoreOutlined } from "@ant-design/icons";
-import { Menu, Dropdown } from "antd";
+import { Menu, Dropdown, Drawer } from "antd";
+import { faFilter, faSortDown } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 //Compoments
 import { useGetProductBySubId } from "apps/queries/subcategory";
 import CardItem from "apps/components/molecules/CardItem";
-
-//Fortawesome
-import { faFilter, faSortDown } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-//Drawer
-import { Drawer } from "antd";
-
-//CSS from productCategory.css
-import "./productCategory.css";
 
 //CSS from styled.js
 import { customItems, customStyle } from "./styled";
@@ -116,7 +108,7 @@ const ProductCategory = () => {
 
   // Sử dụng hàm để lấy danh sách các item con từ sub "sub1"
   const sub1Items = getSubItemsBySubKey(menuLeftSlice, "sub1");
-  
+
   // Sử dụng hàm để lấy danh sách các item con từ sub "sub2"
   const sub2Items = getSubItemsBySubKey(menuLeftSlice, "sub2");
 
@@ -168,7 +160,6 @@ const ProductCategory = () => {
   return (
     <>
       <div className="bg-slate-100">
-        {/* Thanh trượt top */}
         <Row className="lg:hidden lg:bg-black">
           <Drawer
             placement="top"
@@ -182,7 +173,6 @@ const ProductCategory = () => {
               <Divider style={{ fontSize: "20px" }} orientation="left">
                 Theo giá
               </Divider>
-
               <Row gutter={[16, 16]}>
                 {sub1Items?.map((item, index) => {
                   return (
@@ -195,11 +185,9 @@ const ProductCategory = () => {
                     </Col>
                   );
                 })}
-
                 <Divider style={{ fontSize: "20px" }} orientation="left">
                   Thương hiệu
                 </Divider>
-
                 <Row gutter={[4, 32]}>
                   {sub2Items?.map((item, index) => {
                     return (
