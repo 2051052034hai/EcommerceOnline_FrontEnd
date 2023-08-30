@@ -15,6 +15,36 @@ code {
   display: block !important;
 }
 
+
+
+@media (min-width: 992px) {
+  .ant-drawer-mask {
+      background: transparent !important;
+     
+  }
+  .ant-drawer-content-wrapper {
+      height:0px !important;
+      transition: 0s !important;
+  }
+  body {
+      overflow: auto !important;
+    }
+    .ant-dropdown-placement-bottomRight{
+      display: none !important;
+    }
+}
+
+.ant-drawer-content-wrapper{
+  height: 100% !important;
+}
+.ant-dropdown-placement-bottomRight {
+  top: 19% !important;
+  z-index: 99 !important;
+}
+.ant-dropdown-menu {
+  border-radius: 0px !important;
+  box-shadow: none !important;
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

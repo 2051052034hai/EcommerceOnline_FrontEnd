@@ -1,10 +1,9 @@
 export const customStyle = {
-    color: 'black',
-    fontWeight: 'bold',
-    backgroundColor:"white",
-  }
+  color: "black",
+  fontWeight: "bold",
+  backgroundColor: "white",
+};
 
-  export const customItems = {
-    fontWeight: "500",
-  }
- 
+export const customItems = {
+  fontWeight: "500",
+};

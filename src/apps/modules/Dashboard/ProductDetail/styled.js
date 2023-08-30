@@ -3,7 +3,6 @@ import styled from "styled-components";
 export const ProductImage = styled.div`
   padding: 0px 10px;
   background-color: #fff;
-  margin-top: 20px;
 
   img {
     height: 345px;
@@ -17,7 +16,6 @@ export const ProductImage = styled.div`
 export const ProductImageThumb = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
 
   img {
     height: 48px;
@@ -37,7 +35,7 @@ export const ProductImageThumb = styled.div`
 `;
 
 export const ProductContent = styled.div`
-  padding: 20px 10px 20px 10px;
+  padding: 0px 10px 20px 10px;
 
   p {
     margin-bottom: 0;
