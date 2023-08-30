@@ -1,7 +1,7 @@
 //Libralies
 import { Col, Divider, Row } from "antd";
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AppstoreOutlined } from "@ant-design/icons";
 import { Menu, Dropdown, Drawer } from "antd";
 import { faFilter, faSortDown } from "@fortawesome/free-solid-svg-icons";
@@ -13,43 +13,58 @@ import CardItem from "apps/components/molecules/CardItem";
 
 //CSS from styled.js
 import { customItems, customStyle } from "./styled";
+import {
+  filterSelectAll,
+  sortByPrice,
+} from "apps/services/utils/filterProductsSub";
 
 const ProductCategory = () => {
-  //Slice Top
   const [open, setOpen] = useState(false);
-
-  //Set Id cho TitleItems
   const [selectedTitleId, setSelectedTitleId] = useState("0");
+  const [productsSub, setProductsSub] = useState([]);
+  const [defaultProducts, setDefaultProducts] = useState([]);
 
-  //Get id tu param
   const { id } = useParams();
-
-  //Goi api
   const { data, isLoading } = useGetProductBySubId(id);
 
-  //Các hàm xử lí xự kiện lọc theo điều kiện của trang web
+  const copyData = [...defaultProducts];
 
-  //Slice Top
+  useEffect(() => {
+    if (data) {
+      setDefaultProducts(data);
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    setProductsSub(defaultProducts);
+  }, [defaultProducts]);
+
   const showDrawer = (e) => {
-    e.stopPropagation(); // Chặn sự kiện onClick không lan tỏa lên
+    e.stopPropagation();
     setOpen(true);
   };
   const onClose = () => {
     setOpen(false);
   };
 
-  //Hàm click xử lí khi click trên các điều kiện lọc
-  const handleTitleClick = (id) => {
-    setSelectedTitleId(id);
+  const handleFilterAll = (keyId, typeSoft) => {
+    setSelectedTitleId(keyId);
+    if (keyId === "0") {
+      setProductsSub(defaultProducts);
+    } else {
+      let new_data = filterSelectAll(copyData, typeSoft);
+      setProductsSub(new_data);
+    }
   };
 
   const softPrice = (a, b) => {
     return () => {
-      console.log("a,b:", a, b);
+      let new_data = sortByPrice(a, b, productsSub);
+
+      setProductsSub(new_data);
     };
   };
 
-  //GetItem config
   const getItem = (label, key, icon, children, style, onClick) => {
     return {
       key,
@@ -61,7 +76,6 @@ const ProductCategory = () => {
     };
   };
 
-  //Slice left
   const menuLeftSlice = [
     getItem(
       "Khoảng giá",
@@ -69,14 +83,14 @@ const ProductCategory = () => {
       <AppstoreOutlined />,
       [
         getItem(
-          "Từ 200 - 400k",
+          "Từ 100 - 300k",
           "3",
           null,
           null,
           customItems,
-          softPrice(500, 700)
+          softPrice(100000, 150000)
         ),
-        getItem("Từ 400 - 700k", "4", null, null, customItems),
+        getItem("Từ 300 - 700k", "4", null, null, customItems),
         getItem("Từ 700 - 1 triệu", "5", null, null, customItems),
         getItem("Từ 1 triệu - 3 triệu", "6", null, null, customItems),
         getItem("Từ 3 triệu - 7 triệu", "7", null, null, customItems),
@@ -99,44 +113,43 @@ const ProductCategory = () => {
     ),
   ];
 
-  //Xử lí CSS menuLeftSlice khi render ở các thiết bị nhỏ
-  // Tìm mục con có key là "sub1"
   function getSubItemsBySubKey(menuSlice, subKey) {
     const subItem = menuSlice.find((item) => item.key === subKey);
     return subItem ? subItem.children : [];
   }
 
-  // Sử dụng hàm để lấy danh sách các item con từ sub "sub1"
   const sub1Items = getSubItemsBySubKey(menuLeftSlice, "sub1");
 
-  // Sử dụng hàm để lấy danh sách các item con từ sub "sub2"
   const sub2Items = getSubItemsBySubKey(menuLeftSlice, "sub2");
 
-  //Thanh lọc sản phẩm theo điều kiện
   const itemSlice = [
     {
       label: "Mặc định",
       key: "0",
+      value: "default",
     },
     {
       label: "Bán chạy",
       key: "1",
+      value: "selling",
     },
     {
       label: "Khuyến mãi tốt",
       key: "2",
+      value: "promotion",
     },
     {
       label: "Giá giảm dần",
       key: "3",
+      value: "decrease",
     },
     {
       label: "Giá tăng dần",
       key: "4",
+      value: "ascending",
     },
   ];
 
-  //Gán và thêm css để render template sản phẩm theo điều kiện
   const newItemSlice = itemSlice?.map((item, index) => {
     const isSelected = selectedTitleId === item.key;
 
@@ -147,7 +160,7 @@ const ProductCategory = () => {
           className={`${
             isSelected ? "text-purple-900" : "text-black"
           } border-b-2 border-gray-100 py-3 font-medium`}
-          onClick={() => handleTitleClick(item.key)}
+          onClick={() => handleFilterAll(item.key)}
           data-key={item.key} // Lưu trữ key trong thuộc tính data-key
         >
           <p>{item.label}</p>
@@ -296,7 +309,7 @@ const ProductCategory = () => {
                   className="gutter-row font-normal px-0 text-center"
                   lg={4}
                   xs={0}
-                  onClick={() => handleTitleClick(item.key)}
+                  onClick={() => handleFilterAll(item.key, item.value)}
                 >
                   <div
                     className={`text-${
@@ -315,7 +328,7 @@ const ProductCategory = () => {
               ))}
             </Row>
             <Row gutter={[18, 16]}>
-              {data?.map((p, index) => {
+              {productsSub?.map((p, index) => {
                 return (
                   <Col className="gutter-row" xs={12} sm={12} md={8} lg={6}>
                     <CardItem key={index} product={p} />
