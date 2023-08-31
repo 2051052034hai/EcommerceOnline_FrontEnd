@@ -1,13 +1,15 @@
 import { Link } from "react-router-dom";
-import { Col, Divider, Row } from "antd";
+import { Col, Row } from "antd";
 
 const Footer = () => {
   return (
     <footer className="pt-3">
       <Row className="justify-center border-t-2 border-blue-500 border-solid ">
         <Row className="lg:w-10/12 ">
-          <Col lg={8} md ={8} className="p-3">
-            <h3 className="font-bold mb-3 text-center lg:text-left md:text-left">HT WEBSITE</h3>
+          <Col lg={8} md={8} className="p-3">
+            <h3 className="font-bold mb-3 text-center lg:text-left md:text-left">
+              HT WEBSITE
+            </h3>
             <p className="text-justify">
               HT website là project demo 1 số chức năng của một website bán hàng
               online (Quần áo, laptop & Gaming Gear,.vv..). Trong quá trình thực
@@ -19,8 +21,10 @@ const Footer = () => {
               website khác.
             </p>
           </Col>
-          <Col lg={8} md ={8} className="p-3">
-            <h3 className="font-bold mb-3 text-center lg:text-left md:text-left ">THÔNG TIN TRANG WEB</h3>
+          <Col lg={8} md={8} className="p-3">
+            <h3 className="font-bold mb-3 text-center lg:text-left md:text-left ">
+              THÔNG TIN TRANG WEB
+            </h3>
             <label className="font-bold">Trụ sở đặt tại:</label>
             <p className="mb-2">
               Ấp 9, xã Tân Hiệp, huyện Tân Châu, tỉnh Tây Ninh
@@ -35,7 +39,7 @@ const Footer = () => {
             <label className="font-bold inline-block">Email:</label>
             <p className="ml-2  inline">VoThanhTinh@gmail.com</p>
           </Col>
-          <Col lg={4} md ={4} className="p-3">
+          <Col lg={4} md={4} className="p-3">
             <h3 className="font-bold mb-3">THANH TOÁN </h3>
             <ul>
               <li className="font-normal text-base flex">
@@ -43,34 +47,42 @@ const Footer = () => {
                   <img
                     className="lg:w-8 sm:w-6 w-6"
                     src="/assets/image/zalo_Pay.png"
+                    alt="zalo"
                   />
                 </span>
                 <span className="ml-2">Zalo Pay </span>
               </li>
               <li className="font-normal text-base flex">
-              <span>
+                <span>
                   <img
                     className="lg:w-8 sm:w-6 w-6"
                     src="/assets/image/tien_mat.png"
+                    alt="notfound"
                   />
                 </span>
-                <span className="ml-2">Tiền mặt </span></li>
+                <span className="ml-2">Tiền mặt </span>
+              </li>
               <li className="font-bold text-sm my-2">ỦNG HỘ TÔI TẠI ĐÂY ^^</li>
               <span>
-              <img
-                    className="lg:w-8 sm:w-6 w-6"
-                    src="/assets/image/momo.png"
-                  />
+                <img
+                  className="lg:w-8 sm:w-6 w-6"
+                  src="/assets/image/momo.png"
+                  alt="momo"
+                />
               </span>
             </ul>
           </Col>
-          <Col lg={4} md ={4} className="p-3">
+          <Col lg={4} md={4} className="p-3">
             <h3 className="font-bold mb-3">KẾT NỐI VỚI TÔI</h3>
 
             <div>
               <div className="flex items-center gap-3 mt-3 sm:block">
-                <Link to={"/"} >
-                  <svg className="lg:w-28 w-14" fill="none" viewBox="0 0 338 100">
+                <Link to={"/"}>
+                  <svg
+                    className="lg:w-28 w-14"
+                    fill="none"
+                    viewBox="0 0 338 100"
+                  >
                     <path
                       fill="#000"
                       d="M324.477 99.751H13.532c-6.841 0-12.438-5.597-12.438-12.438V12.688C1.094 5.846 6.69.249 13.532.249h310.945c6.841 0 12.438 5.597 12.438 12.438v74.627c0 6.84-5.597 12.437-12.438 12.437z"
@@ -342,7 +354,11 @@ const Footer = () => {
                   </svg>
                 </Link>
                 <Link to={"/"} className="mt-0 block sm:mt-3">
-                  <svg className="lg:w-28 w-14" fill="none" viewBox="0 0 300 100">
+                  <svg
+                    className="lg:w-28 w-14"
+                    fill="none"
+                    viewBox="0 0 300 100"
+                  >
                     <g clipPath="url(#clip0_3_178097)">
                       <path
                         fill="#A6A6A6"

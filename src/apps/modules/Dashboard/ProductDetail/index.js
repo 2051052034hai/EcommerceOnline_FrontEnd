@@ -62,9 +62,10 @@ const ProductDetail = () => {
     setProduct(data);
   }, [data]);
 
-  const subcateId = product?.subcategory;
+  const subcategory = product?.subcategory;
+  const shop = product?.shop;
 
-  const { data: relatedProductsData } = useGetProductBySubId(subcateId);
+  const { data: relatedProductsData } = useGetProductBySubId(subcategory?._id);
 
   useEffect(() => {
     if (Array.isArray(relatedProductsData)) {
@@ -73,10 +74,7 @@ const ProductDetail = () => {
   }, [relatedProductsData]);
 
   const handleAddToCart = () => {
-    console.log({ ...product, quantity: 1 });
-
     dispatch(add_cart({ ...product, quantity: 1 }));
-    // toast.success("Bạn đã thêm thành công vào giỏ hàng");
   };
 
   return (
@@ -179,7 +177,8 @@ const ProductDetail = () => {
                     <div className="flex items-center bg-gray-100 mt-2 md:px-3 px-2 md:py-5 py-3 rounded">
                       <div className="md:text-xl text-xl font-medium mr-2 text-red-500">
                         {Math.round(
-                          product?.price * product?.discountPercentage
+                          product?.price -
+                            (product?.price * product?.discountPercentage) / 100
                         ).toLocaleString("vi-VN", {
                           style: "currency",
                           currency: "VND",
@@ -223,24 +222,24 @@ const ProductDetail = () => {
                     <SupplierTitle>
                       <img src={product?.thumbnail} alt={product?.title} />
                       <SupplierTitleName>
-                        <h3>Supplier</h3>
-                        <h3>{product?.brand}</h3>
+                        <h3>Cửa hàng</h3>
+                        <h3>{shop?.name}</h3>
                       </SupplierTitleName>
                     </SupplierTitle>
                     <div className="supplier__info">
                       <SupplierInfoItem>
                         <img src="/logo192.png" alt="country" />
-                        <p>Germany, Berlin</p>
+                        <p>{shop?.address}</p>
                       </SupplierInfoItem>
 
                       <SupplierInfoItem>
                         <FontAwesomeIcon icon={faShieldHalved} />
-                        <p>Verified Seller</p>
+                        <p>Đã chứng thực</p>
                       </SupplierInfoItem>
 
                       <SupplierInfoItem>
                         <FontAwesomeIcon icon={faGlobe} />
-                        <p>Worldwide shipping</p>
+                        <p>Free ship</p>
                       </SupplierInfoItem>
                     </div>
                     <SupplierButton>
@@ -254,14 +253,14 @@ const ProductDetail = () => {
                         Thêm vào giỏ
                       </AddCart>
                       <SupplierButtonProfile>
-                        <button> Seller's profile</button>
+                        <button> Xem cửa hàng</button>
                       </SupplierButtonProfile>
                     </SupplierButton>
 
                     <SaveLater>
                       <button>
                         <FontAwesomeIcon icon={faHeart} />
-                        <span>Save for later</span>
+                        <span>Yêu thích</span>
                       </button>
                     </SaveLater>
                   </div>

@@ -16,9 +16,7 @@ function CartItem(props) {
     dispatch(increase_cart({ _id: cart._id }));
   };
   const handleOnClickRemoveProduct = () => {
-
     dispatch(remove_product({ _id: cart._id }));
-
   };
 
   return (
@@ -43,10 +41,10 @@ function CartItem(props) {
               </styles.description>
               <styles.group__button>
                 <styles.group__button_remote>
-                  <button onClick={handleOnClickRemoveProduct}>Remove</button>
+                  <button onClick={handleOnClickRemoveProduct}>Xóa</button>
                 </styles.group__button_remote>
                 <styles.group__button_save>
-                  <button>Save for later</button>
+                  <button>Yêu thích</button>
                 </styles.group__button_save>
               </styles.group__button>
             </styles.product__cart_between>
@@ -55,7 +53,9 @@ function CartItem(props) {
           <div className="lg:col-span-3 md:col-span-3">
             <div style={{ textAlign: "right" }}>
               <styles.price>
-                <p>{cart?.price} </p>
+                <p className="line-through">
+                  {Math.round(cart?.price).toLocaleString("vi-VN")} VND
+                </p>
               </styles.price>
 
               <styles.quantity>
@@ -73,6 +73,18 @@ function CartItem(props) {
                   +
                 </button>
               </styles.quantity>
+              <styles.price>
+                <p style={{ color: "red" }}>
+                  {(
+                    Math.ceil(
+                      (cart?.price -
+                        (cart?.price * cart?.discountPercentage) / 100) /
+                        1000
+                    ) * 1000
+                  ).toLocaleString("vi-VN")}
+                  VND
+                </p>
+              </styles.price>
             </div>
           </div>
         </div>

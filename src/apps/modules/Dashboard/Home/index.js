@@ -5,23 +5,36 @@ import { Divider, Pagination } from "antd";
 import CardItem from "apps/components/molecules/CardItem";
 import Slider from "apps/components/molecules/Slider";
 import SlideProduct from "apps/components/molecules/SliderProduct";
-import { useGetDataProductPage } from "apps/queries/product/useGetDataProduct";
+import {
+  useGetDataProductPage,
+  useGetTopSaleProduct,
+} from "apps/queries/product";
 import ProductSkeleton from "apps/components/molecules/ProductSkeleton";
 
 const Home = () => {
   const [page, setPage] = useState(1);
-  const { data, isLoading } = useGetDataProductPage(page);
+  const [pageSize, setPageSize] = useState(10);
   const [products, setProduct] = useState([]);
+  const [productTopSale, setProductTopSale] = useState([]);
+
+  const { data } = useGetDataProductPage(page, pageSize);
+  const { data: dataTop, isLoading: isLoadingDataTop } = useGetTopSaleProduct();
+
   const [total, setTotal] = useState(0);
   useEffect(() => {
     if (data) {
-      setTotal(data.total);
-      setProduct(data.data);
+      setTotal(data?.total);
+      setProduct(data?.data);
     }
   }, [data]);
 
+  useEffect(() => {
+    setProductTopSale(dataTop?.data);
+  }, [dataTop?.data]);
+
   const handleOnchangePage = (page, pageSize) => {
     setPage(page);
+    setPageSize(pageSize);
   };
 
   return (
@@ -38,14 +51,14 @@ const Home = () => {
           Sản Phẩm Bán Chạy
         </Divider>
 
-        {isLoading ? (
+        {isLoadingDataTop ? (
           <SlideProduct
             products={Array.from(Array(5), (_, index) => (
               <ProductSkeleton />
             ))}
           />
         ) : (
-          <SlideProduct products={products} />
+          <SlideProduct products={productTopSale} />
         )}
       </div>
 
@@ -64,14 +77,14 @@ const Home = () => {
             <CardItem key={index} product={items} />
           ))}
         </div>
-        <div className="flex justify-center">
+        <div className="flex justify-center py-12">
           <Pagination
             className="text-base"
             onChange={handleOnchangePage}
             defaultCurrent={1}
             total={total}
             current={page}
-            pageSize={5}
+            pageSize={pageSize}
           />
         </div>
       </section>

@@ -13,7 +13,17 @@ import { useSelector } from "react-redux";
 
 const Cart = () => {
   const listCart = useSelector((state) => state?.cart?.products);
-  const totalCart = useSelector((state) => state?.cart?.total);
+  const totalAfterDiscount = useSelector(
+    (state) => state?.cart?.totalAfterDiscount
+  );
+  const totalBeforeDiscount = useSelector(
+    (state) => state?.cart?.totalBeforeDiscount
+  );
+
+  const totalDiscount = useSelector((state) => state?.cart?.totalDiscount);
+  const currentUser = useSelector((state) => state.user.currentUser);
+
+  console.log("totalDiscount", totalDiscount);
 
   return (
     <>
@@ -98,27 +108,40 @@ const Cart = () => {
             <styles.block__pay>
               <styles.block__pay_caculator>
                 <styles.subtotal>
-                  <styles.key>Subtotal:</styles.key>
-                  <styles.value>{totalCart} đ</styles.value>
+                  <styles.key>Tổng tiền:</styles.key>
+                  <styles.value>
+                    {Math.ceil(totalBeforeDiscount).toLocaleString("vi-VN")}
+                    VND
+                  </styles.value>
                 </styles.subtotal>
                 <styles.discount>
-                  <styles.key>Discount:</styles.key>
-                  <styles.value>- $0</styles.value>
+                  <styles.key>Giảm giá:</styles.key>
+                  <styles.value>
+                    {Math.ceil(totalDiscount).toLocaleString("vi-VN")} VND
+                  </styles.value>
                 </styles.discount>
                 <styles.tax>
-                  <styles.key>Tax:</styles.key>
+                  <styles.key>Phí vận chuyển:</styles.key>
                   <styles.value>+ $0</styles.value>
                 </styles.tax>
-                <hr />
+                <hr className="my-3" />
               </styles.block__pay_caculator>
 
               <styles.block__pay_total>
-                <div style={{ fontSize: "19px" }}>Total:</div>
-                <div style={{ fontSize: "20px" }}>{totalCart} đ</div>
+                <div style={{ fontSize: "16px" }}>Tổng tiền phải trả:</div>
+                <div style={{ fontSize: "16px" }}>
+                  {Math.ceil(totalAfterDiscount).toLocaleString("vi-VN")} VND
+                </div>
               </styles.block__pay_total>
 
               <styles.block__pay_checout>
-                <button>Check Out</button>
+                {currentUser ? (
+                  <button>Thanh Toán</button>
+                ) : (
+                  <Link to="/login">
+                    <button>Đăng nhập</button>
+                  </Link>
+                )}
               </styles.block__pay_checout>
               <styles.block__pay_credit>
                 <div>

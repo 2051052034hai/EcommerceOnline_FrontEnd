@@ -3,7 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   products: [],
   count: 0,
-  total: 0,
+  totalAfterDiscount: 0,
+  totalBeforeDiscount: 0,
+  totalDiscount: 0,
 };
 
 export const cartSlice = createSlice({
@@ -12,28 +14,27 @@ export const cartSlice = createSlice({
 
   reducers: {
     add_cart: (state, action) => {
-      const { _id, quantity, price } = action.payload;
+      const { _id, quantity, price, discountPercentage } = action.payload;
 
-      // Tạo một bản sao của mảng products
-      const productsCopy = [...state.products];
+      const moneyAfterDiscount = price - (price * discountPercentage) / 100;
 
-      // Tìm sản phẩm đã tồn tại trong mảng
-      const existingProduct = productsCopy.find(
+      const existingProduct = state.products.find(
         (product) => product._id === _id
       );
 
       if (existingProduct) {
-        // Cập nhật số lượng nếu sản phẩm đã tồn tại
         existingProduct.quantity += quantity;
       } else {
-        // Thêm sản phẩm vào mảng nếu chưa tồn tại
-        productsCopy.push(action.payload);
+        state.products.push({
+          ...action.payload,
+          moneyAfterDiscount,
+        });
         state.count += 1;
       }
 
-      // Cập nhật state.products bằng bản sao mới
-      state.products = productsCopy;
-      state.total += price * quantity; // Cập nhật tổng tiền
+      state.totalBeforeDiscount += quantity * price;
+      state.totalAfterDiscount += moneyAfterDiscount * quantity;
+      state.totalDiscount += (price - moneyAfterDiscount) * quantity;
     },
     decrease_cart: (state, action) => {
       const { _id } = action.payload;
@@ -45,15 +46,20 @@ export const cartSlice = createSlice({
       if (existingProduct) {
         if (existingProduct.quantity > 1) {
           existingProduct.quantity -= 1;
-          state.total -= existingProduct.price; // Giảm tổng tiền
+          state.count -= 1;
         } else {
-          // Xoá sản phẩm khỏi giỏ hàng nếu số lượng là 1
           state.products = state.products.filter(
             (product) => product._id !== _id
           );
           state.count -= 1;
-          state.total -= existingProduct.price; // Giảm tổng tiền
         }
+
+        const moneyAfterDiscount =
+          existingProduct.price -
+          (existingProduct.price * existingProduct.discountPercentage) / 100;
+        state.totalBeforeDiscount -= existingProduct.price;
+        state.totalAfterDiscount -= moneyAfterDiscount;
+        state.totalDiscount += existingProduct.price - moneyAfterDiscount;
       }
     },
     increase_cart: (state, action) => {
@@ -65,7 +71,14 @@ export const cartSlice = createSlice({
 
       if (existingProduct) {
         existingProduct.quantity += 1;
-        state.total += existingProduct.price; // Tăng tổng tiền
+        state.count += 1;
+
+        const moneyAfterDiscount =
+          existingProduct.price -
+          (existingProduct.price * existingProduct.discountPercentage) / 100;
+        state.totalBeforeDiscount += existingProduct.price;
+        state.totalAfterDiscount += moneyAfterDiscount;
+        state.totalDiscount += existingProduct.price - moneyAfterDiscount;
       }
     },
     remove_product: (state, action) => {
@@ -74,12 +87,20 @@ export const cartSlice = createSlice({
         (product) => product._id === _id
       );
 
-      if (_id) {
+      if (removedProduct) {
         state.products = state.products.filter(
           (product) => product._id !== _id
         );
-        state.count -= 1;
-        state.total -= removedProduct.price * removedProduct.quantity;
+        state.count -= removedProduct.quantity;
+
+        const moneyAfterDiscount =
+          removedProduct.price -
+          (removedProduct.price * removedProduct.discountPercentage) / 100;
+        state.totalBeforeDiscount -= removedProduct.price;
+        state.totalAfterDiscount -=
+          moneyAfterDiscount * removedProduct.quantity;
+        state.totalDiscount +=
+          removedProduct.price - moneyAfterDiscount * removedProduct.quantity;
       }
     },
   },
