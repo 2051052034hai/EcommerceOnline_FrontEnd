@@ -15,7 +15,7 @@ export const sortByPrice = (fromPrice, toPrice, data) => {
   return newData;
 };
 ;
-//Filter theo khoảng giá
+//Filter theo kiểu
 export const filterSelectAll = (array, typeSoft) => {
 
   let new_data = [];

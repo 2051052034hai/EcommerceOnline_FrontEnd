@@ -26,14 +26,13 @@ const ProductCategory = () => {
 
   const { id } = useParams();
   const { data, isLoading } = useGetProductBySubId(id);
-
   const copyData = [...defaultProducts];
 
   useEffect(() => {
     if (data) {
       setDefaultProducts(data);
     }
-  }, [isLoading]);
+  }, [isLoading, data]);
 
   useEffect(() => {
     setProductsSub(defaultProducts);
@@ -160,8 +159,8 @@ const ProductCategory = () => {
           className={`${
             isSelected ? "text-purple-900" : "text-black"
           } border-b-2 border-gray-100 py-3 font-medium`}
-          onClick={() => handleFilterAll(item.key)}
-          data-key={item.key} // Lưu trữ key trong thuộc tính data-key
+          onClick={() => handleFilterAll(item.key, item.value)}
+          data-key={item.key} 
         >
           <p>{item.label}</p>
         </div>
@@ -269,7 +268,7 @@ const ProductCategory = () => {
                   Bộ lọc
                 </span>
                 <span
-                  // onClick={showDrawer}
+                
                   className="text-red-600 text-base font-medium"
                 >
                   <FontAwesomeIcon
