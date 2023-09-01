@@ -21,7 +21,7 @@ const CardItem = (props) => {
     <Link to={`/product/${product?._id}`}>
       {product?.sold >= 50 ? (
         <Badge.Ribbon text="Bán chạy" color="red">
-          <ProductItemStyle className=" mx-auto lg:h-96 md:h-80 mt-4 shadow-lg border rounded-md  duration-300 hover:shadow-sm bg-white">
+          <ProductItemStyle className=" mx-auto lg:h-[22rem] md:h-80 mt-4 shadow-lg border rounded-md  duration-300 hover:shadow-sm bg-white">
             <div>
               <div className="relative ">
                 <LazyLoadImage
@@ -44,7 +44,7 @@ const CardItem = (props) => {
             </div>
 
             <div className="pt-3 ml-2 mr-2 mb-3">
-              <h3 className=" text-gray-900 h-14  md:text-sm lg:text-sm overflow-clip  font-medium">
+              <h3 className=" text-gray-900 h-10  md:text-sm lg:text-sm overflow-clip  font-medium">
                 <span className="line-clamp-2">{product?.title}</span>
               </h3>
               <div>
@@ -94,7 +94,7 @@ const CardItem = (props) => {
           </ProductItemStyle>
         </Badge.Ribbon>
       ) : (
-        <ProductItemStyle className=" mx-auto lg:h-96 md:h-80 mt-4 shadow-lg border rounded-md  duration-300 hover:shadow-sm bg-white">
+        <ProductItemStyle className=" mx-auto lg:h-[22rem] md:h-80 mt-4 shadow-lg border rounded-md  duration-300 hover:shadow-sm bg-white">
           <div>
             <div className="relative ">
               <LazyLoadImage
@@ -117,7 +117,7 @@ const CardItem = (props) => {
           </div>
 
           <div className="pt-3 ml-2 mr-2 mb-3">
-            <h3 className=" text-gray-900 h-14 overflow-x-clip  overflow-clip  md:text-sm lg:text-sm font-medium">
+            <h3 className=" text-gray-900 h-10 overflow-x-clip  overflow-clip  md:text-sm lg:text-sm font-medium">
               <span className="line-clamp-2"> {product?.title}</span>
             </h3>
             <div>

@@ -38,5 +38,6 @@ export const useLoginUser = () => {
 
   return {
     mutation,
+    isLoading: mutation.isLoading,
   };
 };

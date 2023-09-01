@@ -3,9 +3,9 @@ import { Col, Row } from "antd";
 
 const Footer = () => {
   return (
-    <footer className="pt-3">
+    <footer>
       <Row className="justify-center border-t-2 border-blue-500 border-solid ">
-        <Row className="lg:w-10/12 ">
+        <Row className="lg:w-11/12 ">
           <Col lg={8} md={8} className="p-3">
             <h3 className="font-bold mb-3 text-center lg:text-left md:text-left">
               HT WEBSITE
@@ -34,10 +34,10 @@ const Footer = () => {
               Ấp 9, xã Tân Hiệp, huyện Tân Châu, tỉnh Tây Ninh
             </p>
             <label className="font-bold">Điện thoại:</label>
-            <p className="ml-2 inline">84+ 0865028574</p>
+            <p className="ml-2 inline">0865028574</p>
             <br></br>
             <label className="font-bold inline-block">Email:</label>
-            <p className="ml-2  inline">VoThanhTinh@gmail.com</p>
+            <p className="ml-2  inline">vothanhtinh@gmail.com</p>
           </Col>
           <Col lg={4} md={4} className="p-3">
             <h3 className="font-bold mb-3">THANH TOÁN </h3>

@@ -271,7 +271,7 @@ const ProductDetail = () => {
         </section>
       </div>
 
-      <section className="mt-10 mx-auto px-3 max-w-screen-xl md:px-0  ">
+      <section className="mt-10 mx-auto px-3 max-w-screen-xl md:px-0 mb-8  ">
         <RelatedProduct>Sản phẩm liên quan</RelatedProduct>
         {relatedProducts.length === 0 ? (
           <div className="grid gap-5 py-4 px-2 md:px-1 grid-cols-2 md:grid-cols-4 lg:grid-cols-5">

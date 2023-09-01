@@ -1,5 +1,5 @@
 //Libralies
-import { Col, Divider, Row } from "antd";
+import { Col, Divider, Result, Row } from "antd";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { AppstoreOutlined } from "@ant-design/icons";
@@ -13,31 +13,28 @@ import CardItem from "apps/components/molecules/CardItem";
 
 //CSS from styled.js
 import { customItems, customStyle } from "./styled";
-import {
-  filterSelectAll,
-  sortByPrice,
-} from "apps/services/utils/filterProductsSub";
 
 const ProductCategory = () => {
   const [open, setOpen] = useState(false);
   const [selectedTitleId, setSelectedTitleId] = useState("0");
   const [selectedPriceId, setSelectedPriceId] = useState("0");
+  const [maxPrice, setMaxPrice] = useState();
+  const [minPrice, setMinPrice] = useState();
+  const [sort, setSort] = useState();
+
   const [productsSub, setProductsSub] = useState([]);
-  const [defaultProducts, setDefaultProducts] = useState([]);
 
   const { id } = useParams();
-  const { data, isLoading } = useGetProductBySubId(id);
-  const copyData = [...defaultProducts];
+  const { data, isLoading } = useGetProductBySubId(
+    id,
+    minPrice,
+    maxPrice,
+    sort
+  );
 
   useEffect(() => {
-    if (data) {
-      setDefaultProducts(data);
-    }
-  }, [isLoading, data]);
-
-  useEffect(() => {
-    setProductsSub(defaultProducts);
-  }, [defaultProducts]);
+    setProductsSub(data);
+  }, [data]);
 
   const showDrawer = (e) => {
     e.stopPropagation();
@@ -49,21 +46,31 @@ const ProductCategory = () => {
 
   const handleFilterAll = (keyId, typeSoft) => {
     setSelectedTitleId(keyId);
-    if (keyId === "0") {
-      setProductsSub(defaultProducts);
-    } else {
-      let new_data = filterSelectAll(copyData, typeSoft);
-      setProductsSub(new_data);
+
+    switch (typeSoft) {
+      case "default":
+        setSort(undefined);
+        break;
+      case "ascending":
+        setSort("price");
+        break;
+      case "promotion":
+        setSort("-discountPercentage");
+        break;
+      case "decrease":
+        setSort("-price");
+        break;
+
+      default:
+        break;
     }
   };
 
   const softPrice = (a, b, keyPrice) => {
     return () => {
       setSelectedPriceId(keyPrice);
-      setOpen(false);
-      let new_data = sortByPrice(a, b, defaultProducts);
-
-      setProductsSub(new_data);
+      setMinPrice(a);
+      setMaxPrice(b);
     };
   };
 
@@ -85,59 +92,54 @@ const ProductCategory = () => {
       <AppstoreOutlined />,
       [
         getItem(
-          "Từ dưới 100k",
-          "0",
-          null,
-          null,
-          customItems,
-          softPrice(1000, 100000, "0")
-        ),
-        getItem(
-          "Từ 100 - 300k",
+          "Tất cả",
           "1",
           null,
           null,
           customItems,
-          softPrice(100000, 300000, "1")
+          softPrice(undefined, undefined, "1")
         ),
+
         getItem(
-          "Từ 300 - 700k",
+          "Từ dưới 100k",
           "2",
           null,
           null,
           customItems,
-          softPrice(300000, 700000, "2")
+          softPrice(1000, 100000, "2")
         ),
         getItem(
-          "Từ 700 - 1 triệu",
+          "Từ 100 - 300k",
           "3",
           null,
           null,
           customItems,
-          softPrice(700000, 1000000, "3")
+          softPrice(100000, 300000, "3")
         ),
         getItem(
-          "Từ 1 triệu - 3 triệu",
+          "Từ 300 - 700k",
           "4",
           null,
           null,
           customItems,
-          softPrice(1000000, 3000000, "4")
+          softPrice(300000, 700000, "4")
         ),
-      ],
-      customStyle
-    ),
-    getItem(
-      "Thương hiệu",
-      "sub2",
-      <AppstoreOutlined />,
-      [
-        getItem("Apple", "5", null, null, customItems),
-        getItem("Acer", "6", null, null, customItems),
-        getItem("ASUS", "7", null, null, customItems),
-        getItem("DELL", "8", null, null, customItems),
-        getItem("ASUS", "9", null, null, customItems),
-        getItem("DELL", "10", null, null, customItems),
+        getItem(
+          "Từ 700 - 1 triệu",
+          "5",
+          null,
+          null,
+          customItems,
+          softPrice(700000, 1000000, "5")
+        ),
+        getItem(
+          "Từ 1 triệu - 3 triệu",
+          "6",
+          null,
+          null,
+          customItems,
+          softPrice(1000000, 3000000, "5")
+        ),
       ],
       customStyle
     ),
@@ -158,23 +160,18 @@ const ProductCategory = () => {
       value: "default",
     },
     {
-      label: "Bán chạy",
-      key: "1",
-      value: "selling",
-    },
-    {
       label: "Khuyến mãi tốt",
-      key: "2",
+      key: "1",
       value: "promotion",
     },
     {
       label: "Giá giảm dần",
-      key: "3",
+      key: "2",
       value: "decrease",
     },
     {
       label: "Giá tăng dần",
-      key: "4",
+      key: "3",
       value: "ascending",
     },
   ];
@@ -274,8 +271,6 @@ const ProductCategory = () => {
             </Row>
           </Drawer>
         </Row>
-
-        {/* Phần thanh trượt hiển thị mặc định*/}
         <Dropdown
           menu={{
             items: newItemSlice,
@@ -319,9 +314,6 @@ const ProductCategory = () => {
             </Row>
           </Row>
         </Dropdown>
-        {/*/////////////////////////////////////////*/}
-
-        {/* Phần hiển thị body của trang web */}
         <Row className="lg:mx-20 lg:py-8 sm:mx-2 sm:py-1 mx-2 ">
           <Col xs={0} sm={10} md={8} lg={6}>
             <Menu
@@ -333,7 +325,6 @@ const ProductCategory = () => {
               items={menuLeftSlice}
             />
           </Col>
-
           <Col xs={24} sm={14} md={16} lg={18}>
             <Row gutter={[18, 16]}>
               <Col className="gutter-row text-center" lg={4} xs={0}>
@@ -344,7 +335,7 @@ const ProductCategory = () => {
               {itemSlice?.map((item, index) => (
                 <Col
                   key={index}
-                  className="gutter-row font-normal px-0 text-center"
+                  className="gutter-row font-normal px-0 text-center hover:cursor-pointer"
                   lg={4}
                   xs={0}
                   onClick={() => handleFilterAll(item.key, item.value)}
@@ -366,13 +357,29 @@ const ProductCategory = () => {
               ))}
             </Row>
             <Row gutter={[18, 16]}>
-              {productsSub?.map((p, index) => {
-                return (
-                  <Col className="gutter-row" xs={12} sm={12} md={8} lg={6}>
-                    <CardItem key={index} product={p} />
+              {productsSub && productsSub.length === 0 ? (
+                <div className="flex justify-center items-center w-full">
+                  <Result
+                    status="404"
+                    title="Không có sản phẩm phù hợp với bạn"
+                  />
+                </div>
+              ) : (
+                productsSub.map((product, index) => (
+                  <Col
+                    className="gutter-row"
+                    xs={12}
+                    sm={12}
+                    md={8}
+                    lg={6}
+                    key={index}
+                  >
+                    <CardItem product={product} />
                   </Col>
-                );
-              })}
+                ))
+              )}
+
+              {productsSub && <div></div>}
             </Row>
           </Col>
         </Row>

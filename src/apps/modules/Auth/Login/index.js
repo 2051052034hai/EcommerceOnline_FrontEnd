@@ -1,53 +1,39 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
 
 //useForm
 import { useForm } from "react-hook-form";
 import { useLoginUser } from "apps/queries/auth/useLoginUser";
-
+import { Spin } from "antd";
 
 const Login = () => {
-
   //useForm
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  //Trang thái submit
   const [isSubmitting, setIsSubmitting] = useState(false);
 
- const {mutation} = useLoginUser()
+  const { mutation, isLoading } = useLoginUser();
 
- 
- const handleKeyPress = (e) => {
-  if (e.key === "Enter" && !isSubmitting) {
-    setIsSubmitting(true); // Đặt biến trạng thái để không gọi lại khi đã gửi dữ liệu
-    handleSubmit(onSubmit)();
-  }
-};
-
- // submit
-  const onSubmit = (data) => {
-    if(!isSubmitting)
-    {
-      mutation.mutate(data)
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && !isSubmitting) {
       setIsSubmitting(true);
+      handleSubmit(onSubmit)();
     }
-  
   };
 
-
+  // submit
+  const onSubmit = (data) => {
+    mutation.mutate(data);
+  };
 
   return (
     <main className="w-full h-screen flex flex-col items-center justify-center px-4">
       <div className="max-w-sm w-full text-gray-600 space-y-8">
         <div className="text-center">
-          {/* <img
-            src="https://floatui.com/logo.svg"
-            width={150}
-            className="mx-auto"
-            alt="test"
-          /> */}
           <div className="mt-5 space-y-2">
             <h3 className="text-gray-800 text-2xl font-bold sm:text-3xl">
               Log in to your account
@@ -67,28 +53,44 @@ const Login = () => {
           <div>
             <label className="font-medium">Email</label>
             <input
-              {...register("email", { required: "Vui lòng nhập trường này", maxLength: 50 })}
+              {...register("email", {
+                required: "Vui lòng nhập trường này",
+                maxLength: 50,
+              })}
               type="email"
-           
               className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
             />
 
-            {errors.email &&  <p style={{color:'red', fontSize: 13}}>{errors.email.message}</p> }
-
+            {errors.email && (
+              <p style={{ color: "red", fontSize: 13 }}>
+                {errors.email.message}
+              </p>
+            )}
           </div>
-      
+
           <div>
             <label className="font-medium">Password</label>
             <input
-            {...register("password", { required: "Vui lòng nhập trường này", maxLength: 50 })}
+              {...register("password", {
+                required: "Vui lòng nhập trường này",
+                maxLength: 50,
+              })}
               type="password"
               onKeyPress={handleKeyPress}
               className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
             />
-            {errors.password &&  <p style={{color:'red', fontSize: 13}}>{errors.password.message}</p> }
+            {errors.password && (
+              <p style={{ color: "red", fontSize: 13 }}>
+                {errors.password.message}
+              </p>
+            )}
           </div>
-          <button type="submit" className="w-full mt-4 px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150">
-            Sign in
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full mt-4 px-4 py-2 text-white font-medium bg-cyan-500 hover:bg-cyan-400 rounded-lg duration-150"
+          >
+            {isLoading ? <Spin /> : <span>Sign in</span>}
           </button>
         </form>
         <div className="relative">
@@ -133,10 +135,10 @@ const Login = () => {
           </button>
           <button className="w-full flex items-center justify-center gap-x-3 py-2.5 border rounded-lg hover:bg-gray-50 duration-150 active:bg-gray-100">
             <svg
-            className="w-7 h-7 ml-3"
-            viewBox="0 0 48 48"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
+              className="w-7 h-7 ml-3"
+              viewBox="0 0 48 48"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
             >
               <path
                 fill="#039be5"
