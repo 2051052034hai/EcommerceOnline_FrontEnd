@@ -21,6 +21,7 @@ import {
 const ProductCategory = () => {
   const [open, setOpen] = useState(false);
   const [selectedTitleId, setSelectedTitleId] = useState("0");
+  const [selectedPriceId, setSelectedPriceId] = useState("0");
   const [productsSub, setProductsSub] = useState([]);
   const [defaultProducts, setDefaultProducts] = useState([]);
 
@@ -56,9 +57,11 @@ const ProductCategory = () => {
     }
   };
 
-  const softPrice = (a, b) => {
+  const softPrice = (a, b, keyPrice) => {
     return () => {
-      let new_data = sortByPrice(a, b, productsSub);
+      setSelectedPriceId(keyPrice);
+      setOpen(false);
+      let new_data = sortByPrice(a, b, defaultProducts);
 
       setProductsSub(new_data);
     };
@@ -82,17 +85,45 @@ const ProductCategory = () => {
       <AppstoreOutlined />,
       [
         getItem(
+          "Từ dưới 100k",
+          "0",
+          null,
+          null,
+          customItems,
+          softPrice(1000, 100000, "0")
+        ),
+        getItem(
           "Từ 100 - 300k",
+          "1",
+          null,
+          null,
+          customItems,
+          softPrice(100000, 300000, "1")
+        ),
+        getItem(
+          "Từ 300 - 700k",
+          "2",
+          null,
+          null,
+          customItems,
+          softPrice(300000, 700000, "2")
+        ),
+        getItem(
+          "Từ 700 - 1 triệu",
           "3",
           null,
           null,
           customItems,
-          softPrice(100000, 150000)
+          softPrice(700000, 1000000, "3")
         ),
-        getItem("Từ 300 - 700k", "4", null, null, customItems),
-        getItem("Từ 700 - 1 triệu", "5", null, null, customItems),
-        getItem("Từ 1 triệu - 3 triệu", "6", null, null, customItems),
-        getItem("Từ 3 triệu - 7 triệu", "7", null, null, customItems),
+        getItem(
+          "Từ 1 triệu - 3 triệu",
+          "4",
+          null,
+          null,
+          customItems,
+          softPrice(1000000, 3000000, "4")
+        ),
       ],
       customStyle
     ),
@@ -101,12 +132,12 @@ const ProductCategory = () => {
       "sub2",
       <AppstoreOutlined />,
       [
-        getItem("Apple", "7", null, null, customItems),
-        getItem("Acer", "8", null, null, customItems),
+        getItem("Apple", "5", null, null, customItems),
+        getItem("Acer", "6", null, null, customItems),
+        getItem("ASUS", "7", null, null, customItems),
+        getItem("DELL", "8", null, null, customItems),
         getItem("ASUS", "9", null, null, customItems),
         getItem("DELL", "10", null, null, customItems),
-        getItem("ASUS", "11", null, null, customItems),
-        getItem("DELL", "12", null, null, customItems),
       ],
       customStyle
     ),
@@ -118,7 +149,6 @@ const ProductCategory = () => {
   }
 
   const sub1Items = getSubItemsBySubKey(menuLeftSlice, "sub1");
-
   const sub2Items = getSubItemsBySubKey(menuLeftSlice, "sub2");
 
   const itemSlice = [
@@ -160,7 +190,7 @@ const ProductCategory = () => {
             isSelected ? "text-purple-900" : "text-black"
           } border-b-2 border-gray-100 py-3 font-medium`}
           onClick={() => handleFilterAll(item.key, item.value)}
-          data-key={item.key} 
+          data-key={item.key}
         >
           <p>{item.label}</p>
         </div>
@@ -190,7 +220,20 @@ const ProductCategory = () => {
                   return (
                     <Col sm={8} onClick={item.onClick}>
                       <div key={index}>
-                        <span className="px-1 py-1 border border-solid border-gray-300 rounded ">
+                        <span
+                          className={`px-1 py-1 border border-solid border-gray-300 rounded
+                                        ${
+                                          selectedPriceId === item.key
+                                            ? "bg-indigo-600"
+                                            : "bg-white"
+                                        }
+                                        ${
+                                          selectedPriceId === item.key
+                                            ? "text-white"
+                                            : "text-black"
+                                        }
+                                        `}
+                        >
                           {item.label}
                         </span>
                       </div>
@@ -233,7 +276,6 @@ const ProductCategory = () => {
         </Row>
 
         {/* Phần thanh trượt hiển thị mặc định*/}
-
         <Dropdown
           menu={{
             items: newItemSlice,
@@ -267,10 +309,7 @@ const ProductCategory = () => {
                 >
                   Bộ lọc
                 </span>
-                <span
-                
-                  className="text-red-600 text-base font-medium"
-                >
+                <span className="text-red-600 text-base font-medium">
                   <FontAwesomeIcon
                     className="text-sm mb-0 ml-1"
                     icon={faFilter}
