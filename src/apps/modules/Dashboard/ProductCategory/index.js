@@ -3,7 +3,7 @@ import { Col, Divider, Result, Row } from "antd";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { AppstoreOutlined } from "@ant-design/icons";
-import { Menu, Dropdown, Drawer } from "antd";
+import { Menu, Dropdown, Drawer, Pagination } from "antd";
 import { faFilter, faSortDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -21,20 +21,32 @@ const ProductCategory = () => {
   const [maxPrice, setMaxPrice] = useState();
   const [minPrice, setMinPrice] = useState();
   const [sort, setSort] = useState();
-
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(4);
+  const [total, setTotal] = useState(0);
   const [productsSub, setProductsSub] = useState([]);
+  const [DedaultPage, setDedaultPage] = useState(1);
 
   const { id } = useParams();
   const { data, isLoading } = useGetProductBySubId(
     id,
     minPrice,
     maxPrice,
-    sort
+    sort,
+    page,
+    pageSize,
   );
 
   useEffect(() => {
-    setProductsSub(data);
-  }, [data]);
+    setTotal(data?.total)
+    setProductsSub(data?.product);
+  }, [data, isLoading]);
+
+  useEffect(() => {
+    
+    setPage(1)
+  }, [id]);
+
 
   const showDrawer = (e) => {
     e.stopPropagation();
@@ -64,6 +76,10 @@ const ProductCategory = () => {
       default:
         break;
     }
+  };
+
+  const handleOnchangePage = (page) => {
+    setPage(page);
   };
 
   const softPrice = (a, b, keyPrice) => {
@@ -195,6 +211,7 @@ const ProductCategory = () => {
       key: item.key,
     };
   });
+
 
   return (
     <>
@@ -378,10 +395,26 @@ const ProductCategory = () => {
                   </Col>
                 ))
               )}
-
-              {productsSub && <div></div>}
             </Row>
+            
+           
+            {productsSub && productsSub.length > 0 ? (
+                 <Row className="flex justify-center py-8">
+                  <div>
+                    <Pagination
+                      className="text-base"
+                      onChange={handleOnchangePage}
+                      defaultCurrent={page}
+                      total={total}
+                      current={page}
+                      pageSize={pageSize}
+                    />
+                  </div>
+                  </Row>
+                ): null}
+              
           </Col>
+
         </Row>
       </div>
     </>
