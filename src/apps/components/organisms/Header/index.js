@@ -71,7 +71,7 @@ export default function Header() {
       key: "0",
     },
     {
-      label: <Link to="/">Quản lí đơn hàng</Link>,
+      label: <Link to="/purchase-history">Lịch sử mua hàng</Link>,
       key: "1",
     },
     {
@@ -82,6 +82,13 @@ export default function Header() {
       key: "3",
     },
   ];
+
+  if (currentUser?.role === 2) {
+    items.splice(1, 0, {
+      label: <Link to="/">Kênh bán hàng</Link>,
+      key: "2",
+    });
+  }
 
   return (
     <header className="border-b border-slate-400">

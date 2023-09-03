@@ -41,4 +41,10 @@ export const ROUTER = {
     path: "/productsub/:id",
     isPrivate: false,
   },
+  PURCHASEHISTORY: {
+    key: "purchase-history",
+    name: "purchasehistory",
+    path: "/purchase-history",
+    isPrivate: false,
+  },
 };

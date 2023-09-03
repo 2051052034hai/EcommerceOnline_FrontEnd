@@ -10,6 +10,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CartItem from "./CartItem/cartItem";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { selectCurrentUser } from "store/userSlice/userSelector";
+import { useSaveCart } from "apps/queries/cart/useSaveCart";
 
 const Cart = () => {
   const listCart = useSelector((state) => state?.cart?.products);
@@ -21,9 +23,27 @@ const Cart = () => {
   );
 
   const totalDiscount = useSelector((state) => state?.cart?.totalDiscount);
-  const currentUser = useSelector((state) => state.user.currentUser);
+  const currentUser = useSelector(selectCurrentUser);
+  const { mutation } = useSaveCart();
 
-  console.log("totalDiscount", totalDiscount);
+  const handleOrder = () => {
+    const saveNewCart = [];
+    for (var i = 0; i < listCart.length; i++) {
+      var item = listCart[i];
+      var newItem = {
+        product: item._id,
+        qty: item.quantity,
+      };
+      saveNewCart.push(newItem);
+    }
+    const data_save = {
+      userId: currentUser?._id,
+      orderItems: saveNewCart,
+      total: totalAfterDiscount,
+    };
+    mutation.mutate(data_save);
+    console.log(data_save, "test");
+  };
 
   return (
     <>
@@ -135,8 +155,8 @@ const Cart = () => {
               </styles.block__pay_total>
 
               <styles.block__pay_checout>
-                {currentUser ? (
-                  <button>Thanh Toán</button>
+                {currentUser?._id ? (
+                  <button onClick={handleOrder}>Đặt hàng</button>
                 ) : (
                   <Link to="/login">
                     <button>Đăng nhập</button>

@@ -57,7 +57,7 @@ export const cartSlice = createSlice({
           (existingProduct.price * existingProduct.discountPercentage) / 100;
         state.totalBeforeDiscount -= existingProduct.price;
         state.totalAfterDiscount -= moneyAfterDiscount;
-        state.totalDiscount += existingProduct.price - moneyAfterDiscount;
+        state.totalDiscount -= existingProduct.price - moneyAfterDiscount;
       }
     },
     increase_cart: (state, action) => {
@@ -100,10 +100,22 @@ export const cartSlice = createSlice({
           removedProduct.price - moneyAfterDiscount * removedProduct.quantity;
       }
     },
+    clear_cart: (state) => {
+      state.products = [];
+      state.count = 0;
+      state.totalAfterDiscount = 0;
+      state.totalBeforeDiscount = 0;
+      state.totalDiscount = 0;
+    },
   },
 });
 
-export const { add_cart, decrease_cart, increase_cart, remove_product } =
-  cartSlice.actions;
+export const {
+  add_cart,
+  decrease_cart,
+  increase_cart,
+  remove_product,
+  clear_cart,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;

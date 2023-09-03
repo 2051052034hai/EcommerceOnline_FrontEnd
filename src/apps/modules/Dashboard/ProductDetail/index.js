@@ -66,12 +66,12 @@ const ProductDetail = () => {
   const shop = product?.shop;
 
   const { data: relatedProductsData } = useGetProductBySubId(subcategory?._id);
-
+  console.log(relatedProductsData?.product, "test");
   useEffect(() => {
-    if (Array.isArray(relatedProductsData)) {
-      setRelatedProducts(relatedProductsData);
+    if (Array.isArray(relatedProductsData?.product)) {
+      setRelatedProducts(relatedProductsData?.product);
     }
-  }, [relatedProductsData]);
+  }, [relatedProductsData?.product]);
 
   const handleAddToCart = () => {
     dispatch(add_cart({ ...product, quantity: 1 }));
@@ -280,7 +280,7 @@ const ProductDetail = () => {
             ))}
           </div>
         ) : (
-          <SlideProduct products={relatedProductsData} />
+          <SlideProduct products={relatedProducts} />
         )}
       </section>
     </>
