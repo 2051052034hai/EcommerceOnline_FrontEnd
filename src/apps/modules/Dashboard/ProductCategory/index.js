@@ -365,7 +365,7 @@ const ProductCategory = () => {
                   />
                 </div>
               ) : (
-                productsSub.map((product, index) => (
+                productsSub?.map((product, index) => (
                   <Col
                     className="gutter-row"
                     xs={12}

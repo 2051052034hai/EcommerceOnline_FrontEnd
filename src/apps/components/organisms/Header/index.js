@@ -14,19 +14,19 @@ import { log_out } from "store/userSlice/userSlice";
 //Antd
 import { DownOutlined } from "@ant-design/icons";
 import { Dropdown, Space } from "antd";
+import { selectCurrentUser } from "store/userSlice/userSelector";
 
 const { SubMenu } = Menu;
 
 export default function Header() {
   const { data, isLoading } = useGetDataCategory();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isProductMenuOpen, setIsProductMenuOpen] = useState(false);
   const [menuData, setMenuData] = useState([]);
 
   //Redux
   const dispatch = useDispatch();
   const countCart = useSelector((state) => state.cart.count);
-  const currentUser = useSelector((state) => state.user.currentUser);
+  const currentUser = useSelector(selectCurrentUser);
 
   useEffect(() => {
     setMenuData(data);
@@ -36,14 +36,11 @@ export default function Header() {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  const toggleProductMenu = () => {
-    setIsProductMenuOpen(!isProductMenuOpen);
-  };
-
   const [current, setCurrent] = useState([]);
 
   const onClick = (e) => {
     setCurrent(e.key);
+    setIsMobileMenuOpen(false);
   };
 
   const transformedData = data?.map((category) => {
@@ -153,7 +150,7 @@ export default function Header() {
             </p>
           </Link>
 
-          {currentUser ? (
+          {currentUser?.username ? (
             <>
               <Dropdown menu={{ items }} trigger={["click"]}>
                 <Link onClick={(e) => e.preventDefault()}>
@@ -165,7 +162,7 @@ export default function Header() {
                         alt="ảnh không tồn tại"
                       ></img>
                     </div>
-                    <div>{currentUser.username}!</div>
+                    <div>{currentUser?.username}!</div>
                     <DownOutlined />
                   </Space>
                 </Link>
@@ -183,10 +180,8 @@ export default function Header() {
           )}
         </div>
       </nav>
-      {/* <!-- Mobile menu, show/hide based on menu open state. --> */}
       {isMobileMenuOpen && (
         <div className="lg:hidden" role="dialog" aria-modal="true">
-          {/* <!-- Background backdrop, show/hide based on slide-over state. --> */}
           <div className="fixed inset-0 z-10"></div>
           <div className="fixed inset-y-0 left-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
             <div className="flex items-center justify-between">
@@ -221,105 +216,21 @@ export default function Header() {
               </button>
             </div>
             <div className="mt-6 flow-root">
-              <div className="-my-6 divide-y divide-gray-500/10">
-                <div className="space-y-2 py-6">
-                  <div className="-mx-3">
-                    <button
-                      type="button"
-                      className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                      aria-controls="disclosure-1"
-                      aria-expanded="false"
-                      onClick={toggleProductMenu}
-                    >
-                      Product
-                      <svg
-                        className="h-5 w-5 flex-none"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        aria-hidden="true"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </button>
-                    {isProductMenuOpen && (
-                      <div className="mt-2 space-y-2" id="disclosure-1">
-                        <Link
-                          to={"/"}
-                          className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                        >
-                          Analytics
-                        </Link>
-                        <Link
-                          to={"/"}
-                          className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                        >
-                          Engagement
-                        </Link>
-                        <Link
-                          to={"/"}
-                          className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                        >
-                          Security
-                        </Link>
-                        <Link
-                          to={"/"}
-                          className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                        >
-                          Integrations
-                        </Link>
-                        <Link
-                          to={"/"}
-                          className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                        >
-                          Automations
-                        </Link>
-                        <Link
-                          to={"/"}
-                          className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                        >
-                          Watch demo
-                        </Link>
-                        <Link
-                          to={"/"}
-                          className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                        >
-                          Contact sales
-                        </Link>
-                      </div>
-                    )}
-                  </div>
-                  <Link
-                    to={"/"}
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                  >
-                    Features
-                  </Link>
-                  <Link
-                    to={"/"}
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                  >
-                    Marketplace
-                  </Link>
-                  <Link
-                    to={"/"}
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                  >
-                    Company
-                  </Link>
-                </div>
-                <div className="py-6">
-                  <Link
-                    to={"/"}
-                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                  >
-                    Log in
-                  </Link>
-                </div>
-              </div>
+              <Menu onClick={onClick} selectedKeys={[current]} mode="inline">
+                {transformedData?.map((menu) => {
+                  return (
+                    <Menu.SubMenu key={menu.key} title={menu?.label}>
+                      {menu?.children?.map((submenu) => (
+                        <Menu.Item key={submenu.key}>
+                          <Link to={`/productsub/${submenu?.link}`}>
+                            {submenu?.label}
+                          </Link>
+                        </Menu.Item>
+                      ))}
+                    </Menu.SubMenu>
+                  );
+                })}
+              </Menu>
             </div>
           </div>
         </div>

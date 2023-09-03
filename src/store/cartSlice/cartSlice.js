@@ -11,7 +11,6 @@ const initialState = {
 export const cartSlice = createSlice({
   name: "cart",
   initialState,
-
   reducers: {
     add_cart: (state, action) => {
       const { _id, quantity, price, discountPercentage } = action.payload;
@@ -46,7 +45,6 @@ export const cartSlice = createSlice({
       if (existingProduct) {
         if (existingProduct.quantity > 1) {
           existingProduct.quantity -= 1;
-          state.count -= 1;
         } else {
           state.products = state.products.filter(
             (product) => product._id !== _id
@@ -71,7 +69,6 @@ export const cartSlice = createSlice({
 
       if (existingProduct) {
         existingProduct.quantity += 1;
-        state.count += 1;
 
         const moneyAfterDiscount =
           existingProduct.price -
