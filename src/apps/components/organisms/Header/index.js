@@ -85,7 +85,7 @@ export default function Header() {
 
   if (currentUser?.role === 2) {
     items.splice(1, 0, {
-      label: <Link to="/">Kênh bán hàng</Link>,
+      label: <Link to="/sellerspage">Kênh bán hàng</Link>,
       key: "2",
     });
   }
@@ -146,7 +146,7 @@ export default function Header() {
             })}
           </Menu>
         </div>
-        <div className=" lg:flex   lg:justify-end">
+        <div className=" lg:flex lg:justify-end">
           <Link
             to={"/cart"}
             className="text-md relative font-semibold leading-6 mr-7 pl-2 text-gray-900"
