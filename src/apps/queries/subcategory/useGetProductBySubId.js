@@ -13,8 +13,8 @@ export const useGetProductBySubId = (id, minPrice, maxPrice, sort, page, pageSiz
   const nextPage = page + 1;
 
   queryClient.prefetchQuery(
-    [QUERIES_KEYS.GET_PRODUCTS, nextPage, pageSize],
-    () => getProductBySubId(nextPage, pageSize)
+    [QUERIES_KEYS.SUBCATEGORY,id, minPrice, maxPrice, sort, nextPage, pageSize],
+    () => getProductBySubId(id, minPrice, maxPrice, sort, nextPage, pageSize)
   );
 
   const { data, isLoading } = useQuery({

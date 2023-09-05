@@ -1,9 +1,8 @@
 //Libralies
-import { Col, Divider, Result, Row } from "antd";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { AppstoreOutlined } from "@ant-design/icons";
-import { Menu, Dropdown, Drawer, Pagination } from "antd";
+import { Menu, Dropdown, Drawer, Pagination, Col, Divider, Result, Row } from "antd";
 import { faFilter, faSortDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -25,7 +24,6 @@ const ProductCategory = () => {
   const [pageSize, setPageSize] = useState(4);
   const [total, setTotal] = useState(0);
   const [productsSub, setProductsSub] = useState([]);
-  const [DedaultPage, setDedaultPage] = useState(1);
 
   const { id } = useParams();
   const { data, isLoading } = useGetProductBySubId(
@@ -43,7 +41,6 @@ const ProductCategory = () => {
   }, [data, isLoading]);
 
   useEffect(() => {
-    
     setPage(1)
   }, [id]);
 
@@ -78,8 +75,9 @@ const ProductCategory = () => {
     }
   };
 
-  const handleOnchangePage = (page) => {
+  const handleOnchangePage = (page, pageSize) => {
     setPage(page);
+    setPageSize(pageSize);
   };
 
   const softPrice = (a, b, keyPrice) => {
@@ -232,7 +230,7 @@ const ProductCategory = () => {
               <Row gutter={[16, 16]}>
                 {sub1Items?.map((item, index) => {
                   return (
-                    <Col sm={8} onClick={item.onClick}>
+                    <Col key={index} sm={8} onClick={item.onClick}>
                       <div key={index}>
                         <span
                           className={`px-1 py-1 border border-solid border-gray-300 rounded
@@ -384,14 +382,14 @@ const ProductCategory = () => {
               ) : (
                 productsSub?.map((product, index) => (
                   <Col
+                  key={index}
                     className="gutter-row"
                     xs={12}
                     sm={12}
                     md={8}
                     lg={6}
-                    key={index}
                   >
-                    <CardItem product={product} />
+                    <CardItem key={index} product={product} />
                   </Col>
                 ))
               )}

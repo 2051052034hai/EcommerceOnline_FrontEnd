@@ -43,8 +43,8 @@ function SlideProduct(props) {
   return (
     <>
       <Swiper {...swiperOptions}>
-        {products?.map((product) => (
-          <SwiperSlide key={product.id}>
+        {products?.map((product , index) => (
+          <SwiperSlide key={index}>
             <CardItem key={product.id} product={product} />
           </SwiperSlide>
         ))}

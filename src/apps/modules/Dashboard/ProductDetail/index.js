@@ -43,7 +43,6 @@ import {
   TextIconRating,
 } from "./styled";
 import Rating from "react-rating";
-import { toast } from "react-toastify";
 import SlideProduct from "apps/components/molecules/SliderProduct";
 import ProductSkeleton from "apps/components/molecules/ProductSkeleton";
 import { Col, Skeleton } from "antd";
@@ -66,7 +65,6 @@ const ProductDetail = () => {
   const shop = product?.shop;
 
   const { data: relatedProductsData } = useGetProductBySubId(subcategory?._id);
-  console.log(relatedProductsData?.product, "test");
   useEffect(() => {
     if (Array.isArray(relatedProductsData?.product)) {
       setRelatedProducts(relatedProductsData?.product);
@@ -105,8 +103,8 @@ const ProductDetail = () => {
                         alt="ảnh không tồn tại"
                       />
                       <ProductImageThumb>
-                        {product?.images?.map((image, key) => (
-                          <div key={key}>
+                        {product?.images?.map((image, index) => (
+                          <div key={index}>
                             <img
                               src={image}
                               onClick={() => {
@@ -276,7 +274,7 @@ const ProductDetail = () => {
         {relatedProducts.length === 0 ? (
           <div className="grid gap-5 py-4 px-2 md:px-1 grid-cols-2 md:grid-cols-4 lg:grid-cols-5">
             {Array.from(Array(5), (_, index) => (
-              <ProductSkeleton />
+              <ProductSkeleton key={index} />
             ))}
           </div>
         ) : (

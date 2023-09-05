@@ -47,4 +47,10 @@ export const ROUTER = {
     path: "/purchase-history",
     isPrivate: false,
   },
+  SELLERSPAGE: {
+    key: "sellerspage",
+    name: "sellerspage",
+    path: "/sellerspage",
+    isPrivate: false,
+  },
 };

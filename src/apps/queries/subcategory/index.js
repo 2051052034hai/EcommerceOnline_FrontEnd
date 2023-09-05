@@ -1,4 +1,5 @@
 import {useGetProductBySubId} from './useGetProductBySubId'
+import {useGetSubCategories} from './useGetSubCategories'
 
-export{useGetProductBySubId
+export{useGetProductBySubId, useGetSubCategories,
 }

@@ -1,0 +1,2 @@
+export { useGetProductsByShopId } from "./useGetProductsByShopId";
+
