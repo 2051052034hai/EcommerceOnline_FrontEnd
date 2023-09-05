@@ -20,6 +20,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.45.4",
     "react-lazy-load-image-component": "^1.6.0",
+    "react-paypal-button-v2": "^2.6.3",
     "react-query": "^3.39.3",
     "react-rating": "^2.0.5",
     "react-redux": "^8.1.2",

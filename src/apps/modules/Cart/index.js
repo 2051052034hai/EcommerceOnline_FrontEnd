@@ -1,4 +1,5 @@
-import React from "react";
+// Libraries
+import React, { useEffect, useState } from "react";
 import * as styles from "./styledCart";
 import {
   faArrowLeft,
@@ -6,14 +7,26 @@ import {
   faLock,
   faTruckFast,
 } from "@fortawesome/free-solid-svg-icons";
+import { PayPalButton } from "react-paypal-button-v2";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import CartItem from "./CartItem/cartItem";
+import { Radio } from "antd";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+
+//Components
+import CartItem from "./CartItem/cartItem";
+
+// Store
 import { selectCurrentUser } from "store/userSlice/userSelector";
+
+// Queries
 import { useSaveCart } from "apps/queries/cart/useSaveCart";
+import { getPaymentConfig } from "apps/services/apis/payment.api";
 
 const Cart = () => {
+  const [valuePayment, setValuePayment] = useState(1);
+  const [skdReady, setSdkReady] = useState(false);
+
   const listCart = useSelector((state) => state?.cart?.products);
   const totalAfterDiscount = useSelector(
     (state) => state?.cart?.totalAfterDiscount
@@ -42,7 +55,50 @@ const Cart = () => {
       total: totalAfterDiscount,
     };
     mutation.mutate(data_save);
-    console.log(data_save, "test");
+  };
+  const onChange = (e) => {
+    console.log("radio checked", e.target.value);
+    setValuePayment(e.target.value);
+  };
+
+  const addPayPalScript = async () => {
+    const data = await getPaymentConfig();
+    const script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = `https://www.paypal.com/sdk/js?client-id=${data}`;
+    script.async = true;
+    script.onload = () => {
+      setSdkReady(true);
+    };
+    document.body.appendChild(script);
+  };
+
+  useEffect(() => {
+    if (!window.paypal) {
+      addPayPalScript();
+    } else {
+      setSdkReady(true);
+    }
+  }, []);
+
+  const onSuccessPayment = (details, data) => {
+    const saveNewCart = [];
+    for (var i = 0; i < listCart.length; i++) {
+      var item = listCart[i];
+      var newItem = {
+        product: item._id,
+        qty: item.quantity,
+      };
+      saveNewCart.push(newItem);
+    }
+    const data_save = {
+      userId: currentUser?._id,
+      orderItems: saveNewCart,
+      total: totalAfterDiscount,
+      statusPayment: true,
+      updatedAt: details.update_time,
+    };
+    mutation.mutate(data_save);
   };
 
   return (
@@ -68,7 +124,14 @@ const Cart = () => {
                   <button>Remove All</button>
                 </styles.button__navigation_remote>
               </styles.button__navigation>
+              <div>
+                <Radio.Group onChange={onChange} value={valuePayment}>
+                  <Radio value={1}>Thanh toán khi nhận hàng</Radio>
+                  <Radio value={2}>Thanh toán PayPal</Radio>
+                </Radio.Group>
+              </div>
             </styles.block__cart_item>
+
             <styles.supply__policy>
               <styles.supply__policy_items>
                 <styles.supply__policy_item>
@@ -156,7 +219,20 @@ const Cart = () => {
 
               <styles.block__pay_checout>
                 {currentUser?._id ? (
-                  <button onClick={handleOrder}>Đặt hàng</button>
+                  valuePayment === 1 && skdReady ? (
+                    <button onClick={handleOrder}>Đặt hàng</button>
+                  ) : valuePayment === 2 ? (
+                    <div style={{ width: "300px" }}>
+                      <PayPalButton
+                        amount={totalAfterDiscount / 30000}
+                        // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
+                        onSuccess={onSuccessPayment}
+                        onError={() => {
+                          alert("Error");
+                        }}
+                      />
+                    </div>
+                  ) : null
                 ) : (
                   <Link to="/login">
                     <button>Đăng nhập</button>
