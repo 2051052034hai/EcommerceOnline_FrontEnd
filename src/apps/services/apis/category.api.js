@@ -1,4 +1,4 @@
-import { create, update, remove, get } from "./https";
+import { get } from "./https";
 
 const pathUrl = "/categories/";
 

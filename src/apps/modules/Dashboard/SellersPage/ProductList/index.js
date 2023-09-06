@@ -27,6 +27,7 @@ import { selectCurrentUser } from "store/userSlice/userSelector";
 import { useGetProductsByShopId } from "apps/queries/shop";
 import { useGetSubCategories } from "apps/queries/subcategory";
 import { NumericInput, getBase64 } from "apps/services/utils/sellersPage";
+import ReactQuill from "react-quill";
 
 const { Option } = Select;
 
@@ -96,6 +97,7 @@ const ProductList = () => {
   };
   const handleChange = ({ fileList: newFileList }) =>
     setFileListImgs(newFileList);
+
   const uploadButton = (
     <div>
       <PlusOutlined />
@@ -310,6 +312,83 @@ const ProductList = () => {
     imgWindow?.document.write(image.outerHTML);
   };
 
+  // Reac-quill
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      ["bold", "italic", "underline", "strike", "blockquote"],
+      [{ size: [] }],
+      [{ font: [] }],
+      [{ align: ["right", "center", "justify"] }],
+      [{ list: "ordered" }, { list: "bullet" }],
+      ["link", "image"],
+      [
+        {
+          color: [
+            "red",
+            "#785412",
+            "#00CC33",
+            "#FF9966",
+            "#FF9900",
+            "#FFCCFF",
+            "#00CCFF",
+            "#3399CC",
+            "#CC33FF",
+            "#00DD00",
+            "#9900FF",
+            "#110000",
+            "#555555",
+            "#FFFF66",
+            "#FFFFFF",
+          ],
+        },
+      ],
+      [
+        {
+          background: [
+            "red",
+            "#785412",
+            "#00CC33",
+            "#FF9966",
+            "#FF9900",
+            "#FFCCFF",
+            "#00CCFF",
+            "#3399CC",
+            "#CC33FF",
+            "#00DD00",
+            "#9900FF",
+            "#110000",
+            "#555555",
+            "#FFFF66",
+            "#FFFFFF",
+          ],
+        },
+      ],
+    ],
+  };
+
+  const formats = [
+    "header",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "blockquote",
+    "list",
+    "bullet",
+    "link",
+    "color",
+    "image",
+    "background",
+    "align",
+    "size",
+    "font",
+  ];
+
+  const [code, setCode] = useState("hello");
+  const handleProcedureContentChange = (content, delta, source, editor) => {
+    setCode(content);
+  };
   return (
     <>
       <Drawer
@@ -428,7 +507,13 @@ const ProductList = () => {
           <Row gutter={16}>
             <Col span={24}>
               <label>Mô Tả</label>
-             
+              <ReactQuill
+                theme="snow"
+                modules={modules}
+                formats={formats}
+                value={code}
+                onChange={handleProcedureContentChange}
+              />
             </Col>
           </Row>
         </Form>
