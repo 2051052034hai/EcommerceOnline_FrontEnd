@@ -10,7 +10,11 @@ import {
   Form,
   Button,
   Drawer,
+  Upload,
+  Modal,
 } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import ImgCrop from "antd-img-crop";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -22,7 +26,7 @@ import { selectCurrentUser } from "store/userSlice/userSelector";
 //Queries
 import { useGetProductsByShopId } from "apps/queries/shop";
 import { useGetSubCategories } from "apps/queries/subcategory";
-import { NumericInput } from "apps/services/utils/sellersPage";
+import { NumericInput, getBase64 } from "apps/services/utils/sellersPage";
 
 const { Option } = Select;
 
@@ -32,15 +36,79 @@ const ProductList = () => {
   const [total, setTotal] = useState();
   const [page, setPage] = useState(1);
   const [subData, setSubdata] = useState([]);
+  const [fileList, setFileList] = useState([]);
 
   //InfoProduct
-  const [productId, setProductId] = useState("")
+  const [productId, setProductId] = useState("");
   const [productName, setProductName] = useState("");
   const [productSub, setProductSub] = useState("");
   const [productStock, setProductStock] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const [productDescription, setProductDescription] = useState("");
-  
+  const [productImage, setProductImage] = useState("");
+
+  //Upload Images
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [fileListImgs, setFileListImgs] = useState([
+    {
+      uid: "-1",
+      name: "image.png",
+      status: "done",
+      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+    },
+    {
+      uid: "-2",
+      name: "image.png",
+      status: "done",
+      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+    },
+    {
+      uid: "-3",
+      name: "image.png",
+      status: "done",
+      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+    },
+    {
+      uid: "-4",
+      name: "image.png",
+      status: "done",
+      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+    },
+    {
+      uid: "-5",
+      name: "image.png",
+      status: "done",
+      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+    },
+  ]);
+  const handleCancel = () => setPreviewOpen(false);
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+    setPreviewTitle(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    );
+  };
+  const handleChange = ({ fileList: newFileList }) =>
+    setFileListImgs(newFileList);
+  const uploadButton = (
+    <div>
+      <PlusOutlined />
+      <div
+        style={{
+          marginTop: 8,
+        }}
+      >
+        Upload
+      </div>
+    </div>
+  );
+  ////////////////////////
 
   const currentUser = useSelector(selectCurrentUser);
   const { data: new_data, isLoading } = useGetProductsByShopId(
@@ -58,6 +126,20 @@ const ProductList = () => {
   useEffect(() => {
     setSubdata(subcateData);
   }, [subcateData, subLoading]);
+
+  useEffect(() => {
+    if (productImage) {
+      const initialFileList = [
+        {
+          uid: "-1",
+          name: "image.png",
+          status: "done",
+          url: productImage,
+        },
+      ];
+      setFileList(initialFileList);
+    }
+  }, [productImage]);
 
   const columns = [
     {
@@ -119,9 +201,10 @@ const ProductList = () => {
       key: "action",
       render: (record) => {
         let record_Data = {
-          id:record.id,
+          id: record.id,
           name: record.name,
           subCategory: record.subCategory,
+          thumbnail: record.thumbnail,
           stock: record.stock,
           price: record.price,
           description: record.description,
@@ -153,6 +236,7 @@ const ProductList = () => {
       name: item.title,
       price: item.price,
       stock: item.stock,
+      thumbnail: item.thumbnail,
       sold: item.sold,
       subCategory: item.subcategory?.name,
       description: item.description,
@@ -174,12 +258,13 @@ const ProductList = () => {
   const [open, setOpen] = useState(false);
   const showDrawer = (data) => {
     return () => {
-      setProductId(data.id)
+      setProductId(data.id);
       setProductName(data.name);
       setProductPrice(data.price);
       setProductStock(data.stock);
       setProductSub(data.subCategory);
       setProductDescription(data.description);
+      setProductImage(data.thumbnail);
       setOpen(true);
     };
   };
@@ -205,6 +290,26 @@ const ProductList = () => {
     console.log("productUpdate:", productUpdate);
     setOpen(false);
   };
+
+  // ImgProduct
+  const onChange = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+  };
+  const onPreview = async (file) => {
+    let src = file.url;
+    if (!src) {
+      src = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj);
+        reader.onload = () => resolve(reader.result);
+      });
+    }
+    const image = new Image();
+    image.src = src;
+    const imgWindow = window.open(src);
+    imgWindow?.document.write(image.outerHTML);
+  };
+
   return (
     <>
       <Drawer
@@ -225,6 +330,53 @@ const ProductList = () => {
         }
       >
         <Form layout="vertical" hideRequiredMark>
+          <Row gutter={16}>
+            <Col span={24} className="mb-3">
+              <label>Ảnh Sản Phẩm</label>
+              <ImgCrop rotationSlider>
+                <Upload
+                  className="mt-3"
+                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                  listType="picture-card"
+                  fileList={fileList}
+                  onChange={onChange}
+                  onPreview={onPreview}
+                >
+                  {fileList.length < 1 && "Thay đổi"}
+                </Upload>
+              </ImgCrop>
+            </Col>
+          </Row>
+
+          <Row gutter={16}>
+            <Col span={24} className="mb-3">
+              <label>Ảnh Kèm Theo</label>
+              <Upload
+                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                listType="picture-card"
+                fileList={fileListImgs}
+                onPreview={handlePreview}
+                onChange={handleChange}
+              >
+                {fileListImgs.length >= 5 ? null : uploadButton}
+              </Upload>
+              <Modal
+                open={previewOpen}
+                title={previewTitle}
+                footer={null}
+                onCancel={handleCancel}
+              >
+                <img
+                  alt="example"
+                  style={{
+                    width: "100%",
+                  }}
+                  src={previewImage}
+                />
+              </Modal>
+            </Col>
+          </Row>
+
           <Row gutter={16}>
             <Col span={24} className="mb-3">
               <label>Tên Sản Phẩm</label>
@@ -276,13 +428,7 @@ const ProductList = () => {
           <Row gutter={16}>
             <Col span={24}>
               <label>Mô Tả</label>
-              <Input.TextArea
-                className="mt-2"
-                value={productDescription}
-                rows={4}
-                placeholder="Nhập mô tả..."
-                onChange={(e) => setProductDescription(e.target.value)}
-              />
+             
             </Col>
           </Row>
         </Form>
