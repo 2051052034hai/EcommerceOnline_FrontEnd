@@ -28,10 +28,13 @@ import { useGetProductsByShopId } from "apps/queries/shop";
 import { useGetSubCategories } from "apps/queries/subcategory";
 import { NumericInput, getBase64 } from "apps/services/utils/sellersPage";
 import ReactQuill from "react-quill";
+import { uploadImage } from "apps/services/utils/uploadImage";
+import { useUpdateProduct } from "apps/queries/product/useUpdateProduct";
 
 const { Option } = Select;
 
 const ProductList = () => {
+  const { mutation } = useUpdateProduct();
   const [pageSize, setPageSize] = useState(5);
   const [productData, setProductData] = useState([]);
   const [total, setTotal] = useState();
@@ -59,8 +62,8 @@ const ProductList = () => {
   useEffect(() => {
     if (productImages) {
       const imageList = productImages.map((img, index) => ({
-        uid: -index,
-        name: "image.png",
+        // uid: -index,
+        // name: "image.png",
         status: "done",
         url: img,
       }));
@@ -117,8 +120,6 @@ const ProductList = () => {
     if (productImage) {
       const initialFileList = [
         {
-          uid: "-1",
-          name: "image.png",
           status: "done",
           url: productImage,
         },
@@ -223,11 +224,11 @@ const ProductList = () => {
       name: item.title,
       price: item.price,
       stock: item.stock,
-      thumbnail: item.thumbnail,
       sold: item.sold,
       subCategory: item.subcategory?.name,
       description: item.description,
       images: item.images,
+      shop: item.shop,
     };
   });
 
@@ -266,19 +267,39 @@ const ProductList = () => {
     setProductSub(value);
   };
 
-  const handelUdateProduct = () => {
+  const handelUdateProduct = async () => {
     const productUpdate = {
-      id: productId,
-      name: productName,
+      _id: productId,
+      title: productName,
       price: productPrice,
       stock: productStock,
       subcategory: productSub,
       description: productDescription,
-      thumbnail: fileList,
-      images: fileListImgs,
+      thumbnail: "",
+      images: [],
     };
 
-    console.log("productUpdate:", productUpdate);
+    for (const file of fileList) {
+      if (file.url) {
+        productUpdate.thumbnail = file.url;
+      } else {
+        const imagetest = await uploadImage(file.originFileObj);
+        productUpdate.thumbnail = imagetest;
+      }
+    }
+    for (const file of fileListImgs) {
+      if (file.url) {
+        productUpdate.images.push(file.url);
+      } else {
+        const imagetest = await uploadImage(file.originFileObj);
+
+        productUpdate.images.push(imagetest);
+      }
+    }
+
+    if (productUpdate) {
+      mutation.mutate(productUpdate);
+    }
     setOpen(false);
   };
 

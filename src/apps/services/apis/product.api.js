@@ -1,4 +1,4 @@
-import { get } from "./https";
+import { get, update } from "./https";
 
 const pathUrl = "/product/";
 
@@ -14,5 +14,11 @@ export const getProductsById = async (id) => {
 
 export const getTopSaleProduct = async () => {
   const result = await get("/products/topsale");
+  return result.data;
+};
+
+export const updateProduct = async (product) => {
+  const result = await update(pathUrl, product);
+  console.log(result, "result");
   return result.data;
 };
