@@ -47,43 +47,27 @@ const ProductList = () => {
   const [productPrice, setProductPrice] = useState("");
   const [productDescription, setProductDescription] = useState("");
   const [productImage, setProductImage] = useState("");
+  const [productImages, setProductImages] = useState([]);
 
   //Upload Images
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
-  const [fileListImgs, setFileListImgs] = useState([
-    {
-      uid: "-1",
-      name: "image.png",
-      status: "done",
-      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    },
-    {
-      uid: "-2",
-      name: "image.png",
-      status: "done",
-      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    },
-    {
-      uid: "-3",
-      name: "image.png",
-      status: "done",
-      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    },
-    {
-      uid: "-4",
-      name: "image.png",
-      status: "done",
-      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    },
-    {
-      uid: "-5",
-      name: "image.png",
-      status: "done",
-      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    },
-  ]);
+
+  const [fileListImgs, setFileListImgs] = useState([]);
+
+  useEffect(() => {
+    if (productImages) {
+      const imageList = productImages.map((img, index) => ({
+        uid: -index,
+        name: "image.png",
+        status: "done",
+        url: img,
+      }));
+      setFileListImgs(imageList);
+    }
+  }, [productImages]);
+
   const handleCancel = () => setPreviewOpen(false);
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -106,11 +90,11 @@ const ProductList = () => {
           marginTop: 8,
         }}
       >
-        Upload
+        <span>Thêm ảnh</span>
       </div>
     </div>
   );
-  ////////////////////////
+  /*///////////end upload////////////////////*/
 
   const currentUser = useSelector(selectCurrentUser);
   const { data: new_data, isLoading } = useGetProductsByShopId(
@@ -210,6 +194,7 @@ const ProductList = () => {
           stock: record.stock,
           price: record.price,
           description: record.description,
+          images: record.images,
         };
 
         return (
@@ -242,6 +227,7 @@ const ProductList = () => {
       sold: item.sold,
       subCategory: item.subcategory?.name,
       description: item.description,
+      images: item.images,
     };
   });
 
@@ -267,6 +253,7 @@ const ProductList = () => {
       setProductSub(data.subCategory);
       setProductDescription(data.description);
       setProductImage(data.thumbnail);
+      setProductImages(data.images);
       setOpen(true);
     };
   };
@@ -287,6 +274,8 @@ const ProductList = () => {
       stock: productStock,
       subcategory: productSub,
       description: productDescription,
+      thumbnail: fileList,
+      images: fileListImgs,
     };
 
     console.log("productUpdate:", productUpdate);
@@ -385,9 +374,8 @@ const ProductList = () => {
     "font",
   ];
 
-  const [code, setCode] = useState("hello");
   const handleProcedureContentChange = (content, delta, source, editor) => {
-    setCode(content);
+    setProductDescription(content);
   };
   return (
     <>
@@ -431,6 +419,7 @@ const ProductList = () => {
             <Col span={24} className="mb-3">
               <label>Ảnh Kèm Theo</label>
               <Upload
+                className="mt-3"
                 action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                 listType="picture-card"
                 fileList={fileListImgs}
@@ -511,7 +500,7 @@ const ProductList = () => {
                 theme="snow"
                 modules={modules}
                 formats={formats}
-                value={code}
+                value={productDescription}
                 onChange={handleProcedureContentChange}
               />
             </Col>
