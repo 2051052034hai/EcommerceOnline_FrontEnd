@@ -8,7 +8,6 @@ import { QUERIES_KEYS } from "apps/constants/queries";
 import { getProductsByShopId } from "apps/services/apis/shop.api";
 
 export const useGetProductsByShopId = (id, page, pageSize) => {
-
   const queryClient = useQueryClient();
 
   const nextPage = page + 1;

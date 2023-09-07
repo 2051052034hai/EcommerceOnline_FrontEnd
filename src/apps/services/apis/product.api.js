@@ -1,4 +1,4 @@
-import { get, update } from "./https";
+import { get, update, remove } from "./https";
 
 const pathUrl = "/product/";
 
@@ -19,6 +19,10 @@ export const getTopSaleProduct = async () => {
 
 export const updateProduct = async (product) => {
   const result = await update(pathUrl, product);
-  console.log(result, "result");
   return result.data;
+};
+
+export const deleteProduct = async (data) => {
+  const { id } = data;
+  await remove(`${pathUrl}${id}`);
 };
