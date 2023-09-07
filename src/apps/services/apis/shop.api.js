@@ -3,14 +3,23 @@ import { get } from "./https";
 const pathUrl = "/shop/";
 
 export const getProductsByShopId = async (id, page, pageSize) => {
+  if (id) {
+    let url = `/productShop/${id}?populate=subcategory&`;
 
-  let url = `${pathUrl}${id}?populate=subcategory&`;
+    if (page !== undefined && pageSize !== undefined) {
+      url += `page=${page}&limit=${pageSize}&`;
+    }
 
-  if (page !== undefined && pageSize !== undefined) {
-    url += `page=${page}&limit=${pageSize}&`;
+    const result = await get(url);
+
+    return result.data.data;
   }
-  
-  const result = await get(url);
+};
 
-  return result.data.data;
+export const getShopbyUserId = async (id) => {
+  if (id) {
+    let url = `${pathUrl}${id}`;
+    const result = await get(url);
+    return result.data.data;
+  }
 };

@@ -10,6 +10,7 @@ import { useGetSubCategories } from "apps/queries/subcategory";
 import ReactQuill from "react-quill";
 import { selectCurrentUser } from "store/userSlice/userSelector";
 import { useSelector } from "react-redux";
+import { useGetShopbyUserId } from "apps/queries/shop/useGetShopbyUserId";
 
 const AddProduct = () => {
   const currentUser = useSelector(selectCurrentUser);
@@ -29,9 +30,14 @@ const AddProduct = () => {
   const [productImage, setProductImage] = useState({});
   const [productImages, setProductImages] = useState([]);
 
+  
+
   useEffect(() => {
     setSubdata(data);
   }, [data, isLoading]);
+
+  const { data: shop_data, isLoading: isLoadingShopData } =
+  useGetShopbyUserId(currentUser?._id);
 
   //Upload Img
   const onChange = ({ fileList: newFileList }) => {
@@ -166,6 +172,7 @@ const AddProduct = () => {
 
   //update
   const handleAddProduct = () => {
+    
     let new_product = {
       title: productName,
       price: productPrice,
@@ -173,7 +180,7 @@ const AddProduct = () => {
       discountPercentage: productDiscount,
       subcategory: productSub,
       description: productDescription,
-      shop: currentUser?._id,
+      shop: shop_data?._id,
       thumbnail: productImage,
       images: productImages,
     };

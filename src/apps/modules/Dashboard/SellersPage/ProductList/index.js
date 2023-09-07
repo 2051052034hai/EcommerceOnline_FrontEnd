@@ -31,6 +31,7 @@ import ReactQuill from "react-quill";
 import { uploadImage } from "apps/services/utils/uploadImage";
 import { useUpdateProduct } from "apps/queries/product/useUpdateProduct";
 import { useDeleteProduct } from "apps/queries/product/useDeleteProduct";
+import { useGetShopbyUserId } from "apps/queries/shop/useGetShopbyUserId";
 
 const { Option } = Select;
 
@@ -100,15 +101,20 @@ const ProductList = () => {
   );
 
   const currentUser = useSelector(selectCurrentUser);
+
+  const { data: shop_data, isLoading: isLoadingShopData } =
+  useGetShopbyUserId(currentUser?._id);
+
   const { data: new_data, isLoading: isLoadingGetProducts } =
-    useGetProductsByShopId(currentUser?._id, page, pageSize);
+    useGetProductsByShopId(shop_data?._id, page, pageSize);
 
   const { data: subcateData, isLoading: subLoading } = useGetSubCategories();
 
   useEffect(() => {
     setProductData(new_data?.products);
     setTotal(new_data?.total);
-  }, [new_data, isLoadingGetProducts]);
+  }, [new_data, isLoadingGetProducts, isLoadingUpdateProduct]);
+
 
   useEffect(() => {
     setSubdata(subcateData);
@@ -267,12 +273,15 @@ const ProductList = () => {
 
   const handelUdateProduct = async () => {
     const productUpdate = {
+      page,
+      pageSize,
       _id: productId,
       title: productName,
       price: productPrice,
       stock: productStock,
       subcategory: productSub,
       description: productDescription,
+      shop: shop_data?._id,
       thumbnail: "",
       images: [],
     };
@@ -306,7 +315,7 @@ const ProductList = () => {
       id,
       page,
       pageSize,
-      user: currentUser?._id,
+      shop: shop_data?._id,
     };
     mutationDelete.mutate(dataDelete);
   };

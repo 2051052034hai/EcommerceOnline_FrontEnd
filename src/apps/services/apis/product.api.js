@@ -18,7 +18,8 @@ export const getTopSaleProduct = async () => {
 };
 
 export const updateProduct = async (product) => {
-  const result = await update(pathUrl, product);
+  const {shop, page, pageSize, ...other} = product;
+  const result = await update(pathUrl, other);
   return result.data;
 };
 
