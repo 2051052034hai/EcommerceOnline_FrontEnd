@@ -26,7 +26,7 @@ const AddProduct = () => {
   const [productStock, setProductStock] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const [productDescription, setProductDescription] = useState("");
-  const [productImage, setProductImage] = useState("");
+  const [productImage, setProductImage] = useState({});
   const [productImages, setProductImages] = useState([]);
 
   useEffect(() => {
@@ -35,8 +35,9 @@ const AddProduct = () => {
 
   //Upload Img
   const onChange = ({ fileList: newFileList }) => {
+
     setFileList(newFileList);
-    setProductImage(newFileList);
+    setProductImage(newFileList[0]);
   };
   const onPreview = async (file) => {
     let src = file.url;
@@ -77,6 +78,7 @@ const AddProduct = () => {
     return {
       value: index,
       label: item?.name,
+      key: item?._id,
     };
   });
 
@@ -155,6 +157,11 @@ const AddProduct = () => {
 
   const handleProcedureContentChange = (content, delta, source, editor) => {
     setProductDescription(content);
+  };
+
+  const handleProductSubChange = (value, option) => {
+    const selectedKey = option.key;
+    setProductSub(selectedKey);
   };
 
   //update
@@ -288,8 +295,7 @@ const AddProduct = () => {
           </Col>
           <Col lg={21}>
             <Select
-              value={productSub}
-              onChange={(value) => setProductSub(value)}
+              onChange={handleProductSubChange}
               showSearch
               className="w-full pt-3"
               placeholder="Chọn loại sản phẩm"
