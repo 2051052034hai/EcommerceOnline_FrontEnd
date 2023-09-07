@@ -13,10 +13,10 @@ export const useDeleteProduct = () => {
   const mutation = useMutation({
     mutationFn: async (data) => deleteProduct(data),
     onMutate: (data) => {
-      const { user, page, pageSize } = data;
+      const { shop, page, pageSize } = data;
       queryClient.prefetchQuery(
-        [QUERIES_KEYS.GET_PRODUCTS_BY_SHOPID, user, page, pageSize],
-        () => getProductsByShopId(user, page, pageSize)
+        [QUERIES_KEYS.GET_PRODUCTS_BY_SHOPID, shop, page, pageSize],
+        () => getProductsByShopId(shop, page, pageSize)
       );
     },
     onSuccess: (data) => {
