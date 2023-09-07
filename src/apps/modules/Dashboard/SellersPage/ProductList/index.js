@@ -30,11 +30,13 @@ import { NumericInput, getBase64 } from "apps/services/utils/sellersPage";
 import ReactQuill from "react-quill";
 import { uploadImage } from "apps/services/utils/uploadImage";
 import { useUpdateProduct } from "apps/queries/product/useUpdateProduct";
+import { useDeleteProduct } from "apps/queries/product/useDeleteProduct";
 
 const { Option } = Select;
 
 const ProductList = () => {
-  const { mutation } = useUpdateProduct();
+  const { mutation, isLoading: isLoadingUpdateProduct } = useUpdateProduct();
+  const { mutationDelete, isLoadingDelete } = useDeleteProduct();
   const [pageSize, setPageSize] = useState(5);
   const [productData, setProductData] = useState([]);
   const [total, setTotal] = useState();
@@ -62,8 +64,6 @@ const ProductList = () => {
   useEffect(() => {
     if (productImages) {
       const imageList = productImages.map((img, index) => ({
-        // uid: -index,
-        // name: "image.png",
         status: "done",
         url: img,
       }));
@@ -72,7 +72,7 @@ const ProductList = () => {
   }, [productImages]);
 
   const handleCancel = () => setPreviewOpen(false);
-  
+
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
@@ -98,20 +98,17 @@ const ProductList = () => {
       </div>
     </div>
   );
-  /*///////////end upload////////////////////*/
 
   const currentUser = useSelector(selectCurrentUser);
-  const { data: new_data, isLoading } = useGetProductsByShopId(
-    currentUser?._id,
-    page,
-    pageSize
-  );
+  const { data: new_data, isLoading: isLoadingGetProducts } =
+    useGetProductsByShopId(currentUser?._id, page, pageSize);
+
   const { data: subcateData, isLoading: subLoading } = useGetSubCategories();
 
   useEffect(() => {
     setProductData(new_data?.products);
     setTotal(new_data?.total);
-  }, [new_data, isLoading]);
+  }, [new_data, isLoadingGetProducts]);
 
   useEffect(() => {
     setSubdata(subcateData);
@@ -202,13 +199,17 @@ const ProductList = () => {
         return (
           <Space size="middle">
             <span>
-              <FontAwesomeIcon icon={faTrash} style={{ color: "#e74023" }} />
+              <FontAwesomeIcon
+                onClick={() => handleDeleteProduct(record.id)}
+                icon={faTrash}
+                style={{ color: "#e74023", cursor: "pointer" }}
+              />
             </span>
             <span>
               <FontAwesomeIcon
                 onClick={showDrawer(record_Data)}
                 icon={faPen}
-                style={{ color: "#1b61da" }}
+                style={{ color: "#1b61da", cursor: "pointer" }}
               />
             </span>
           </Space>
@@ -229,7 +230,7 @@ const ProductList = () => {
       subCategory: item.subcategory?.name,
       description: item.description,
       images: item.images,
-      shop: item.shop,
+      user: currentUser?._id,
     };
   });
 
@@ -262,10 +263,6 @@ const ProductList = () => {
 
   const onClose = () => {
     setOpen(false);
-  };
-
-  const handleProductSubChange = (value) => {
-    setProductSub(value);
   };
 
   const handelUdateProduct = async () => {
@@ -302,6 +299,16 @@ const ProductList = () => {
       mutation.mutate(productUpdate);
     }
     setOpen(false);
+  };
+
+  const handleDeleteProduct = async (id) => {
+    const dataDelete = {
+      id,
+      page,
+      pageSize,
+      user: currentUser?._id,
+    };
+    mutationDelete.mutate(dataDelete);
   };
 
   // ImgProduct
@@ -503,12 +510,14 @@ const ProductList = () => {
               <label>Loại sản phẩm</label>
               <Select
                 className="block my-2"
-                value={productSub}
                 placeholder="Please choose the type"
-                onChange={handleProductSubChange}
               >
                 {subData?.map((item, index) => (
-                  <Option key={index} value={item.name}>
+                  <Option
+                    key={index}
+                    value={item.name}
+                    onChange={() => setProductSub(item?._id)}
+                  >
                     {item.name}
                   </Option>
                 ))}
@@ -534,6 +543,9 @@ const ProductList = () => {
         columns={columns}
         dataSource={data}
         pagination={paginationConfig}
+        loading={
+          isLoadingUpdateProduct || isLoadingGetProducts || isLoadingDelete
+        }
       />
     </>
   );
