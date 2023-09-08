@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const uploadImage = async (image) => {
-  console.log(image);
+
   try {
     const uploadImageUrl = "http://localhost:8000/v1/api/upload-image";
     const formData = new FormData();

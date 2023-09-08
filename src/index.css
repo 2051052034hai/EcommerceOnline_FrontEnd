@@ -59,7 +59,11 @@ code {
   background: #fff;
   border-top: 1px solid #e9e9e9;
 }
-
+:where(.css-dev-only-do-not-override-17a39f8).ant-btn-primary {
+  color: #fff;
+  background-color: #1677ff !important;
+  box-shadow: 0 2px 0 rgba(5, 145, 255, 0.1);
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
