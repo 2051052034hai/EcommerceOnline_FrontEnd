@@ -32,11 +32,10 @@ import { uploadImage } from "apps/services/utils/uploadImage";
 import { useUpdateProduct } from "apps/queries/product/useUpdateProduct";
 import { useDeleteProduct } from "apps/queries/product/useDeleteProduct";
 import { useGetShopbyUserId } from "apps/queries/shop/useGetShopbyUserId";
-
 const { Option } = Select;
 
 const ProductList = () => {
-  const { mutation, isLoading: isLoadingUpdateProduct } = useUpdateProduct();
+ 
   const { mutationDelete, isLoadingDelete } = useDeleteProduct();
   const [pageSize, setPageSize] = useState(5);
   const [productData, setProductData] = useState([]);
@@ -48,72 +47,34 @@ const ProductList = () => {
   //InfoProduct
   const [productId, setProductId] = useState("");
   const [productName, setProductName] = useState("");
-  const [productSub, setProductSub] = useState("");
+  const [productSubId, setProductSubId] = useState("");
   const [productStock, setProductStock] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const [productDescription, setProductDescription] = useState("");
   const [productImage, setProductImage] = useState("");
   const [productImages, setProductImages] = useState([]);
+  const [productSubName, setProductSubName] = useState("");
 
   //Upload Images
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
-
   const [fileListImgs, setFileListImgs] = useState([]);
 
-  useEffect(() => {
-    if (productImages) {
-      const imageList = productImages.map((img, index) => ({
-        status: "done",
-        url: img,
-      }));
-      setFileListImgs(imageList);
-    }
-  }, [productImages]);
-
-  const handleCancel = () => setPreviewOpen(false);
-
-  const handlePreview = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-    setPreviewImage(file.url || file.preview);
-    setPreviewOpen(true);
-    setPreviewTitle(
-      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
-    );
-  };
-  const handleChange = ({ fileList: newFileList }) =>
-    setFileListImgs(newFileList);
-
-  const uploadButton = (
-    <div>
-      <PlusOutlined />
-      <div
-        style={{
-          marginTop: 8,
-        }}
-      >
-        <span>Thêm ảnh</span>
-      </div>
-    </div>
-  );
-
   const currentUser = useSelector(selectCurrentUser);
-
+  const { mutation, isLoading: isLoadingUpdateProduct } = useUpdateProduct();
   const { data: shop_data, isLoading: isLoadingShopData } =
   useGetShopbyUserId(currentUser?._id);
-
   const { data: new_data, isLoading: isLoadingGetProducts } =
     useGetProductsByShopId(shop_data?._id, page, pageSize);
-
   const { data: subcateData, isLoading: subLoading } = useGetSubCategories();
+ 
 
   useEffect(() => {
     setProductData(new_data?.products);
     setTotal(new_data?.total);
   }, [new_data, isLoadingGetProducts, isLoadingUpdateProduct]);
+
 
 
   useEffect(() => {
@@ -132,6 +93,19 @@ const ProductList = () => {
     }
   }, [productImage]);
 
+  
+  useEffect(() => {
+    if (productImages) {
+      const imageList = productImages.map((img, index) => ({
+        status: "done",
+        url: img,
+      }));
+      setFileListImgs(imageList);
+    }
+  }, [productImages]);
+
+  
+  // Loa data
   const columns = [
     {
       title: "",
@@ -185,16 +159,17 @@ const ProductList = () => {
       title: "Loại sản phẩm",
       dataIndex: "subCategory",
       key: "subCategory",
-      render: (text) => <h3 className="font-bold text-blue-800">{text}</h3>,
+      render: (text, record) => <h3 className="font-bold text-blue-800">{record.subCategoryName}</h3>,
     },
     {
       title: "Hành động",
       key: "action",
       render: (record) => {
+      
         let record_Data = {
           id: record.id,
           name: record.name,
-          subCategory: record.subCategory,
+          subCategory: record.subCategoryName,
           thumbnail: record.thumbnail,
           stock: record.stock,
           price: record.price,
@@ -233,13 +208,22 @@ const ProductList = () => {
       price: item.price,
       stock: item.stock,
       sold: item.sold,
-      subCategory: item.subcategory?.name,
+      subCategoryName: item.subcategory?.name,
       description: item.description,
       images: item.images,
       user: currentUser?._id,
     };
   });
 
+  const options = subcateData?.map((item, index) => {
+    return {
+      value: index,
+      label: item?.name,
+      key: item?._id,
+    };
+  });
+
+// Pagination
   const paginationConfig = {
     pageSize: pageSize,
     total: total,
@@ -251,6 +235,20 @@ const ProductList = () => {
     },
   };
 
+
+  const uploadButton = (
+    <div>
+      <PlusOutlined />
+      <div
+        style={{
+          marginTop: 8,
+        }}
+      >
+        <span>Thêm ảnh</span>
+      </div>
+    </div>
+  );
+
   //Drawer
   const [open, setOpen] = useState(false);
   const showDrawer = (data) => {
@@ -259,7 +257,7 @@ const ProductList = () => {
       setProductName(data.name);
       setProductPrice(data.price);
       setProductStock(data.stock);
-      setProductSub(data.subCategory);
+      setProductSubName(data.subCategory);
       setProductDescription(data.description);
       setProductImage(data.thumbnail);
       setProductImages(data.images);
@@ -271,54 +269,7 @@ const ProductList = () => {
     setOpen(false);
   };
 
-  const handelUdateProduct = async () => {
-    const productUpdate = {
-      page,
-      pageSize,
-      _id: productId,
-      title: productName,
-      price: productPrice,
-      stock: productStock,
-      subcategory: productSub,
-      description: productDescription,
-      shop: shop_data?._id,
-      thumbnail: "",
-      images: [],
-    };
 
-    for (const file of fileList) {
-      if (file.url) {
-        productUpdate.thumbnail = file.url;
-      } else {
-        const imagetest = await uploadImage(file.originFileObj);
-        productUpdate.thumbnail = imagetest;
-      }
-    }
-    for (const file of fileListImgs) {
-      if (file.url) {
-        productUpdate.images.push(file.url);
-      } else {
-        const imagetest = await uploadImage(file.originFileObj);
-
-        productUpdate.images.push(imagetest);
-      }
-    }
-
-    if (productUpdate) {
-      mutation.mutate(productUpdate);
-    }
-    setOpen(false);
-  };
-
-  const handleDeleteProduct = async (id) => {
-    const dataDelete = {
-      id,
-      page,
-      pageSize,
-      shop: shop_data?._id,
-    };
-    mutationDelete.mutate(dataDelete);
-  };
 
   // ImgProduct
   const onChange = ({ fileList: newFileList }) => {
@@ -412,9 +363,85 @@ const ProductList = () => {
     "font",
   ];
 
+
+//Handle function
+  const handleDeleteProduct = async (id) => {
+    const dataDelete = {
+      id,
+      page,
+      pageSize,
+      shop: shop_data?._id,
+    };
+    mutationDelete.mutate(dataDelete);
+  };
+
+  
+  const handleCancel = () => setPreviewOpen(false);
+
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+    setPreviewTitle(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    );
+  };
+
+  const handleChange = ({ fileList: newFileList }) =>
+    setFileListImgs(newFileList);
+
+  const handleProductSubChange = (value, option) => {
+    setProductSubId( option.key);
+    setProductSubName(value);
+    
+  };
+
   const handleProcedureContentChange = (content, delta, source, editor) => {
     setProductDescription(content);
   };
+
+  const handelUdateProduct = async () => {
+    const productUpdate = {
+      page,
+      pageSize,
+      _id: productId,
+      title: productName,
+      price: productPrice,
+      stock: productStock,
+      subcategory: productSubId,
+      description: productDescription,
+      shop: shop_data?._id,
+      thumbnail: "",
+      images: [],
+    };
+
+    for (const file of fileList) {
+      if (file.url) {
+        productUpdate.thumbnail = file.url;
+      } else {
+        const imagetest = await uploadImage(file.originFileObj);
+        productUpdate.thumbnail = imagetest;
+      }
+    }
+    for (const file of fileListImgs) {
+      if (file.url) {
+        productUpdate.images.push(file.url);
+      } else {
+        const imagetest = await uploadImage(file.originFileObj);
+
+        productUpdate.images.push(imagetest);
+      }
+    }
+
+    // console.log("productUpdate: ", productUpdate);
+    if (productUpdate) {
+      mutation.mutate(productUpdate);
+    }
+    setOpen(false);
+  };
+
   return (
     <>
       <Drawer
@@ -518,25 +545,31 @@ const ProductList = () => {
             <Col span={24} className="mt-2">
               <label>Loại sản phẩm</label>
               <Select
-                className="block my-2"
-                placeholder="Please choose the type"
-              >
-                {subData?.map((item, index) => (
-                  <Option
-                    key={index}
-                    value={item.name}
-                    onChange={() => setProductSub(item?._id)}
-                  >
-                    {item.name}
-                  </Option>
-                ))}
-              </Select>
+              onChange={handleProductSubChange}
+              value={productSubName}
+              showSearch
+              className="w-full pt-3"
+              placeholder="Chọn loại sản phẩm"
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                (option?.label?.toLowerCase() ?? "").includes(
+                  input.toLowerCase()
+                )
+              }
+              filterSort={(optionA, optionB) =>
+                (optionA?.label?.toLowerCase() ?? "").localeCompare(
+                  optionB?.label?.toLowerCase()
+                )
+              }
+              options={options}
+            />
             </Col>
           </Row>
           <Row gutter={16}>
-            <Col span={24}>
-              <label>Mô Tả</label>
+            <Col span={24} className="my-2" >
+              <label >Mô Tả</label>
               <ReactQuill
+                className="mt-2"
                 theme="snow"
                 modules={modules}
                 formats={formats}
