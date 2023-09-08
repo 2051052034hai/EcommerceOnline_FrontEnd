@@ -35,7 +35,6 @@ import { useGetShopbyUserId } from "apps/queries/shop/useGetShopbyUserId";
 const { Option } = Select;
 
 const ProductList = () => {
- 
   const { mutationDelete, isLoadingDelete } = useDeleteProduct();
   const [pageSize, setPageSize] = useState(5);
   const [productData, setProductData] = useState([]);
@@ -43,6 +42,7 @@ const ProductList = () => {
   const [page, setPage] = useState(1);
   const [subData, setSubdata] = useState([]);
   const [fileList, setFileList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   //InfoProduct
   const [productId, setProductId] = useState("");
@@ -63,19 +63,19 @@ const ProductList = () => {
 
   const currentUser = useSelector(selectCurrentUser);
   const { mutation, isLoading: isLoadingUpdateProduct } = useUpdateProduct();
-  const { data: shop_data, isLoading: isLoadingShopData } =
-  useGetShopbyUserId(currentUser?._id);
+  const { data: shop_data, isLoading: isLoadingShopData } = useGetShopbyUserId(
+    currentUser?._id
+  );
+
+  console.log(isLoadingUpdateProduct, "isLoadingUpdateProduct");
   const { data: new_data, isLoading: isLoadingGetProducts } =
-    useGetProductsByShopId(shop_data?._id, page, pageSize);
+    useGetProductsByShopId(shop_data?._id);
   const { data: subcateData, isLoading: subLoading } = useGetSubCategories();
- 
 
   useEffect(() => {
     setProductData(new_data?.products);
     setTotal(new_data?.total);
-  }, [new_data, isLoadingGetProducts, isLoadingUpdateProduct]);
-
-
+  }, [new_data, isLoadingGetProducts]);
 
   useEffect(() => {
     setSubdata(subcateData);
@@ -93,7 +93,6 @@ const ProductList = () => {
     }
   }, [productImage]);
 
-  
   useEffect(() => {
     if (productImages) {
       const imageList = productImages.map((img, index) => ({
@@ -104,7 +103,6 @@ const ProductList = () => {
     }
   }, [productImages]);
 
-  
   // Loa data
   const columns = [
     {
@@ -159,13 +157,14 @@ const ProductList = () => {
       title: "Loại sản phẩm",
       dataIndex: "subCategory",
       key: "subCategory",
-      render: (text, record) => <h3 className="font-bold text-blue-800">{record.subCategoryName}</h3>,
+      render: (text, record) => (
+        <h3 className="font-bold text-blue-800">{record.subCategoryName}</h3>
+      ),
     },
     {
       title: "Hành động",
       key: "action",
       render: (record) => {
-      
         let record_Data = {
           id: record.id,
           name: record.name,
@@ -175,6 +174,7 @@ const ProductList = () => {
           price: record.price,
           description: record.description,
           images: record.images,
+          subcategoryId: record.subcategoryId,
         };
 
         return (
@@ -212,6 +212,7 @@ const ProductList = () => {
       description: item.description,
       images: item.images,
       user: currentUser?._id,
+      subcategoryId: item.subcategory?._id,
     };
   });
 
@@ -223,7 +224,7 @@ const ProductList = () => {
     };
   });
 
-// Pagination
+  // Pagination
   const paginationConfig = {
     pageSize: pageSize,
     total: total,
@@ -234,7 +235,6 @@ const ProductList = () => {
       setPageSize(pageSize);
     },
   };
-
 
   const uploadButton = (
     <div>
@@ -261,6 +261,7 @@ const ProductList = () => {
       setProductDescription(data.description);
       setProductImage(data.thumbnail);
       setProductImages(data.images);
+      setProductSubId(data.subcategoryId);
       setOpen(true);
     };
   };
@@ -268,8 +269,6 @@ const ProductList = () => {
   const onClose = () => {
     setOpen(false);
   };
-
-
 
   // ImgProduct
   const onChange = ({ fileList: newFileList }) => {
@@ -363,19 +362,15 @@ const ProductList = () => {
     "font",
   ];
 
-
-//Handle function
+  //Handle function
   const handleDeleteProduct = async (id) => {
     const dataDelete = {
       id,
-      page,
-      pageSize,
       shop: shop_data?._id,
     };
     mutationDelete.mutate(dataDelete);
   };
 
-  
   const handleCancel = () => setPreviewOpen(false);
 
   const handlePreview = async (file) => {
@@ -393,9 +388,8 @@ const ProductList = () => {
     setFileListImgs(newFileList);
 
   const handleProductSubChange = (value, option) => {
-    setProductSubId( option.key);
+    setProductSubId(option.key);
     setProductSubName(value);
-    
   };
 
   const handleProcedureContentChange = (content, delta, source, editor) => {
@@ -403,6 +397,7 @@ const ProductList = () => {
   };
 
   const handelUdateProduct = async () => {
+    setIsLoading(true);
     const productUpdate = {
       page,
       pageSize,
@@ -435,7 +430,6 @@ const ProductList = () => {
       }
     }
 
-    // console.log("productUpdate: ", productUpdate);
     if (productUpdate) {
       mutation.mutate(productUpdate);
     }
@@ -455,7 +449,11 @@ const ProductList = () => {
         extra={
           <Space>
             <Button onClick={onClose}>Huỷ bỏ</Button>
-            <Button onClick={handelUdateProduct} type="primary">
+            <Button
+              onClick={handelUdateProduct}
+              type="primary"
+              loading={isLoading}
+            >
               Thay đổi
             </Button>
           </Space>
@@ -545,29 +543,29 @@ const ProductList = () => {
             <Col span={24} className="mt-2">
               <label>Loại sản phẩm</label>
               <Select
-              onChange={handleProductSubChange}
-              value={productSubName}
-              showSearch
-              className="w-full pt-3"
-              placeholder="Chọn loại sản phẩm"
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                (option?.label?.toLowerCase() ?? "").includes(
-                  input.toLowerCase()
-                )
-              }
-              filterSort={(optionA, optionB) =>
-                (optionA?.label?.toLowerCase() ?? "").localeCompare(
-                  optionB?.label?.toLowerCase()
-                )
-              }
-              options={options}
-            />
+                onChange={handleProductSubChange}
+                value={productSubName}
+                showSearch
+                className="w-full pt-3"
+                placeholder="Chọn loại sản phẩm"
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  (option?.label?.toLowerCase() ?? "").includes(
+                    input.toLowerCase()
+                  )
+                }
+                filterSort={(optionA, optionB) =>
+                  (optionA?.label?.toLowerCase() ?? "").localeCompare(
+                    optionB?.label?.toLowerCase()
+                  )
+                }
+                options={options}
+              />
             </Col>
           </Row>
           <Row gutter={16}>
-            <Col span={24} className="my-2" >
-              <label >Mô Tả</label>
+            <Col span={24} className="my-2">
+              <label>Mô Tả</label>
               <ReactQuill
                 className="mt-2"
                 theme="snow"

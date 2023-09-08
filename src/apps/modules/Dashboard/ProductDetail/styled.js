@@ -35,10 +35,13 @@ export const ProductImageThumb = styled.div`
 `;
 
 export const ProductContent = styled.div`
-  padding: 0px 10px 20px 10px;
+  padding: 0px 20px 30px 20px;
 
   p {
     margin-bottom: 0;
+  }
+  div {
+    margin-bottom: 10px;
   }
 `;
 
@@ -60,6 +63,8 @@ export const ProductContentTitle = styled.div`
 
 export const ProductContentValuate = styled.div`
   display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-size: 16px;
 `;
 
@@ -67,6 +72,8 @@ export const Comment = styled.div`
   display: flex;
   align-items: center;
   color: #787a80;
+  height: 20px;
+
   p {
     padding-left: 10px;
     padding-right: 10px;
@@ -78,6 +85,7 @@ export const IconRating = styled.div`
 export const TextIconRating = styled.div`
   padding-right: 10px;
   display: flex;
+  height: 20px;
 `;
 export const Sold = styled.div`
   display: flex;

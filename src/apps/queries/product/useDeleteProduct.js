@@ -5,21 +5,18 @@ import { useMutation, useQueryClient } from "react-query";
 import { deleteProduct } from "apps/services/apis/product.api";
 import { toast } from "react-toastify";
 import { QUERIES_KEYS } from "apps/constants/queries";
-import { getProductsByShopId } from "apps/services/apis/shop.api";
 
 export const useDeleteProduct = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
     mutationFn: async (data) => deleteProduct(data),
-    onMutate: (data) => {
-      const { shop, page, pageSize } = data;
-      queryClient.prefetchQuery(
-        [QUERIES_KEYS.GET_PRODUCTS_BY_SHOPID, shop, page, pageSize],
-        () => getProductsByShopId(shop, page, pageSize)
-      );
-    },
+    onMutate: (data) => {},
     onSuccess: (data) => {
+      queryClient.invalidateQueries([
+        QUERIES_KEYS.GET_PRODUCTS_BY_SHOPID,
+        data.shop,
+      ]);
       toast.success("Xóa dữ liệu thành công");
     },
     onError: () => {

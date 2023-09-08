@@ -45,9 +45,10 @@ import {
 import Rating from "react-rating";
 import SlideProduct from "apps/components/molecules/SliderProduct";
 import ProductSkeleton from "apps/components/molecules/ProductSkeleton";
-import { Col, Skeleton } from "antd";
+import { Button, Col, Skeleton, Typography } from "antd";
 import { useGetProductBySubId } from "apps/queries/subcategory";
 
+const { Paragraph } = Typography;
 const ProductDetail = () => {
   const { id } = useParams();
   const imgRef = useRef(null);
@@ -73,6 +74,12 @@ const ProductDetail = () => {
 
   const handleAddToCart = () => {
     dispatch(add_cart({ ...product, quantity: 1 }));
+  };
+
+  const [expanded, setExpanded] = useState(false);
+
+  const toggleExpanded = () => {
+    setExpanded(!expanded);
   };
 
   return (
@@ -192,22 +199,6 @@ const ProductDetail = () => {
                         <span>{Math.round(product?.discountPercentage)}%</span>
                       </div>
                     </div>
-                    <ProductContentDetail>
-                      <Items>
-                        <p className="key">Customization: </p>
-                        <p className="value">
-                          Customized logo and design custom packages
-                        </p>
-                      </Items>
-                      <Items>
-                        <p className="key">Protection:</p>
-                        <p className="value">Refund Policy</p>
-                      </Items>
-                      <Items>
-                        <p className="key">Warranty: </p>
-                        <p className="value">2 years full warranty </p>
-                      </Items>
-                    </ProductContentDetail>
                   </ProductContent>
                 </Col>
                 <Col
@@ -266,6 +257,25 @@ const ProductDetail = () => {
               </>
             )}
           </div>
+        </section>
+      </div>
+      <div>
+        <section className="mt-10 mx-auto px-3 max-w-screen-xl md:px-0 mb-8  ">
+          <RelatedProduct>Giới thiệu sản phẩm</RelatedProduct>
+
+          <Paragraph
+            style={{ maxHeight: expanded ? "none" : 200, overflow: "hidden" }}
+            className={expanded ? "expanded-paragraph" : ""}
+          >
+            <div
+              dangerouslySetInnerHTML={{ __html: product?.description }}
+            ></div>
+          </Paragraph>
+          {!expanded && (
+            <Button type="link" onClick={toggleExpanded}>
+              Xem thêm
+            </Button>
+          )}
         </section>
       </div>
 

@@ -18,12 +18,13 @@ export const getTopSaleProduct = async () => {
 };
 
 export const updateProduct = async (product) => {
-  const {shop, page, pageSize, ...other} = product;
+  const { shop, page, pageSize, ...other } = product;
   const result = await update(pathUrl, other);
   return result.data;
 };
 
 export const deleteProduct = async (data) => {
   const { id } = data;
-  await remove(`${pathUrl}${id}`);
+  const result = await remove(`${pathUrl}${id}`);
+  return result.data.data;
 };
