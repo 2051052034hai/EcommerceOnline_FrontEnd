@@ -8,7 +8,6 @@ export const Purchase_History = () => {
   const currentUser = useSelector(selectCurrentUser);
   const { data } = useGetCartByUserId(currentUser?._id);
 
-  console.log("data", data);
   return (
     <>
       <Divider
@@ -52,7 +51,7 @@ export const Purchase_History = () => {
                           </div>
                           <div className="w-2/3">
                             <h3 className="text-base text-gray-800 font-semibold mt-1">
-                              {item?.product.title}
+                              {item?.product?.title}
                             </h3>
                             <p>Số lượng: {item?.qty}</p>
                           </div>

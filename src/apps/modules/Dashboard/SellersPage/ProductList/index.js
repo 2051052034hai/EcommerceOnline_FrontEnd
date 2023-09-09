@@ -68,6 +68,7 @@ const ProductList = () => {
   const { data: shop_data, isLoading: isLoadingShopData } = useGetShopbyUserId(
     currentUser?._id
   );
+
   const { data: new_data, isLoading: isLoadingGetProducts } =
     useGetProductsByShopId(shop_data?._id);
   const { data: subcateData, isLoading: subLoading } = useGetSubCategories();
@@ -364,11 +365,7 @@ const ProductList = () => {
 
   //Handle function
   const handleDeleteProduct = async (id) => {
-    const dataDelete = {
-      id,
-      shop: shop_data?._id,
-    };
-    mutationDelete.mutate(dataDelete);
+    mutationDelete.mutate(id);
   };
 
   const handleCancel = () => setPreviewOpen(false);

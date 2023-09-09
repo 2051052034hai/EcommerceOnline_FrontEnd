@@ -11,12 +11,18 @@ import ReactQuill from "react-quill";
 import { selectCurrentUser } from "store/userSlice/userSelector";
 import { useSelector } from "react-redux";
 import { useGetShopbyUserId } from "apps/queries/shop/useGetShopbyUserId";
+import { useCreateProduct } from "apps/queries/product/useCreateProduct";
+import { useRef } from "react";
 
 const AddProduct = () => {
+  const { mutation } = useCreateProduct();
+  const { data, isLoading } = useGetSubCategories();
+  const buttonRef = useRef();
+
   const currentUser = useSelector(selectCurrentUser);
+  const [isLoadingAdd, setIsLoadingAdd] = useState(false);
   const [fileList, setFileList] = useState([]);
   const [fileListImgs, setFileListImgs] = useState([]);
-  const { data, isLoading } = useGetSubCategories();
   const [subData, setSubdata] = useState([]);
 
   //product
@@ -24,7 +30,7 @@ const AddProduct = () => {
   const [productName, setProductName] = useState("");
   const [productSub, setProductSub] = useState("");
   const [productStock, setProductStock] = useState("");
-  const [productPrice, setProductPrice] = useState("");
+  const [productPrice, setProductPrice] = useState(0);
   const [productDescription, setProductDescription] = useState("");
   const [productImage, setProductImage] = useState({});
   const [productImages, setProductImages] = useState([]);
@@ -40,15 +46,15 @@ const AddProduct = () => {
   //Upload Img
   const onChange = ({ fileList: newFileList }) => {
     const isValidImg = beforeUpload(fileList);
-    console.log("isValidImg:", isValidImg);
     if (isValidImg) {
       setFileList(newFileList);
       setProductImage(newFileList[0]);
     } else {
       setFileList([]);
-      alert("vui lòng nhập ảnh có dung lượng nhỏ hơn 2mb")
+      alert("vui lòng nhập ảnh có dung lượng nhỏ hơn 2mb");
     }
   };
+
   const onPreview = async (file) => {
     let src = file.url;
     if (!src) {
@@ -69,6 +75,7 @@ const AddProduct = () => {
     setFileListImgs(newFileList);
     setProductImages(newFileList);
   };
+
   const onPreviewImgs = async (file) => {
     let src = file.url;
     if (!src) {
@@ -83,6 +90,7 @@ const AddProduct = () => {
     const imgWindow = window.open(src);
     imgWindow?.document.write(image.outerHTML);
   };
+
   //Select
   const options = subData?.map((item, index) => {
     return {
@@ -175,8 +183,8 @@ const AddProduct = () => {
   };
 
   //Add product
-  const handleAddProduct = (values) => {
-    console.log("Success:", values);
+  const handleAddProduct = async (values) => {
+    setIsLoadingAdd(true);
     let new_product = {
       title: productName,
       price: productPrice,
@@ -185,12 +193,22 @@ const AddProduct = () => {
       subcategory: productSub,
       description: productDescription,
       shop: shop_data?._id,
-      thumbnail: productImage,
-      images: productImages,
+      thumbnail: productImage.originFileObj,
+      images: [],
     };
 
-    console.log("new_product:", new_product);
+    for (const file of productImages) {
+      new_product.images.push(file.originFileObj);
+    }
+    await mutation.mutateAsync(new_product);
+    setIsLoadingAdd(false);
+    buttonRef.current.type = "reset";
+    setFileList([]);
+    setFileListImgs([]);
+    buttonRef.current.click();
   };
+
+  console.log(isLoadingAdd);
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -219,9 +237,15 @@ const AddProduct = () => {
         >
           <Row>
             <Col lg={24}>
-              <h3 className="text-base mb-3 pt-3">Hình ảnh sản phẩm ( <span className="text-sm">*vui lòng tải hình ảnh có dung lượng nhỏ hơn 2mb</span>)</h3>
+              <h3 className="text-base mb-3 pt-3">
+                Hình ảnh sản phẩm ({" "}
+                <span className="text-sm">
+                  *vui lòng tải hình ảnh có dung lượng nhỏ hơn 2mb
+                </span>
+                )
+              </h3>
             </Col>
-            <Col className="ml-32">
+            <Col className="ml-44">
               <ImgCrop rotationSlider>
                 <Form.Item
                   name="ProductImg"
@@ -253,14 +277,14 @@ const AddProduct = () => {
             <Col lg={24}>
               <h3 className="text-base mb-3 pt-3">Hình ảnh kèm theo</h3>
             </Col>
-            <Col className="ml-32">
+            <Col className="ml-44">
               <ImgCrop rotationSlider>
                 <Upload
                   action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                   listType="picture-card"
                   fileList={fileListImgs}
                   onChange={onChangeImgs}
-                  onPreview={onPreviewImgs}
+                  onPreview={onPreview}
                 >
                   {fileList.length < 5 && (
                     <span className="text-red-500 font-medium w-20">
@@ -272,10 +296,10 @@ const AddProduct = () => {
             </Col>
           </Row>
           <Row className="mt-5">
-            <Col lg={3}>
+            <Col lg={4}>
               <h3 className="text-base mb-5 pt-3">Tên sản phẩm</h3>
             </Col>
-            <Col lg={21}>
+            <Col lg={20}>
               <Form.Item
                 name="ProductName"
                 rules={[
@@ -294,33 +318,23 @@ const AddProduct = () => {
             </Col>
           </Row>
           <Row className="mt-5">
-            <Col lg={3}>
-              <h3 className="text-base mb-5 pt-3">Giá sản phẩm</h3>
+            <Col lg={4}>
+              <h3 className="text-base mb-5 pt-3 w-32">Nhập giá</h3>
             </Col>
-            <Col lg={21}>
-              <Form.Item
-                name="ProductPrice"
-                rules={[
-                  {
-                    required: true,
-                    message: "Vui lòng giá tên sản phẩm",
-                  },
-                ]}
-              >
-                <NumericInput
-                  value={productPrice}
-                  className="p-2 w-full"
-                  onChange={setProductPrice}
-                  text="Nhập giá sản phẩm"
-                />
-              </Form.Item>
+            <Col lg={20}>
+              <NumericInput
+                value={productPrice}
+                className="p-2 w-full"
+                onChange={setProductDiscount}
+                text="Nhập giá sản phẩm..."
+              />
             </Col>
           </Row>
           <Row className="mt-5">
-            <Col lg={3}>
+            <Col lg={4}>
               <h3 className="text-base mb-5 pt-3 w-32">Giảm giá %</h3>
             </Col>
-            <Col lg={21}>
+            <Col lg={20}>
               <NumericInput
                 value={productDiscount}
                 className="p-2 w-full"
@@ -330,10 +344,10 @@ const AddProduct = () => {
             </Col>
           </Row>
           <Row className="mt-5">
-            <Col lg={3}>
+            <Col lg={4}>
               <h3 className="text-base mb-5 pt-3">SL tồn kho</h3>
             </Col>
-            <Col lg={21}>
+            <Col lg={20}>
               <Form.Item
                 name="ProductStock"
                 rules={[
@@ -353,10 +367,10 @@ const AddProduct = () => {
             </Col>
           </Row>
           <Row className="mt-5">
-            <Col lg={3}>
+            <Col lg={4}>
               <h3 className="text-base mb-5 pt-3">Loại sản phẩm</h3>
             </Col>
-            <Col lg={21}>
+            <Col lg={20}>
               <Form.Item
                 name="ProductSub"
                 rules={[
@@ -388,10 +402,10 @@ const AddProduct = () => {
             </Col>
           </Row>
           <Row className="my-5">
-            <Col lg={3}>
+            <Col lg={4}>
               <h3 className="text-base mb-5 pt-5 ">Mô tả sản phẩm</h3>
             </Col>
-            <Col lg={21}>
+            <Col lg={20}>
               <Form.Item
                 name="ProductDescription"
                 rules={[
@@ -416,6 +430,8 @@ const AddProduct = () => {
               className="bg-blue-600 text-white rounded "
               htmlType="submit"
               type="primary"
+              loading={isLoadingAdd}
+              ref={buttonRef}
             >
               Thêm sản phẩm
             </Button>

@@ -17,12 +17,7 @@ export const ROUTER = {
     path: "/login",
     isPrivate: false,
   },
-  NOTFOUNDPAGE: {
-    key: "notpage",
-    name: "NotFoundPage",
-    path: "/notfoundpage",
-    isPrivate: false,
-  },
+
   PRODUCTDETAIL: {
     key: "productDetail",
     name: "productDetail",

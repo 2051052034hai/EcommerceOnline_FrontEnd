@@ -6,15 +6,18 @@ import { useGetDataCategory } from "apps/queries/category";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-
+import { SearchOutlined, DownOutlined } from "@ant-design/icons";
 import cookie from "react-cookies";
+import { Dropdown, Space } from "antd";
+
 //UserSlice
 import { log_out } from "store/userSlice/userSlice";
 
 //Antd
-import { DownOutlined } from "@ant-design/icons";
-import { Dropdown, Space } from "antd";
 import { selectCurrentUser } from "store/userSlice/userSelector";
+import { ROLE } from "apps/constants";
+import { useGetShopbyUserId } from "apps/queries/shop/useGetShopbyUserId";
+import { SearchStyle } from "./styled";
 
 const { SubMenu } = Menu;
 
@@ -27,6 +30,7 @@ export default function Header() {
   const dispatch = useDispatch();
   const countCart = useSelector((state) => state.cart.count);
   const currentUser = useSelector(selectCurrentUser);
+  const { data: shop } = useGetShopbyUserId(currentUser?._id);
 
   useEffect(() => {
     setMenuData(data);
@@ -83,7 +87,7 @@ export default function Header() {
     },
   ];
 
-  if (currentUser?.role === 2) {
+  if (currentUser?.role === ROLE.SELLER && shop) {
     items.splice(1, 0, {
       label: <Link to="/sellerspage">Kênh bán hàng</Link>,
       key: "2",
@@ -146,7 +150,10 @@ export default function Header() {
             })}
           </Menu>
         </div>
-        <div className=" lg:flex lg:justify-end">
+        <div className=" lg:flex lg:justify-end ">
+          <SearchStyle>
+            <SearchOutlined />
+          </SearchStyle>
           <Link
             to={"/cart"}
             className="text-md relative font-semibold leading-6 mr-7 pl-2 text-gray-900"
