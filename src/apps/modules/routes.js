@@ -2,7 +2,6 @@
 import { ROUTER } from "../constants/routes";
 
 // Components
-import NotFoundPage from "./NotFoundPage";
 import Home from "./Dashboard/Home";
 import Login from "./Auth/Login";
 import ProductDetail from "./Dashboard/ProductDetail";
@@ -12,12 +11,6 @@ import { Purchase_History } from "./Dashboard/Purchase_History";
 import sellersPage from "./Dashboard/SellersPage";
 
 export const routes = [
-  {
-    key: ROUTER.NOTFOUNDPAGE.key,
-    path: ROUTER.NOTFOUNDPAGE.path,
-    name: ROUTER.NOTFOUNDPAGE.name,
-    component: NotFoundPage,
-  },
   {
     key: ROUTER.HOME.key,
     path: ROUTER.HOME.path,
