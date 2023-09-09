@@ -10,7 +10,7 @@ export const useDeleteProduct = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: async (data) => deleteProduct(data),
+    mutationFn: async (id) => deleteProduct(id),
     onMutate: (data) => {},
     onSuccess: (data) => {
       queryClient.invalidateQueries([

@@ -13,7 +13,6 @@ import { ROUTER, ROLE } from "apps/constants";
 export const Root = () => {
   const navigate = useNavigate();
   const currentUser = useSelector(selectCurrentUser);
-  console.log(currentUser);
   return (
     <Routes>
       {routes?.map((route) => {
