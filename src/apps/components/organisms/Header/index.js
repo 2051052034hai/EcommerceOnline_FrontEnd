@@ -151,9 +151,12 @@ export default function Header() {
           </Menu>
         </div>
         <div className=" lg:flex lg:justify-end ">
-          <SearchStyle>
-            <SearchOutlined />
-          </SearchStyle>
+          <Link to="/searchpage">
+            <SearchStyle>
+              <SearchOutlined />
+            </SearchStyle>
+          </Link>
+
           <Link
             to={"/cart"}
             className="text-md relative font-semibold leading-6 mr-7 pl-2 text-gray-900"

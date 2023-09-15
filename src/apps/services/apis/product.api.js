@@ -2,8 +2,27 @@ import { get, update, remove, create } from "./https";
 
 const pathUrl = "/product/";
 
-export const getProductsPage = async (page, pageSize) => {
-  const result = await get(`${pathUrl}?page=${page}&limit=${pageSize}`);
+export const getProductsPage = async (page, pageSize, keyWord, subcategory, shopId) => {
+
+  let url = `${pathUrl}?`;
+
+  if (page !== undefined && pageSize !== undefined) {
+    url += `page=${page}&limit=${pageSize}&`;
+  }
+
+  if (keyWord !== undefined) {
+    url += `title=/${keyWord}/&`;
+  }
+
+  if(subcategory !== undefined) {
+    url +=`subcategory=${subcategory}&`
+  }
+
+  if(shopId !== undefined) {
+    url +=`shop=${shopId}`
+  }
+
+  const result = await get(url);
   return result.data;
 };
 

@@ -9,6 +9,7 @@ import Cart from "apps/modules/Cart";
 import ProductCategory from "./Dashboard/ProductCategory";
 import { Purchase_History } from "./Dashboard/Purchase_History";
 import sellersPage from "./Dashboard/SellersPage";
+import SearchPage from "./Dashboard/SearchPage";
 
 export const routes = [
   {
@@ -52,5 +53,11 @@ export const routes = [
     path: ROUTER.SELLERSPAGE.path,
     name: ROUTER.SELLERSPAGE.name,
     component: sellersPage,
+  },
+  {
+    key: ROUTER.SEARCHPAGE.key,
+    path: ROUTER.SEARCHPAGE.path,
+    name: ROUTER.SEARCHPAGE.name,
+    component: SearchPage,
   },
 ];
