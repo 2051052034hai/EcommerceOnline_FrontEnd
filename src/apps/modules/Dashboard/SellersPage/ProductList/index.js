@@ -32,6 +32,7 @@ import { uploadImage } from "apps/services/utils/uploadImage";
 import { useUpdateProduct } from "apps/queries/product/useUpdateProduct";
 import { useDeleteProduct } from "apps/queries/product/useDeleteProduct";
 import { useGetShopbyUserId } from "apps/queries/shop/useGetShopbyUserId";
+import { toast } from "react-toastify";
 const { Option } = Select;
 
 const ProductList = () => {
@@ -43,6 +44,7 @@ const ProductList = () => {
   const [subData, setSubdata] = useState([]);
   const [fileList, setFileList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [form] = Form.useForm();
 
   //InfoProduct
   const [productId, setProductId] = useState("");
@@ -393,6 +395,10 @@ const ProductList = () => {
 
   const handelUdateProduct = async () => {
     setIsLoading(true);
+    if (!productName || !fileList) {
+      setIsLoading(false);
+      return toast.error("Cập nhật thất bại!");
+    }
     const productUpdate = {
       page,
       pageSize,
@@ -429,32 +435,50 @@ const ProductList = () => {
       mutation.mutate(productUpdate);
     }
     setOpen(false);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    form.setFieldsValue({
+      ProductName: productName,
+    });
+  }, [productName, form]);
+
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
   };
 
   return (
     <>
-      <Drawer
-        title="Thông Tin Sản Phẩm"
-        width={720}
-        onClose={onClose}
-        open={open}
-        bodyStyle={{
-          paddingBottom: 80,
-        }}
-        extra={
-          <Space>
-            <Button onClick={onClose}>Huỷ bỏ</Button>
-            <Button
-              onClick={handelUdateProduct}
-              type="primary"
-              loading={isLoading}
-            >
-              Thay đổi
-            </Button>
-          </Space>
-        }
+      <Form
+        form={form}
+        name="basic"
+        autoComplete="off"
+        onFinish={handelUdateProduct}
+        onFinishFailed={onFinishFailed}
       >
-        <Form layout="vertical" hideRequiredMark>
+        <Drawer
+          title="Thông Tin Sản Phẩm"
+          width={720}
+          onClose={onClose}
+          open={open}
+          bodyStyle={{
+            paddingBottom: 80,
+          }}
+          extra={
+            <Space>
+              <Button onClick={onClose}>Huỷ bỏ</Button>
+              <Button
+                htmlType="submit"
+                type="primary"
+                onClick={handelUdateProduct}
+                loading={isLoading}
+              >
+                Thay đổi
+              </Button>
+            </Space>
+          }
+        >
           <Row gutter={16}>
             <Col span={24} className="mb-3">
               <label>Ảnh Sản Phẩm</label>
@@ -506,12 +530,22 @@ const ProductList = () => {
           <Row gutter={16}>
             <Col span={24} className="mb-3">
               <label>Tên Sản Phẩm</label>
-              <Input
-                className="mt-3"
-                placeholder="Nhập tên sản phẩm..."
-                value={productName}
-                onChange={(e) => setProductName(e.target.value)}
-              />
+              <Form.Item
+                name="ProductName"
+                rules={[
+                  {
+                    required: true,
+                    message: "Vui lòng nhập tên của sản phẩm",
+                  },
+                ]}
+                initialValue={productName}
+              >
+                <Input
+                  className="mt-3"
+                  placeholder="Nhập tên sản phẩm..."
+                  onChange={(e) => setProductName(e.target.value)}
+                />
+              </Form.Item>
             </Col>
           </Row>
           <Row gutter={16}>
@@ -571,9 +605,8 @@ const ProductList = () => {
               />
             </Col>
           </Row>
-        </Form>
-      </Drawer>
-
+        </Drawer>
+      </Form>
       <Table
         columns={columns}
         dataSource={data}
