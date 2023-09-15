@@ -4,7 +4,6 @@ const pathUrl = "/order";
 
 export const handleAddOrder = async (order) => {
   const result = await create(pathUrl, order);
-  console.log(result);
   return result.data;
 };
 
