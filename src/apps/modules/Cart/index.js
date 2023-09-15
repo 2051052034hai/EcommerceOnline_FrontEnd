@@ -21,7 +21,6 @@ import { selectCurrentUser } from "store/userSlice/userSelector";
 
 // Queries
 import { useSaveCart } from "apps/queries/cart/useSaveCart";
-import { getPaymentConfig } from "apps/services/apis/payment.api";
 
 const Cart = () => {
   const [valuePayment, setValuePayment] = useState(1);
@@ -57,15 +56,13 @@ const Cart = () => {
     mutation.mutate(data_save);
   };
   const onChange = (e) => {
-    console.log("radio checked", e.target.value);
     setValuePayment(e.target.value);
   };
 
   const addPayPalScript = async () => {
-    const data = await getPaymentConfig();
     const script = document.createElement("script");
     script.type = "text/javascript";
-    script.src = `https://www.paypal.com/sdk/js?client-id=${data}`;
+    script.src = `https://www.paypal.com/sdk/js?client-id=${process.env.REACT_APP_CLIENT_ID_PAYPAL}`;
     script.async = true;
     script.onload = () => {
       setSdkReady(true);
@@ -224,7 +221,7 @@ const Cart = () => {
                   ) : valuePayment === 2 ? (
                     <div style={{ width: "300px" }}>
                       <PayPalButton
-                        amount={totalAfterDiscount / 30000}
+                        amount={Math.ceil(totalAfterDiscount / 30000)}
                         // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
                         onSuccess={onSuccessPayment}
                         onError={() => {
