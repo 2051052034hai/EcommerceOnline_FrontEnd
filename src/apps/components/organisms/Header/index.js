@@ -6,7 +6,7 @@ import { useGetDataCategory } from "apps/queries/category";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { SearchOutlined, DownOutlined } from "@ant-design/icons";
+import { SearchOutlined, DownOutlined, UserOutlined } from "@ant-design/icons";
 import cookie from "react-cookies";
 import { Dropdown, Space } from "antd";
 
@@ -68,6 +68,21 @@ export default function Header() {
     dispatch(log_out());
   };
 
+  //
+  function getItem(label, key, icon, children, type, to, onClick) {
+    return {
+      key,
+      icon,
+      children,
+      label: to ? <Link to={to}>{label}</Link> : label,
+      type,
+      onClick,
+    };
+  }
+
+  const userMobiItems = [
+   
+  ];
   // Item current user
   const items = [
     {
@@ -150,51 +165,55 @@ export default function Header() {
             })}
           </Menu>
         </div>
-        <div className=" lg:flex lg:justify-end ">
-          <Link to="/searchpage">
-            <SearchStyle>
-              <SearchOutlined />
-            </SearchStyle>
-          </Link>
 
-          <Link
-            to={"/cart"}
-            className="text-md relative font-semibold leading-6 mr-7 pl-2 text-gray-900"
-          >
-            <FontAwesomeIcon icon={faCartShopping} bounce />
-            <p className="absolute -top-3 left-7 text-xs border border-black rounded-full px-1">
-              {countCart}
-            </p>
-          </Link>
-
-          {currentUser?.username ? (
-            <>
-              <Dropdown menu={{ items }} trigger={["click"]}>
-                <Link onClick={(e) => e.preventDefault()}>
-                  <Space>
-                    <div className="lg:w-7 md:w-6 sm:w-5 w-5">
-                      <img
-                        className="rounded-full"
-                        src="/assets/image/avatar.jpg"
-                        alt="ảnh không tồn tại"
-                      ></img>
-                    </div>
-                    <div>{currentUser?.username}!</div>
-                    <DownOutlined />
-                  </Space>
+        <div className="flex justify-end flex-row">
+          <div>
+            <Link to="/searchpage">
+              <SearchStyle>
+                <SearchOutlined />
+              </SearchStyle>
+            </Link>
+          </div>
+          <div>
+            <Link
+              to={"/cart"}
+              className="text-md relative font-semibold leading-6 mr-7 pl-2 text-gray-900"
+            >
+              <FontAwesomeIcon icon={faCartShopping} bounce />
+              <p className="absolute -top-3 left-7 text-xs border border-black rounded-full px-1">
+                {countCart}
+              </p>
+            </Link>
+          </div>
+          <div className="hidden lg:block md:hidden">
+            {currentUser?.username ? (
+              <>
+                <Dropdown menu={{ items }} trigger={["click"]}>
+                  <Link onClick={(e) => e.preventDefault()}>
+                    <Space>
+                      <div style={{marginTop: "-10px"}}>
+                       <UserOutlined />
+                      </div>
+                      <div>{currentUser?.username}!</div>
+                      <div className="-mt-2">
+                      <DownOutlined style={{fontSize: "13px",}}/>
+                      </div>
+                    </Space>
+                  </Link>
+                </Dropdown>
+              </>
+            ) : (
+              <>
+                <Link
+                  to={"/login"}
+                  className="text-sm font-semibold leading-6 text-gray-900"
+                  style={{paddingLeft:"20px"}}
+                >
+                  Log in <span aria-hidden="true">&rarr;</span>
                 </Link>
-              </Dropdown>
-            </>
-          ) : (
-            <>
-              <Link
-                to={"/login"}
-                className="text-sm font-semibold leading-6 text-gray-900"
-              >
-                Log in <span aria-hidden="true">&rarr;</span>
-              </Link>
-            </>
-          )}
+              </>
+            )}
+          </div>
         </div>
       </nav>
       {isMobileMenuOpen && (
@@ -248,6 +267,31 @@ export default function Header() {
                   );
                 })}
               </Menu>
+              {currentUser?.username ? (
+                <>
+                  <Menu
+                    mode="inline"
+                    style={{
+                      width: "100%",
+                    }}
+                    items={[ getItem(currentUser?.username, "sub1", <UserOutlined />, [
+                      getItem("Thông tin cá nhân", "1", null, null, null, "/"),
+                      getItem("Lịch sử mua hàng", "2", null, null, null, "/purchase-history"),
+                      getItem("Đăng xuất", "3", null, null, null, null, handleLogOut),
+                    ]),]}
+                  />
+                </>
+              ) : (
+                <>
+                  <Link
+                    to={"/login"}
+                    className="text-sm font-semibold leading-6 text-gray-900"
+                    style={{paddingLeft:"27px"}}
+                  >
+                    Log in <span aria-hidden="true">&rarr;</span>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>
