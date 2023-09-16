@@ -30,7 +30,6 @@ const SearchPage = () => {
   const [productLoading, setProductLoading] = useState(true);
   const [subName, setSubName] = useState("Loại sản phẩm");
   const [shopName, setShopName] = useState("Cửa hàng");
-  const [defaultData, setDefaultData] = useState([]);
   const [isDeleteteFilter, setIsDeleteteFilter] = useState(true);
 
   const { data: subcateData, isLoading: subLoading } = useGetSubCategories();
@@ -43,11 +42,6 @@ const SearchPage = () => {
     shopId
   );
 
-  useEffect(() => {
-    if (data) {
-      setDefaultData(data?.data);
-    }
-  }, [isLoading]);
 
   useEffect(() => {
     if (data) {
@@ -55,7 +49,9 @@ const SearchPage = () => {
       setProduct(data?.data);
       setProductLoading(false);
     }
-  }, [data]);
+  }, [data, isLoading]);
+
+  console.log("products:", products);
 
   useEffect(() => {
     setSubdata(subcateData);
@@ -86,13 +82,14 @@ const SearchPage = () => {
     setProductSubId(item.key);
     setProductLoading(true);
     setIsDeleteteFilter(true);
+    setPage(1)
   };
 
   const handleShopChange = (value, item) => {
     setShopName(value);
     setShopId(item.key);
-    setProductLoading(true);
     setIsDeleteteFilter(true);
+    setPage(1)
   };
 
   const handleOnchangePage = (page, pageSize) => {
@@ -101,16 +98,18 @@ const SearchPage = () => {
   };
 
   const handleClickSearch = () => {
-    setProductLoading(true);
+    
     setKeyWord(valueSeach);
   };
 
   const handleDeleteFilter = () => {
-    setProduct(defaultData);
     setValueSeach("");
     setSubName("Loại sản phẩm");
     setShopName("Cửa hàng");
     setIsDeleteteFilter(false);
+    setPage(1);
+    setProductSubId();
+    setShopId();
   };
 
   return (
@@ -226,7 +225,7 @@ const SearchPage = () => {
           defaultCurrent={1}
           total={total}
           current={page}
-          pageSize={pageSize}
+          pageSize={10}
         />
       </div>
     </>
