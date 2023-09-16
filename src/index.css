@@ -67,6 +67,10 @@ code {
 .ant-upload-list-item-error {
   border:1px solid #1677ff !important;
 }
+.ant-input-search-button{
+  background: #1677ff !important
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
