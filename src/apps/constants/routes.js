@@ -48,4 +48,10 @@ export const ROUTER = {
     path: "/sellerspage",
     isPrivate: false,
   },
+  SEARCHPAGE: {
+    key: "searchpage",
+    name: "searchpage",
+    path: "/searchpage",
+    isPrivate: false,
+  },
 };
