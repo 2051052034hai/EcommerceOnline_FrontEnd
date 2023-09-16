@@ -45,6 +45,7 @@ const Cart = () => {
       var newItem = {
         product: item._id,
         qty: item.quantity,
+        shop: item.shop._id,
       };
       saveNewCart.push(newItem);
     }
@@ -85,6 +86,7 @@ const Cart = () => {
       var newItem = {
         product: item._id,
         qty: item.quantity,
+        shop: item.shop._id,
       };
       saveNewCart.push(newItem);
     }
