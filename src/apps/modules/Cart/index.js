@@ -9,7 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { PayPalButton } from "react-paypal-button-v2";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Radio } from "antd";
+import { Button, Radio } from "antd";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -25,6 +25,7 @@ import { useSaveCart } from "apps/queries/cart/useSaveCart";
 const Cart = () => {
   const [valuePayment, setValuePayment] = useState(1);
   const [skdReady, setSdkReady] = useState(false);
+  const [loadingAdd, setLoadingAdd] = useState(false);
 
   const listCart = useSelector((state) => state?.cart?.products);
   const totalAfterDiscount = useSelector(
@@ -38,7 +39,8 @@ const Cart = () => {
   const currentUser = useSelector(selectCurrentUser);
   const { mutation } = useSaveCart();
 
-  const handleOrder = () => {
+  const handleOrder = async () => {
+    setLoadingAdd(true);
     const saveNewCart = [];
     for (var i = 0; i < listCart.length; i++) {
       var item = listCart[i];
@@ -54,8 +56,11 @@ const Cart = () => {
       orderItems: saveNewCart,
       total: totalAfterDiscount,
     };
-    mutation.mutate(data_save);
+    await mutation.mutateAsync(data_save);
+    setLoadingAdd(false);
   };
+  console.log(loadingAdd);
+
   const onChange = (e) => {
     setValuePayment(e.target.value);
   };
@@ -219,7 +224,15 @@ const Cart = () => {
               <styles.block__pay_checout>
                 {currentUser?._id ? (
                   valuePayment === 1 && skdReady ? (
-                    <button onClick={handleOrder}>Đặt hàng</button>
+                    <Button
+                      style={{
+                        width: "300px",
+                      }}
+                      loading={loadingAdd}
+                      onClick={handleOrder}
+                    >
+                      Đặt hàng
+                    </Button>
                   ) : valuePayment === 2 ? (
                     <div style={{ width: "300px" }}>
                       <PayPalButton

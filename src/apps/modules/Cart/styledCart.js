@@ -137,12 +137,6 @@ export const block__pay_checout = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  button {
-    background: #00b517;
-    padding: 16px 82px;
-    border: none;
-    font-size: 13px;
-  }
 `;
 export const block__pay_credit = styled.div`
   margin-top: 20px;
