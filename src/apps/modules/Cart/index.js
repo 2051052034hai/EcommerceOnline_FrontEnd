@@ -59,7 +59,6 @@ const Cart = () => {
     await mutation.mutateAsync(data_save);
     setLoadingAdd(false);
   };
-  console.log(loadingAdd);
 
   const onChange = (e) => {
     setValuePayment(e.target.value);
@@ -92,6 +91,7 @@ const Cart = () => {
         product: item._id,
         qty: item.quantity,
         shop: item.shop._id,
+        statusPayment: true,
       };
       saveNewCart.push(newItem);
     }
@@ -99,7 +99,6 @@ const Cart = () => {
       userId: currentUser?._id,
       orderItems: saveNewCart,
       total: totalAfterDiscount,
-      statusPayment: true,
       updatedAt: details.update_time,
     };
     mutation.mutate(data_save);

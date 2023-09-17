@@ -186,7 +186,7 @@ export default function Header() {
           <div className="hidden lg:block md:hidden">
             {currentUser?.username ? (
               <div className=" w-36 text-center">
-                <Dropdown menu={{ items }} trigger={["click", "hover"]}>
+                <Dropdown menu={{ items }} trigger={["click"]}>
                   <Link onClick={(e) => e.preventDefault()}>
                     <Space>
                       <div style={{ marginTop: "-10px" }}>
