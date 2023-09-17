@@ -225,9 +225,15 @@ const AddProduct = () => {
   return (
     <>
       <div className="px-5">
-        <Divider style={{ fontSize: "20px" }} orientation="left">
-          Thêm sản phẩm
-        </Divider>
+      <Divider
+        style={{
+          fontSize: "24px",
+          color: "#31a9e0",
+          textTransform: "uppercase",
+        }}
+      >
+        thêm sản phẩm
+      </Divider>
 
         <Form
           name="basic"
@@ -238,9 +244,9 @@ const AddProduct = () => {
           <Row>
             <Col lg={24}>
               <h3 className="text-base mb-3 pt-3">
-                Hình ảnh sản phẩm ({" "}
+                <span style={{fontWeight: 'bold'}}>* </span>Hình ảnh sản phẩm ({" "}
                 <span className="text-sm">
-                  *vui lòng tải hình ảnh có dung lượng nhỏ hơn 2mb
+                  <span style={{fontWeight: 'bold'}}>* </span>vui lòng tải hình ảnh có dung lượng {`<= 2MB`}
                 </span>
                 )
               </h3>
@@ -275,7 +281,7 @@ const AddProduct = () => {
           </Row>
           <Row>
             <Col lg={24}>
-              <h3 className="text-base mb-3 pt-3">Hình ảnh kèm theo</h3>
+              <h3 className="text-base mb-3 pt-3"><span style={{fontWeight: 'bold'}}>* </span>Hình ảnh kèm theo</h3>
             </Col>
             <Col className="ml-44">
               <ImgCrop rotationSlider>
@@ -297,7 +303,7 @@ const AddProduct = () => {
           </Row>
           <Row className="mt-5">
             <Col lg={4}>
-              <h3 className="text-base mb-5 pt-3">Tên sản phẩm</h3>
+              <h3 className="text-base mb-5 pt-3"><span style={{fontWeight: 'bold'}}>* </span>Tên sản phẩm</h3>
             </Col>
             <Col lg={20}>
               <Form.Item
@@ -319,20 +325,20 @@ const AddProduct = () => {
           </Row>
           <Row className="mt-5">
             <Col lg={4}>
-              <h3 className="text-base mb-5 pt-3 w-32">Nhập giá</h3>
+              <h3 className="text-base mb-5 pt-3 w-32"><span style={{fontWeight: 'bold'}}>* </span>Nhập giá</h3>
             </Col>
             <Col lg={20}>
               <NumericInput
                 value={productPrice}
                 className="p-2 w-full"
-                onChange={setProductDiscount}
+                onChange={setProductPrice}
                 text="Nhập giá sản phẩm..."
               />
             </Col>
           </Row>
           <Row className="mt-5">
             <Col lg={4}>
-              <h3 className="text-base mb-5 pt-3 w-32">Giảm giá %</h3>
+              <h3 className="text-base mb-5 pt-3 w-32"><span style={{fontWeight: 'bold'}}>* </span>Giảm giá %</h3>
             </Col>
             <Col lg={20}>
               <NumericInput
@@ -345,7 +351,7 @@ const AddProduct = () => {
           </Row>
           <Row className="mt-5">
             <Col lg={4}>
-              <h3 className="text-base mb-5 pt-3">SL tồn kho</h3>
+              <h3 className="text-base mb-5 pt-3"><span style={{fontWeight: 'bold'}}>* </span>SL tồn kho</h3>
             </Col>
             <Col lg={20}>
               <Form.Item
@@ -368,7 +374,7 @@ const AddProduct = () => {
           </Row>
           <Row className="mt-5">
             <Col lg={4}>
-              <h3 className="text-base mb-5 pt-3">Loại sản phẩm</h3>
+              <h3 className="text-base mb-5 pt-3"><span style={{fontWeight: 'bold'}}>* </span>Loại sản phẩm</h3>
             </Col>
             <Col lg={20}>
               <Form.Item
@@ -401,9 +407,9 @@ const AddProduct = () => {
               </Form.Item>
             </Col>
           </Row>
-          <Row className="my-5">
+          <Row className="mt-5">
             <Col lg={4}>
-              <h3 className="text-base mb-5 pt-5 ">Mô tả sản phẩm</h3>
+              <h3 className="text-base mb-5 pt-5 "><span style={{fontWeight: 'bold'}}>* </span>Mô tả sản phẩm</h3>
             </Col>
             <Col lg={20}>
               <Form.Item
@@ -425,7 +431,7 @@ const AddProduct = () => {
               </Form.Item>
             </Col>
           </Row>
-          <Row className="mb-3 justify-end">
+          <Row className="mb-3 justify-start" style={{marginLeft: "170px"}}>
             <Button
               className="bg-blue-600 text-white rounded "
               htmlType="submit"

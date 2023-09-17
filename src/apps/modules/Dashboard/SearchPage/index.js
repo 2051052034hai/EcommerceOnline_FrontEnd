@@ -42,7 +42,6 @@ const SearchPage = () => {
     shopId
   );
 
-
   useEffect(() => {
     if (data) {
       setTotal(data?.total);
@@ -50,8 +49,6 @@ const SearchPage = () => {
       setProductLoading(false);
     }
   }, [data, isLoading]);
-
-  console.log("products:", products);
 
   useEffect(() => {
     setSubdata(subcateData);
@@ -82,14 +79,15 @@ const SearchPage = () => {
     setProductSubId(item.key);
     setProductLoading(true);
     setIsDeleteteFilter(true);
-    setPage(1)
+    setPage(1);
   };
 
   const handleShopChange = (value, item) => {
     setShopName(value);
     setShopId(item.key);
     setIsDeleteteFilter(true);
-    setPage(1)
+    setProductLoading(true);
+    setPage(1);
   };
 
   const handleOnchangePage = (page, pageSize) => {
@@ -98,8 +96,15 @@ const SearchPage = () => {
   };
 
   const handleClickSearch = () => {
-    
+    setProductLoading(true);
     setKeyWord(valueSeach);
+    setValueSeach("");
+  };
+
+  const handleValueChange = (e) => {
+    const { value } = e.target;
+    setValueSeach(value);
+    setIsDeleteteFilter(true);
   };
 
   const handleDeleteFilter = () => {
@@ -110,6 +115,8 @@ const SearchPage = () => {
     setPage(1);
     setProductSubId();
     setShopId();
+    setValueSeach("");
+    setKeyWord();
   };
 
   return (
@@ -129,7 +136,8 @@ const SearchPage = () => {
           <Search
             className="w-11/12"
             placeholder="Nhập tên sản phẩm"
-            onChange={(e) => setValueSeach(e.target.value)}
+            onChange={handleValueChange}
+            value={valueSeach}
             enterButton
             onSearch={handleClickSearch}
           />
@@ -176,7 +184,7 @@ const SearchPage = () => {
           />
         </Col>
 
-        {(productSubId || shopId) && isDeleteteFilter ? (
+        {(productSubId || shopId || valueSeach) && isDeleteteFilter ? (
           <>
             <Col lg={5} className="justify-center">
               <Button
@@ -200,12 +208,15 @@ const SearchPage = () => {
 
       <div className="grid gap-5 py-4 px-2 md:px-1 grid-cols-2 md:grid-cols-4 lg:grid-cols-5 mx-14">
         {productLoading ? (
-          <Skeleton
-            active
-            paragraph={{
-              rows: 10,
-            }}
-          />
+          <div style={{ width: "100%" }}>
+            <Skeleton
+              active
+              paragraph={{
+                rows: 10,
+                width: "1200px",
+              }}
+            />
+          </div>
         ) : (
           products?.length !== 0 &&
           products.map((item, index) => <CardItem key={index} product={item} />)
