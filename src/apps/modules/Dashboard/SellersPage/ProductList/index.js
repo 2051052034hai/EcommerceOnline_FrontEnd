@@ -71,16 +71,17 @@ const ProductList = () => {
 
   const { data: new_data, isLoading: isLoadingGetProducts } =
     useGetProductsByShopId(shop_data?._id);
-  const { data: subcateData, isLoading: subLoading } = useGetSubCategories();
+  const { data: subcateData } = useGetSubCategories();
 
   useEffect(() => {
     setProductData(new_data?.products);
     setTotal(new_data?.total);
-  }, [new_data, isLoadingGetProducts]);
+  }, [new_data]);
 
   useEffect(() => {
     setSubdata(subcateData);
-  }, [subcateData, subLoading]);
+  }, [subcateData]);
+
 
   useEffect(() => {
     if (productImage) {
@@ -124,7 +125,7 @@ const ProductList = () => {
       key: "name",
       width: 400,
       render: (text, record) => (
-        <Link to={`/product/${record.id}`} className="font-medium">
+        <Link to={`/product/${record.id}`} className="font-medium text-justify">
           {text}
         </Link>
       ),
@@ -134,7 +135,7 @@ const ProductList = () => {
       dataIndex: "price",
       key: "price",
       render: (text) => (
-        <h3 className="font-bold">
+        <h3 className="font-medium">
           {new Intl.NumberFormat("vi-VN", {
             style: "currency",
             currency: "VND",
@@ -146,20 +147,20 @@ const ProductList = () => {
       title: "Tồn Kho",
       dataIndex: "stock",
       key: "stock",
-      render: (text) => <h3 className="font-bold">{text}</h3>,
+      render: (text) => <h3 className="font-medium">{text}</h3>,
     },
     {
       title: "Đã bán",
       dataIndex: "sold",
       key: "sold",
-      render: (text) => <h3 className="font-bold">{text}</h3>,
+      render: (text) => <h3 className="font-medium">{text}</h3>,
     },
     {
       title: "Loại sản phẩm",
       dataIndex: "subCategory",
       key: "subCategory",
       render: (text, record) => (
-        <h3 className="font-bold text-blue-800">{record.subCategoryName}</h3>
+        <h3 className="font-medium text-blue-800">{record.subCategoryName}</h3>
       ),
     },
     {
@@ -611,9 +612,7 @@ const ProductList = () => {
         columns={columns}
         dataSource={data}
         pagination={paginationConfig}
-        loading={
-          isLoadingUpdateProduct || isLoadingGetProducts || isLoadingDelete
-        }
+        loading={isLoadingGetProducts}
       />
     </>
   );
