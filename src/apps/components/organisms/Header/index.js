@@ -5,11 +5,10 @@ import { Menu } from "antd";
 import { useGetDataCategory } from "apps/queries/category";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SearchOutlined, DownOutlined, UserOutlined } from "@ant-design/icons";
 import cookie from "react-cookies";
 import { Dropdown, Space } from "antd";
-
 //UserSlice
 import { log_out } from "store/userSlice/userSlice";
 
@@ -26,6 +25,7 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [menuData, setMenuData] = useState([]);
 
+  const navigate = useNavigate();
   //Redux
   const dispatch = useDispatch();
   const countCart = useSelector((state) => state.cart.count);
@@ -63,6 +63,7 @@ export default function Header() {
 
   //Log out
   const handleLogOut = () => {
+    navigate("/");
     cookie.remove("access-token");
     cookie.remove("refresh_token");
     dispatch(log_out());
@@ -80,9 +81,6 @@ export default function Header() {
     };
   }
 
-  const userMobiItems = [
-   
-  ];
   // Item current user
   const items = [
     {
@@ -187,27 +185,27 @@ export default function Header() {
           </div>
           <div className="hidden lg:block md:hidden">
             {currentUser?.username ? (
-              <>
-                <Dropdown menu={{ items }} trigger={["click"]}>
+              <div className=" w-36 text-center">
+                <Dropdown menu={{ items }} trigger={["click", "hover"]}>
                   <Link onClick={(e) => e.preventDefault()}>
                     <Space>
-                      <div style={{marginTop: "-10px"}}>
-                       <UserOutlined />
+                      <div style={{ marginTop: "-10px" }}>
+                        <UserOutlined />
                       </div>
                       <div>{currentUser?.username}!</div>
                       <div className="-mt-2">
-                      <DownOutlined style={{fontSize: "13px",}}/>
+                        <DownOutlined style={{ fontSize: "13px" }} />
                       </div>
                     </Space>
                   </Link>
                 </Dropdown>
-              </>
+              </div>
             ) : (
               <>
                 <Link
                   to={"/login"}
                   className="text-sm font-semibold leading-6 text-gray-900"
-                  style={{paddingLeft:"20px"}}
+                  style={{ paddingLeft: "20px" }}
                 >
                   Log in <span aria-hidden="true">&rarr;</span>
                 </Link>
@@ -274,11 +272,35 @@ export default function Header() {
                     style={{
                       width: "100%",
                     }}
-                    items={[ getItem(currentUser?.username, "sub1", <UserOutlined />, [
-                      getItem("Thông tin cá nhân", "1", null, null, null, "/"),
-                      getItem("Lịch sử mua hàng", "2", null, null, null, "/purchase-history"),
-                      getItem("Đăng xuất", "3", null, null, null, null, handleLogOut),
-                    ]),]}
+                    items={[
+                      getItem(currentUser?.username, "sub1", <UserOutlined />, [
+                        getItem(
+                          "Thông tin cá nhân",
+                          "1",
+                          null,
+                          null,
+                          null,
+                          "/"
+                        ),
+                        getItem(
+                          "Lịch sử mua hàng",
+                          "2",
+                          null,
+                          null,
+                          null,
+                          "/purchase-history"
+                        ),
+                        getItem(
+                          "Đăng xuất",
+                          "3",
+                          null,
+                          null,
+                          null,
+                          null,
+                          handleLogOut
+                        ),
+                      ]),
+                    ]}
                   />
                 </>
               ) : (
@@ -286,7 +308,7 @@ export default function Header() {
                   <Link
                     to={"/login"}
                     className="text-sm font-semibold leading-6 text-gray-900"
-                    style={{paddingLeft:"27px"}}
+                    style={{ paddingLeft: "27px" }}
                   >
                     Log in <span aria-hidden="true">&rarr;</span>
                   </Link>
