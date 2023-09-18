@@ -84,3 +84,28 @@ export const handleChangeTime = (timer) => {
 
   return formattedDateTime;
 };
+
+export const handleArrDataTable = (data) => {
+  const dataTable = data?.reduce((result, items, orderIndex) => {
+    let new_Time = handleChangeTime(items?.createdAt);
+    let arrProducts = [];
+
+    items?.data.forEach((p, productIndex) => {
+      arrProducts.push({
+        key: `${orderIndex}-${productIndex}`,
+        username: items?.userId?.email,
+        id: p.product._id,
+        productName: p.product.title,
+        thumbnail: p.product.thumbnail,
+        price: p.product.price,
+        quantity: p.qty,
+        createdAt: new_Time,
+        status: p.statusPayment,
+      });
+    });
+
+    return result.concat(arrProducts);
+  }, []);
+
+  return dataTable;
+};
