@@ -11,7 +11,7 @@ import { useGetOrderByShop } from "apps/queries/order";
 import { useGetShopbyUserId } from "apps/queries/shop/useGetShopbyUserId";
 
 //Utils
-import { handleChangeTime } from "apps/services/utils/sellersPage";
+import { handleArrDataTable, handleChangeTime } from "apps/services/utils/sellersPage";
 
 //Store
 import { selectCurrentUser } from "store/userSlice/userSelector";
@@ -124,26 +124,7 @@ const OrderList = () => {
     },
   ];
 
-  const dataTable = orderData?.reduce((result, items, orderIndex) => {
-    let new_Time = handleChangeTime(items?.createdAt);
-    let arrProducts = [];
-
-    items?.data.forEach((p, productIndex) => {
-      arrProducts.push({
-        key: `${orderIndex}-${productIndex}`,
-        username: items?.userId?.username,
-        id: p.product._id,
-        productName: p.product.title,
-        thumbnail: p.product.thumbnail,
-        price: p.product.price,
-        quantity: p.qty,
-        createdAt: new_Time,
-        status: p.statusPayment,
-      });
-    });
-
-    return result.concat(arrProducts);
-  }, []);
+  const dataTable = handleArrDataTable(orderData)
 
   //Pagination
   const paginationConfig = {

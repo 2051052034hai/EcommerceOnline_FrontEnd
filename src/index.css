@@ -74,6 +74,10 @@ code {
   background: #1677ff !important
 }
 
+.recharts-responsive-container {
+  margin:auto;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
