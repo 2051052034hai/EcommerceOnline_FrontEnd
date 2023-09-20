@@ -109,3 +109,171 @@ export const handleArrDataTable = (data) => {
 
   return dataTable;
 };
+
+export const optionInputSelectChart = (text, length, number) => {
+  let arr = Array.from({ length: length - number + 1 }, (_, index) => ({
+    value: number + index,
+    label: `${text} ${number + index}`,
+    key: number + index,
+  }));
+
+  return arr;
+};
+
+//Get day
+export const handelGetDay = (timer) => {
+  const parts = timer.split("/");
+  const day = parseInt(parts[0], 10);
+  return day;
+};
+
+//Get month
+export const handelGetMonth = (timer) => {
+  const parts = timer.split("/");
+  const day = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10);
+  const year = parseInt(parts[2], 10);
+
+  const date = new Date(year, month - 1, day);
+
+  const monthNumber = date.getMonth() + 1;
+
+  return monthNumber;
+};
+
+//Get year
+export const handelGetYear = (timer) => {
+  const parts = timer.split("/");
+  const day = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10);
+  const year = parseInt(parts[2], 10);
+
+  return year;
+};
+
+//Get total month
+export const sumTotalMonth = (data, month) => {
+  let sum = 0;
+  Object.keys(data).map((date) => {
+    let getMonth = handelGetMonth(date);
+    if (month === getMonth) {
+      sum += data[date];
+    }
+  });
+  return sum;
+};
+
+export const sumTotalDay = (data) => {
+  let sum = 0;
+  Object.keys(data).map((date) => {
+    sum += data[date];
+  });
+  return sum;
+};
+
+//Get total precious
+export const sumTotalPrecious = (data, precious) => {
+  let sum = 0;
+  for (let i = 1; i <= 4; i++) {
+    if (precious === i) {
+      for (let month = (i - 1) * 3 + 1; month <= i * 3; month++) {
+        sum += sumTotalMonth(data, month);
+      }
+      break; // Thoát khỏi vòng lặp khi đã tính tổng xong
+    }
+  }
+  return sum;
+};
+
+//ChangeTimeChart
+const changeTimeChart = (timer) => {
+  const parts = timer.split(" ");
+
+  const datePart = parts[0];
+
+  const dateComponents = datePart.split("/");
+  const day = dateComponents[0].padStart(2, "0");
+  const month = dateComponents[1].padStart(2, "0");
+  const year = dateComponents[2];
+
+  const newDate = `${day}/${month}/${year}`;
+
+  return newDate;
+};
+
+// RevenueByDate
+export const handleRevenueByDate = (data, month) => {
+  let revenueByDate = {};
+  data?.forEach((product) => {
+    if (product.status) {
+      let newCreateAt = changeTimeChart(product.createdAt);
+      let getMonth = handelGetMonth(newCreateAt);
+
+      if (getMonth === month) {
+        if (!revenueByDate[newCreateAt]) {
+          revenueByDate[newCreateAt] = 0;
+        }
+        revenueByDate[newCreateAt] += product.price;
+      }
+    }
+  });
+
+  return revenueByDate;
+};
+
+export const handleRevenueByDay = (data, day) => {
+  let revenueByDay = {};
+  data?.forEach((product) => {
+    if (product.status) {
+      let newCreateAt = changeTimeChart(product.createdAt);
+      let getday = handelGetDay(newCreateAt);
+
+      if (getday === day) {
+        if (!revenueByDay[newCreateAt]) {
+          revenueByDay[newCreateAt] = 0;
+        }
+        revenueByDay[newCreateAt] += product.price;
+      }
+    }
+  });
+
+  return revenueByDay;
+};
+
+export const handleRevenueByYear = (data, year) => {
+  let revenueByYear = {};
+  data?.forEach((product) => {
+    if (product.status) {
+      let newCreateAt = changeTimeChart(product.createdAt);
+      let getYear = handelGetYear(newCreateAt);
+
+      if (year === getYear) {
+        if (!revenueByYear[newCreateAt]) {
+          revenueByYear[newCreateAt] = 0;
+        }
+        revenueByYear[newCreateAt] += product.price;
+      }
+    }
+  });
+
+  return revenueByYear;
+};
+
+export const handleRevenueByPrecious = (data, year) => {
+  let revenueByYear = {};
+  data?.forEach((product) => {
+    if (product.status) {
+      let newCreateAt = changeTimeChart(product.createdAt);
+      let getYear = handelGetYear(newCreateAt);
+
+      if (year === getYear) {
+        if (!revenueByYear[newCreateAt]) {
+          revenueByYear[newCreateAt] = 0;
+        }
+        revenueByYear[newCreateAt] += product.price;
+      }
+    }
+  });
+
+  return revenueByYear;
+};

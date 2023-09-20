@@ -1,7 +1,8 @@
 //libaries
 import { useSelector } from "react-redux";
 import { useEffect, useMemo, useState } from "react";
-import { Col, Divider, Row, Select } from "antd";
+import { Col, Divider, Row, Select, Statistic, Card } from "antd";
+import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 
 //Store
 import { selectCurrentUser } from "store/userSlice/userSelector";
@@ -9,21 +10,38 @@ import { selectCurrentUser } from "store/userSlice/userSelector";
 //Queries
 import { useGetOrderByShop } from "apps/queries/order";
 import { useGetShopbyUserId } from "apps/queries/shop/useGetShopbyUserId";
-import { handleArrDataTable } from "apps/services/utils/sellersPage";
+import {
+  handelGetMonth,
+  handleArrDataTable,
+  handleRevenueByDate,
+  handleRevenueByDay,
+  handleRevenueByPrecious,
+  handleRevenueByYear,
+  optionInputSelectChart,
+  sumTotalDay,
+  sumTotalMonth,
+  sumTotalPrecious,
+} from "apps/services/utils/sellersPage";
 
 //Molecules
 import LineChartConnect from "apps/components/molecules/LineChartConnect";
+import SameDataChart from "apps/components/molecules/SameDataChart";
+import PieChartWith from "apps/components/molecules/pieChart";
 
 const StatisticsPage = () => {
   const currentUser = useSelector(selectCurrentUser);
   const { data: shop_data } = useGetShopbyUserId(currentUser?._id);
-  const { data: new_data } = useGetOrderByShop(shop_data?._id);
+  const { data: new_data, isLoading } = useGetOrderByShop(shop_data?._id);
 
   const currentDate = useMemo(() => new Date(), []);
+  const currentDay = currentDate.getDate();
   const currentMonth = currentDate.getMonth() + 1;
+  const currentYear = currentDate.getFullYear();
 
   const [orderData, setOrderData] = useState([]);
   const [monthAt, setMonthAt] = useState(currentMonth);
+  const [yearAt, setYearAt] = useState(currentYear);
+  const [yearPre, setYearPre] = useState(currentYear);
 
   useEffect(() => {
     setOrderData(new_data?.data);
@@ -32,69 +50,77 @@ const StatisticsPage = () => {
   const dataTable = handleArrDataTable(orderData);
 
   //ChangeTime createdAt
-  const changeTimeChart = (timer) => {
-    const parts = timer.split(" ");
-
-    const datePart = parts[0];
-
-    const dateComponents = datePart.split("/");
-    const day = dateComponents[0].padStart(2, "0");
-    const month = dateComponents[1].padStart(2, "0");
-    const year = dateComponents[2];
-
-    const newDate = `${day}/${month}/${year}`;
-
-    return newDate;
-  };
 
   const handleChangeMonth = (value) => {
-    console.log(value);
-  };
-  //Get month
-  const handelGetMonth = (timer) => {
-    const parts = timer.split("/");
-    const day = parseInt(parts[0], 10);
-    const month = parseInt(parts[1], 10);
-    const year = parseInt(parts[2], 10);
-
-    const date = new Date(year, month - 1, day);
-
-    const monthNumber = date.getMonth() + 1;
-
-    return monthNumber;
+    setMonthAt(value);
   };
 
-  //Data chart
-  const revenueByDate = {};
-  // Duyệt qua mảng dataTable
-  dataTable?.forEach((product) => {
-    if (product.status) {
-      let newCreateAt = changeTimeChart(product.createdAt);
+  const handleChangeYear = (value) => {
+    setYearAt(value);
+  };
 
-      let getMonth = handelGetMonth(newCreateAt);
+  const handleChangeYearPre = (value) => {
+    setYearPre(value)
+  }
 
-      console.log("getMonth:", getMonth);
+  const optionsMonth = optionInputSelectChart("Tháng", 12, 1);
+  const optionsYear = optionInputSelectChart("Năm", 2025, 2020);
 
-      if (!revenueByDate[newCreateAt]) {
-        revenueByDate[newCreateAt] = 0;
+  if (dataTable) {
+    var revenueByDay = handleRevenueByDay(dataTable, currentDay);
+    var revenueByDate = handleRevenueByDate(dataTable, monthAt);
+    var revenueByYear = handleRevenueByYear(dataTable, yearAt);
+    var revenueByPrecious = handleRevenueByPrecious(dataTable, yearPre);
+
+    //Total day
+    if (revenueByDay) {
+    var totalDay = sumTotalDay(revenueByDay);
+  }
+
+    //Line Chart
+    var dataChart = Object.keys(revenueByDate).map((date) => {
+      if (revenueByDate) {
+        return {
+          name: date,
+          Total: revenueByDate[date],
+        };
       }
-      revenueByDate[newCreateAt] += product.price;
+    });
+  }
+
+  //Same Chart
+  var sameChart = {};
+  if (revenueByYear) {
+    if (Object.keys(revenueByYear).length !== 0) {
+      sameChart = Array.from({ length: 12 }, (_, index) => {
+        let TotalMonth = sumTotalMonth(revenueByYear, index + 1);
+        return {
+          name: `Tháng ${index + 1}`,
+          Total: TotalMonth,
+          key: index + 1,
+        };
+      });
+    } else {
+      sameChart = [];
     }
-  });
+  }
 
-  // Tạo mảng data mới dựa trên revenueByDate
-  const dataChart = Object.keys(revenueByDate).map((date) => {
-    return {
-      name: date,
-      Total: revenueByDate[date],
-    };
-  });
-
-  const optionShops = Array.from({ length: 12 }, (_, index) => ({
-    value: index + 1,
-    label: `Tháng ${index + 1}`,
-    key: index + 1,
-  }));
+//Pie Chart
+  var dataPiechart = {};
+  if (revenueByPrecious) {
+    if (Object.keys(revenueByPrecious).length !== 0) {
+      dataPiechart = Array.from({ length: 4 }, (_, index) => {
+        let TotalMonth = sumTotalPrecious(revenueByPrecious, index + 1);
+        return {
+          name: `Quý ${index + 1}`,
+          Total: TotalMonth,
+          key: index + 1,
+        };
+      });
+    } else {
+      dataPiechart = [];
+    }
+  }
 
   return (
     <>
@@ -108,17 +134,133 @@ const StatisticsPage = () => {
         Thống Kê
       </Divider>
 
-      <Row className="mb-3 ml-32">
-        <Col lg={7}>
+      <Divider
+        orientation="left"
+        style={{
+          fontSize: "15px",
+          color: "black",
+          textTransform: "uppercase",
+        }}
+      >
+        Doanh thu hôm nay
+      </Divider>
+
+      <Row gutter={16} className="px-5">
+        <Col span={8}>
+          <Card bordered={false}>
+            <Statistic
+              title="Số Lượt Mua"
+              value={11.28}
+              precision={2}
+              valueStyle={{
+                color: "#3f8600",
+              }}
+              prefix={<ArrowUpOutlined />}
+              suffix="%"
+            />
+          </Card>
+        </Col>
+
+        <Col span={8}>
+          <Card bordered={false}>
+            <Statistic
+              title="Đơn Huỷ"
+              value={9.3}
+              precision={2}
+              valueStyle={{
+                color: "#cf1322",
+              }}
+              prefix={<ArrowDownOutlined />}
+              suffix="%"
+            />
+          </Card>
+        </Col>
+
+        <Col span={8}>
+          <Card bordered={false}>
+            <Statistic
+              title="Doanh Thu"
+              value={totalDay}
+              precision={0}
+              valueStyle={{
+                color: "#3f8600",
+              }}
+              prefix={<ArrowUpOutlined />}
+              suffix="VNĐ"
+            />
+          </Card>
+        </Col>
+      </Row>
+
+      <Divider
+        orientation="left"
+        style={{
+          fontSize: "15px",
+          color: "black",
+          textTransform: "uppercase",
+        }}
+      >
+        Doanh thu theo tháng
+      </Divider>
+
+      <Row className="my-3 ml-16">
+        <Col lg={10}>
           <Select
             onChange={handleChangeMonth}
             value={monthAt}
             className="w-11/12"
-            options={optionShops}
+            options={optionsMonth}
           />
         </Col>
       </Row>
-      <LineChartConnect data={dataChart} />
+      <LineChartConnect data={dataChart} loading={isLoading} />
+
+      <Divider
+        orientation="left"
+        style={{
+          fontSize: "15px",
+          color: "black",
+          textTransform: "uppercase",
+        }}
+      >
+        Doanh thu theo quý
+      </Divider>
+
+      <Row className="my-3 ml-16">
+        <Col lg={10}>
+          <Select
+            onChange={handleChangeYearPre}
+            value={yearPre}
+            className="w-11/12"
+            options={optionsYear}
+          />
+        </Col>
+      </Row>
+
+      <PieChartWith data={dataPiechart} loading = {isLoading} />
+
+      <Divider
+        orientation="left"
+        style={{
+          fontSize: "15px",
+          color: "black",
+          textTransform: "uppercase",
+        }}
+      >
+        Doanh thu theo năm
+      </Divider>
+
+      <Row className="my-3 ml-16">
+        <Col lg={10}>
+          <Select
+            onChange={handleChangeYear}
+            value={yearAt}
+            className="w-11/12"
+            options={optionsYear}
+          />
+        </Col>
+      </Row>
+      <SameDataChart data={sameChart} loading={isLoading} />
     </>
   );
 };
