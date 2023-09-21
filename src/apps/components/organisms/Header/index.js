@@ -185,7 +185,7 @@ export default function Header() {
           </div>
           <div className="hidden lg:block md:hidden">
             {currentUser?.username ? (
-              <div className=" w-36 text-center">
+              <div className="text-center">
                 <Dropdown
                   menu={{ items }}
                   trigger={["click"]}
