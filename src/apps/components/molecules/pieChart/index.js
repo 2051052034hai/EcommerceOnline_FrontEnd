@@ -1,32 +1,56 @@
 import { Empty, Skeleton } from "antd";
 import React from "react";
-import { PieChart, ResponsiveContainer, Pie, Tooltip, Cell } from "recharts";
+import {
+  PieChart,
+  ResponsiveContainer,
+  Pie,
+  Tooltip,
+  Cell,
+  Bar,
+  Legend,
+} from "recharts";
 
 const PieChartWith = ({ data, loading }) => {
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+
+  const CustomTooltip = ({ active, payload }) => {
+    if (active) {
+      const formattedLabel = `Doanh thu: ${payload[0].value.toLocaleString()} đ`;
+
+      return (
+        <div className="custom-tooltip">
+          <p>{payload[0]?.payload.name}</p>
+          <p>{`${formattedLabel}`}</p>
+        </div>
+      );
+    }
+  };
 
   if (loading) return <Skeleton />;
   if (data?.length > 0) {
     return (
       <>
         <div>
-          <ResponsiveContainer width={500} height={400}>
+          <ResponsiveContainer width={300} height={300}>
             <PieChart width={400} height={400}>
               <Pie
                 dataKey="Total"
-                isAnimationActive={false}
+                isAnimationActive={true}
                 data={data}
                 fill="#0088FE"
-                label
               >
-                {data.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
+                {data.map((entry, index) => {
+                  return (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  );
+                })}
               </Pie>
-              <Tooltip />
+              <Tooltip content={<CustomTooltip />} />
+              <Legend />
+              
             </PieChart>
           </ResponsiveContainer>
         </div>

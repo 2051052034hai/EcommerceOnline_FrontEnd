@@ -6,22 +6,32 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
- 
   ResponsiveContainer,
   Label,
 } from "recharts";
-import { Empty, Skeleton } from 'antd';
+import { Empty, Skeleton } from "antd";
 
-const LineChartConnect = ({ data, loading}) => {
+const LineChartConnect = ({ data, loading }) => {
+  const CustomTooltip = ({ active, payload }) => {
+    if (active) {
+      const formattedLabel = `Doanh thu: ${payload[0].value.toLocaleString()} đ`;
 
-  if(loading)
-    return <Skeleton />;
+      return (
+        <div className="custom-tooltip">
+          <p>{`${formattedLabel}`}</p>
+        </div>
+      );
+    }
 
-  if(data?.length > 0)
-  {
+    return null;
+  };
+
+  if (loading) return <Skeleton />;
+
+  if (data?.length > 0) {
     return (
       <>
-        <div style={{ width: "100%", justifyContent: "end" }}>
+        <div>
           <ResponsiveContainer width="80%" height={300}>
             <LineChart
               width={300}
@@ -36,14 +46,25 @@ const LineChartConnect = ({ data, loading}) => {
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name">
-              <Label style={{fontWeight:"500", fill: "blue"}} dy ={20}  position="insideCenter" value="Thời gian:" offset={100} />
+                <Label
+                  style={{ fontWeight: "500", fill: "blue" }}
+                  dy={20}
+                  position="insideCenter"
+                  value="Thời gian:"
+                  offset={100}
+                />
               </XAxis>
-          
+
               <YAxis>
-                <Label style={{fontWeight:"500", fill: "blue"}} value="Doanh thu: " position="insideTop" offset={-25} />
+                <Label
+                  style={{ fontWeight: "500", fill: "blue" }}
+                  value="Doanh thu: "
+                  position="insideTop"
+                  offset={-25}
+                />
               </YAxis>
-  
-              <Tooltip />
+
+              <Tooltip content={<CustomTooltip />} />
               <Line
                 connectNulls
                 type="monotone"
@@ -56,10 +77,9 @@ const LineChartConnect = ({ data, loading}) => {
         </div>
       </>
     );
-  }else {
+  } else {
     return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
   }
-  
 };
 
 export default LineChartConnect;
