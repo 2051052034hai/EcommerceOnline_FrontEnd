@@ -14,6 +14,18 @@ import { Empty, Skeleton } from 'antd';
 
 const SameDataChart = ({data, loading}) => {
   
+  const CustomTooltip = ({ active, payload }) => {
+    if (active) {
+      const formattedLabel = `Doanh thu: ${payload[0].value.toLocaleString()} đ`;
+
+      return (
+        <div className="custom-tooltip">
+          <p>{payload[0]?.payload.name}</p>
+          <p>{`${formattedLabel}`}</p>
+        </div>
+      );
+    }
+  }
 
   if(loading)
   return <Skeleton />;
@@ -37,10 +49,9 @@ const SameDataChart = ({data, loading}) => {
             <CartesianGrid stroke="#f5f5f5" />
             <XAxis dataKey="name" scale="band" />
             <YAxis />
-            <Tooltip />
+            <Tooltip content={<CustomTooltip />} />
             <Legend />
-            <Bar dataKey="Total" barSize={20} fill="#413ea0" />
-            <Line type="monotone" dataKey="uv" stroke="#ff7300" />
+            <Bar dataKey="Total" barSize={20} fill="#413ea0" name = "Doanh thu"/>
           </ComposedChart>
         </ResponsiveContainer>
       </div>

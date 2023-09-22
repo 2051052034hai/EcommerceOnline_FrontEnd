@@ -10,23 +10,24 @@ import { selectCurrentUser } from "store/userSlice/userSelector";
 //Queries
 import { useGetOrderByShop } from "apps/queries/order";
 import { useGetShopbyUserId } from "apps/queries/shop/useGetShopbyUserId";
-import {
-  handelGetMonth,
-  handleArrDataTable,
-  handleRevenueByDate,
-  handleRevenueByDay,
-  handleRevenueByPrecious,
-  handleRevenueByYear,
-  optionInputSelectChart,
-  sumTotalDay,
-  sumTotalMonth,
-  sumTotalPrecious,
-} from "apps/services/utils/sellersPage";
 
 //Molecules
 import LineChartConnect from "apps/components/molecules/LineChartConnect";
 import SameDataChart from "apps/components/molecules/SameDataChart";
 import PieChartWith from "apps/components/molecules/pieChart";
+
+//services/utils
+import {
+  handleRevenueByMonth,
+  handleRevenueByDay,
+  handleRevenueByPrecious,
+  handleRevenueByYear,
+  optionInputSelectChart,
+  findTop3BuyersMonth,
+  findTop3BuyersYear,
+} from "apps/services/utils/chart";
+import { handleArrDataTable } from "apps/services/utils/sellersPage";
+import CustomContentOfTooltip from "apps/components/molecules/CustomContentOfTooltip";
 
 const StatisticsPage = () => {
   const currentUser = useSelector(selectCurrentUser);
@@ -42,14 +43,30 @@ const StatisticsPage = () => {
   const [monthAt, setMonthAt] = useState(currentMonth);
   const [yearAt, setYearAt] = useState(currentYear);
   const [yearPre, setYearPre] = useState(currentYear);
+  const [titleUser, setTitleUser] = useState("Theo Tháng");
+  const [dataOptionsUserTop, setDataOptionsUserTop] = useState([]);
+
+  const optionsMonth = optionInputSelectChart("Tháng", 12, 1);
+  const optionsYear = optionInputSelectChart("Năm", 2025, 2020);
+  const dataTable = handleArrDataTable(orderData);
+  const titleTopUser = [
+    {
+      key: 1,
+      value: "Theo tháng",
+    },
+    {
+      key: 2,
+      value: "Theo quý",
+    },
+    {
+      key: 3,
+      value: "Theo năm",
+    },
+  ];
 
   useEffect(() => {
     setOrderData(new_data?.data);
   }, [new_data]);
-
-  const dataTable = handleArrDataTable(orderData);
-
-  //ChangeTime createdAt
 
   const handleChangeMonth = (value) => {
     setMonthAt(value);
@@ -60,67 +77,31 @@ const StatisticsPage = () => {
   };
 
   const handleChangeYearPre = (value) => {
-    setYearPre(value)
-  }
+    setYearPre(value);
+  };
 
-  const optionsMonth = optionInputSelectChart("Tháng", 12, 1);
-  const optionsYear = optionInputSelectChart("Năm", 2025, 2020);
+  const handleChangeTitleTopUser = (value, data) => {
+    setTitleUser(value);
+
+    switch (data.key) {
+      case 1:
+        setDataOptionsUserTop(topBuyersMonth);
+        break;
+      case 3:
+        setDataOptionsUserTop(topBuyersYear);
+        break;
+    }
+  };
 
   if (dataTable) {
     var revenueByDay = handleRevenueByDay(dataTable, currentDay);
-    var revenueByDate = handleRevenueByDate(dataTable, monthAt);
+    var revenueByMonth = handleRevenueByMonth(dataTable, monthAt);
     var revenueByYear = handleRevenueByYear(dataTable, yearAt);
     var revenueByPrecious = handleRevenueByPrecious(dataTable, yearPre);
-
-    //Total day
-    if (revenueByDay) {
-    var totalDay = sumTotalDay(revenueByDay);
+    var topBuyersMonth = findTop3BuyersMonth(dataTable, monthAt);
+    var topBuyersYear = findTop3BuyersYear(dataTable, yearAt);
   }
-
-    //Line Chart
-    var dataChart = Object.keys(revenueByDate).map((date) => {
-      if (revenueByDate) {
-        return {
-          name: date,
-          Total: revenueByDate[date],
-        };
-      }
-    });
-  }
-
-  //Same Chart
-  var sameChart = {};
-  if (revenueByYear) {
-    if (Object.keys(revenueByYear).length !== 0) {
-      sameChart = Array.from({ length: 12 }, (_, index) => {
-        let TotalMonth = sumTotalMonth(revenueByYear, index + 1);
-        return {
-          name: `Tháng ${index + 1}`,
-          Total: TotalMonth,
-          key: index + 1,
-        };
-      });
-    } else {
-      sameChart = [];
-    }
-  }
-
-//Pie Chart
-  var dataPiechart = {};
-  if (revenueByPrecious) {
-    if (Object.keys(revenueByPrecious).length !== 0) {
-      dataPiechart = Array.from({ length: 4 }, (_, index) => {
-        let TotalMonth = sumTotalPrecious(revenueByPrecious, index + 1);
-        return {
-          name: `Quý ${index + 1}`,
-          Total: TotalMonth,
-          key: index + 1,
-        };
-      });
-    } else {
-      dataPiechart = [];
-    }
-  }
+  console.log("dataOptionsUserTop:", dataOptionsUserTop);
 
   return (
     <>
@@ -180,7 +161,7 @@ const StatisticsPage = () => {
           <Card bordered={false}>
             <Statistic
               title="Doanh Thu"
-              value={totalDay}
+              value={revenueByDay}
               precision={0}
               valueStyle={{
                 color: "#3f8600",
@@ -192,75 +173,117 @@ const StatisticsPage = () => {
         </Col>
       </Row>
 
-      <Divider
-        orientation="left"
-        style={{
-          fontSize: "15px",
-          color: "black",
-          textTransform: "uppercase",
-        }}
-      >
-        Doanh thu theo tháng
-      </Divider>
+      <Row>
+        <Col lg={12}>
+          <Divider
+            orientation="left"
+            style={{
+              fontSize: "15px",
+              color: "black",
+              textTransform: "uppercase",
+            }}
+          >
+            Doanh thu theo tháng
+          </Divider>
+          <Row className="my-3 ml-16">
+            <Col lg={10}>
+              <Select
+                onChange={handleChangeMonth}
+                value={monthAt}
+                className="w-11/12"
+                options={optionsMonth}
+              />
+            </Col>
+          </Row>
+          <LineChartConnect data={revenueByMonth} loading={isLoading} />
+        </Col>
 
-      <Row className="my-3 ml-16">
-        <Col lg={10}>
-          <Select
-            onChange={handleChangeMonth}
-            value={monthAt}
-            className="w-11/12"
-            options={optionsMonth}
-          />
+        <Col lg={12}>
+          <Divider
+            orientation="left"
+            style={{
+              fontSize: "15px",
+              color: "black",
+              textTransform: "uppercase",
+            }}
+          >
+            Doanh thu theo quý
+          </Divider>
+
+          <Row className="my-3 ml-16">
+            <Col lg={10}>
+              <Select
+                onChange={handleChangeYearPre}
+                value={yearPre}
+                className="w-11/12"
+                options={optionsYear}
+              />
+            </Col>
+          </Row>
+
+          <PieChartWith data={revenueByPrecious} loading={isLoading} />
         </Col>
       </Row>
-      <LineChartConnect data={dataChart} loading={isLoading} />
 
-      <Divider
-        orientation="left"
-        style={{
-          fontSize: "15px",
-          color: "black",
-          textTransform: "uppercase",
-        }}
-      >
-        Doanh thu theo quý
-      </Divider>
+      <Row>
+        <Col lg={12}>
+          <Divider
+            orientation="left"
+            style={{
+              fontSize: "15px",
+              color: "black",
+              textTransform: "uppercase",
+            }}
+          >
+            Doanh thu theo năm
+          </Divider>
 
-      <Row className="my-3 ml-16">
-        <Col lg={10}>
-          <Select
-            onChange={handleChangeYearPre}
-            value={yearPre}
-            className="w-11/12"
-            options={optionsYear}
-          />
+          <Row className="my-3 ml-16">
+            <Col lg={10}>
+              <Select
+                onChange={handleChangeYear}
+                value={yearAt}
+                className="w-11/12"
+                options={optionsYear}
+              />
+            </Col>
+          </Row>
+          <SameDataChart data={revenueByYear} loading={isLoading} />
+        </Col>
+        <Col lg={12}>
+          <Divider
+            orientation="left"
+            style={{
+              fontSize: "15px",
+              color: "black",
+              textTransform: "uppercase",
+            }}
+          >
+            Top người mua hàng
+          </Divider>
+          <Row className="my-3 ml-16">
+            <Col lg={10}>
+              <Select
+                onChange={handleChangeTitleTopUser}
+                value={titleUser}
+                className="w-11/12"
+                options={titleTopUser}
+              />
+            </Col>
+          </Row>
+          {dataOptionsUserTop.length > 0 ? (
+            <CustomContentOfTooltip
+              data={dataOptionsUserTop}
+              loading={isLoading}
+            />
+          ) : (
+            <CustomContentOfTooltip
+              data={topBuyersMonth}
+              loading={isLoading}
+            />
+          )}
         </Col>
       </Row>
-
-      <PieChartWith data={dataPiechart} loading = {isLoading} />
-
-      <Divider
-        orientation="left"
-        style={{
-          fontSize: "15px",
-          color: "black",
-          textTransform: "uppercase",
-        }}
-      >
-        Doanh thu theo năm
-      </Divider>
-
-      <Row className="my-3 ml-16">
-        <Col lg={10}>
-          <Select
-            onChange={handleChangeYear}
-            value={yearAt}
-            className="w-11/12"
-            options={optionsYear}
-          />
-        </Col>
-      </Row>
-      <SameDataChart data={sameChart} loading={isLoading} />
     </>
   );
 };
