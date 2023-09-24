@@ -1,18 +1,24 @@
+//Libaries
 import React, { useEffect, useState } from "react";
 import { Upload, Divider, Row, Col, Input, Select, Button, Form } from "antd";
 import ImgCrop from "antd-img-crop";
+import { useSelector } from "react-redux";
+import { useRef } from "react";
 
 //Utils
 import { NumericInput } from "apps/services/utils/sellersPage";
 
-// Queries
-import { useGetSubCategories } from "apps/queries/subcategory";
-import ReactQuill from "react-quill";
-import { selectCurrentUser } from "store/userSlice/userSelector";
-import { useSelector } from "react-redux";
+//Queries
 import { useGetShopbyUserId } from "apps/queries/shop/useGetShopbyUserId";
 import { useCreateProduct } from "apps/queries/product/useCreateProduct";
-import { useRef } from "react";
+import { useGetSubCategories } from "apps/queries/subcategory";
+import ReactQuill from "react-quill";
+
+//UserSlice
+import { selectCurrentUser } from "store/userSlice/userSelector";
+
+
+
 
 const AddProduct = () => {
   const { mutation } = useCreateProduct();
@@ -39,7 +45,7 @@ const AddProduct = () => {
     setSubdata(data);
   }, [data, isLoading]);
 
-  const { data: shop_data, isLoading: isLoadingShopData } = useGetShopbyUserId(
+  const { data: shop_data } = useGetShopbyUserId(
     currentUser?._id
   );
 
@@ -74,21 +80,6 @@ const AddProduct = () => {
   const onChangeImgs = ({ fileList: newFileList }) => {
     setFileListImgs(newFileList);
     setProductImages(newFileList);
-  };
-
-  const onPreviewImgs = async (file) => {
-    let src = file.url;
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj);
-        reader.onload = () => resolve(reader.result);
-      });
-    }
-    const image = new Image();
-    image.src = src;
-    const imgWindow = window.open(src);
-    imgWindow?.document.write(image.outerHTML);
   };
 
   //Select
@@ -208,8 +199,6 @@ const AddProduct = () => {
     buttonRef.current.click();
   };
 
-  console.log(isLoadingAdd);
-
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
@@ -224,7 +213,7 @@ const AddProduct = () => {
 
   return (
     <>
-      <div className="px-5">
+      <div className="px-5 overflow-x-hidden">
       <Divider
         style={{
           fontSize: "24px",
@@ -242,7 +231,7 @@ const AddProduct = () => {
           onFinishFailed={onFinishFailed}
         >
           <Row>
-            <Col lg={24}>
+            <Col lg={24} md = {20}>
               <h3 className="text-base mb-3 pt-3">
                 <span style={{fontWeight: 'bold'}}>* </span>Hình ảnh sản phẩm ({" "}
                 <span className="text-sm">
@@ -251,7 +240,7 @@ const AddProduct = () => {
                 )
               </h3>
             </Col>
-            <Col className="ml-44">
+            <Col className="lg:ml-44 ml-48">
               <ImgCrop rotationSlider>
                 <Form.Item
                   name="ProductImg"
@@ -280,10 +269,10 @@ const AddProduct = () => {
             </Col>
           </Row>
           <Row>
-            <Col lg={24}>
+            <Col lg={24} md = {20}>
               <h3 className="text-base mb-3 pt-3"><span style={{fontWeight: 'bold'}}>* </span>Hình ảnh kèm theo</h3>
             </Col>
-            <Col className="ml-44">
+            <Col className="lg:ml-44 ml-48">
               <ImgCrop rotationSlider>
                 <Upload
                   action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
@@ -302,10 +291,10 @@ const AddProduct = () => {
             </Col>
           </Row>
           <Row className="mt-5">
-            <Col lg={4}>
-              <h3 className="text-base mb-5 pt-3"><span style={{fontWeight: 'bold'}}>* </span>Tên sản phẩm</h3>
+            <Col lg={4} md={4}>
+              <h3 className="text-base mb-5 pt-3 w-32"><span style={{fontWeight: 'bold'}}>* </span>Tên sản phẩm</h3>
             </Col>
-            <Col lg={20}>
+            <Col lg={20} md={14}>
               <Form.Item
                 name="ProductName"
                 rules={[
@@ -324,10 +313,10 @@ const AddProduct = () => {
             </Col>
           </Row>
           <Row className="mt-5">
-            <Col lg={4}>
+            <Col lg={4} md={4}>
               <h3 className="text-base mb-5 pt-3 w-32"><span style={{fontWeight: 'bold'}}>* </span>Nhập giá</h3>
             </Col>
-            <Col lg={20}>
+            <Col lg={20} md={14}>
               <NumericInput
                 value={productPrice}
                 className="p-2 w-full"
@@ -337,10 +326,10 @@ const AddProduct = () => {
             </Col>
           </Row>
           <Row className="mt-5">
-            <Col lg={4}>
+            <Col lg={4} md={4}>
               <h3 className="text-base mb-5 pt-3 w-32"><span style={{fontWeight: 'bold'}}>* </span>Giảm giá %</h3>
             </Col>
-            <Col lg={20}>
+            <Col lg={20} md={14}>
               <NumericInput
                 value={productDiscount}
                 className="p-2 w-full"
@@ -350,10 +339,10 @@ const AddProduct = () => {
             </Col>
           </Row>
           <Row className="mt-5">
-            <Col lg={4}>
-              <h3 className="text-base mb-5 pt-3"><span style={{fontWeight: 'bold'}}>* </span>SL tồn kho</h3>
+            <Col lg={4} md={4}>
+              <h3 className="text-base mb-5 pt-3 w-32"><span style={{fontWeight: 'bold'}}>* </span>SL tồn kho</h3>
             </Col>
-            <Col lg={20}>
+            <Col lg={20} md={14} >
               <Form.Item
                 name="ProductStock"
                 rules={[
@@ -373,10 +362,10 @@ const AddProduct = () => {
             </Col>
           </Row>
           <Row className="mt-5">
-            <Col lg={4}>
-              <h3 className="text-base mb-5 pt-3"><span style={{fontWeight: 'bold'}}>* </span>Loại sản phẩm</h3>
+            <Col lg={4} md={4}>
+              <h3 className="text-base mb-5 pt-3 w-32"><span style={{fontWeight: 'bold'}}>* </span>Loại sản phẩm</h3>
             </Col>
-            <Col lg={20}>
+            <Col lg={20} md={14}>
               <Form.Item
                 name="ProductSub"
                 rules={[
@@ -389,7 +378,7 @@ const AddProduct = () => {
                 <Select
                   onChange={handleProductSubChange}
                   showSearch
-                  className="w-full pt-3"
+                  className="w-full p-1"
                   placeholder="Chọn loại sản phẩm"
                   optionFilterProp="children"
                   filterOption={(input, option) =>
@@ -404,14 +393,15 @@ const AddProduct = () => {
                   }
                   options={options}
                 />
+                
               </Form.Item>
             </Col>
           </Row>
           <Row className="mt-5">
-            <Col lg={4}>
+            <Col lg={4} md={4}>
               <h3 className="text-base mb-5 pt-5 "><span style={{fontWeight: 'bold'}}>* </span>Mô tả sản phẩm</h3>
             </Col>
-            <Col lg={20}>
+            <Col lg={20} md={14}>
               <Form.Item
                 name="ProductDescription"
                 rules={[
@@ -431,7 +421,7 @@ const AddProduct = () => {
               </Form.Item>
             </Col>
           </Row>
-          <Row className="mb-3 justify-start" style={{marginLeft: "170px"}}>
+          <Row className="mb-3 lg:justify-start md:ml-32 lg:ml-48">
             <Button
               className="bg-blue-600 text-white rounded "
               htmlType="submit"

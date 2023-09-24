@@ -31,8 +31,8 @@ const LineChartConnect = ({ data, loading }) => {
   if (data?.length > 0) {
     return (
       <>
-        <div>
-          <ResponsiveContainer width="80%" height={300}>
+        <div className="m:auto lg:w-11/12 ">
+          <ResponsiveContainer className="m-auto ml-5" width="85%"  height={300}>
             <LineChart
               width={300}
               height={200}
@@ -47,18 +47,18 @@ const LineChartConnect = ({ data, loading }) => {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name">
                 <Label
-                  style={{ fontWeight: "500", fill: "blue" }}
+                  style={{ fontWeight: "500", fill: "#8884d8" }}
                   dy={20}
                   position="insideCenter"
-                  value="Thời gian:"
+                  value="Thời gian"
                   offset={100}
                 />
               </XAxis>
 
               <YAxis>
                 <Label
-                  style={{ fontWeight: "500", fill: "blue" }}
-                  value="Doanh thu: "
+                  style={{ fontWeight: "500", fill: "#8884d8" }}
+                  value="Doanh thu "
                   position="insideTop"
                   offset={-25}
                 />

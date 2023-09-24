@@ -1,73 +1,73 @@
 // Libraries
-import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Menu } from "antd";
-import { useGetDataCategory } from "apps/queries/category";
-import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { SearchOutlined, DownOutlined, UserOutlined } from "@ant-design/icons";
-import cookie from "react-cookies";
-import { Dropdown, Space } from "antd";
+import { faCartShopping } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Menu } from 'antd'
+import { useGetDataCategory } from 'apps/queries/category'
+import { useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
+import { SearchOutlined, DownOutlined, UserOutlined } from '@ant-design/icons'
+import cookie from 'react-cookies'
+import { Dropdown, Space } from 'antd'
 //UserSlice
-import { log_out } from "store/userSlice/userSlice";
+import { log_out } from 'store/userSlice/userSlice'
 
 //Antd
-import { selectCurrentUser } from "store/userSlice/userSelector";
-import { ROLE } from "apps/constants";
-import { useGetShopbyUserId } from "apps/queries/shop/useGetShopbyUserId";
-import { SearchStyle } from "./styled";
+import { selectCurrentUser } from 'store/userSlice/userSelector'
+import { ROLE } from 'apps/constants'
+import { useGetShopbyUserId } from 'apps/queries/shop/useGetShopbyUserId'
+import { SearchStyle } from './styled'
 
-const { SubMenu } = Menu;
+const { SubMenu } = Menu
 
 export default function Header() {
-  const { data, isLoading } = useGetDataCategory();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [menuData, setMenuData] = useState([]);
+  const { data, isLoading } = useGetDataCategory()
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [menuData, setMenuData] = useState([])
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   //Redux
-  const dispatch = useDispatch();
-  const countCart = useSelector((state) => state.cart.count);
-  const currentUser = useSelector(selectCurrentUser);
-  const { data: shop } = useGetShopbyUserId(currentUser?._id);
+  const dispatch = useDispatch()
+  const countCart = useSelector((state) => state.cart.count)
+  const currentUser = useSelector(selectCurrentUser)
+  const { data: shop } = useGetShopbyUserId(currentUser?._id)
 
   useEffect(() => {
-    setMenuData(data);
-  }, [isLoading]);
+    setMenuData(data)
+  }, [isLoading])
 
   const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
+    setIsMobileMenuOpen(!isMobileMenuOpen)
+  }
 
-  const [current, setCurrent] = useState([]);
+  const [current, setCurrent] = useState([])
 
   const onClick = (e) => {
-    setCurrent(e.key);
-    setIsMobileMenuOpen(false);
-  };
+    setCurrent(e.key)
+    setIsMobileMenuOpen(false)
+  }
 
   const transformedData = data?.map((category) => {
     const subcategories = category.subcategories.map((subcategory) => ({
       label: subcategory.name,
       key: subcategory._id,
       link: subcategory._id,
-    }));
+    }))
 
     return {
       label: category.name,
       key: category._id,
       children: subcategories,
-    };
-  });
+    }
+  })
 
   //Log out
   const handleLogOut = () => {
-    navigate("/");
-    cookie.remove("access-token");
-    cookie.remove("refresh_token");
-    dispatch(log_out());
-  };
+    navigate('/')
+    cookie.remove('access-token')
+    cookie.remove('refresh_token')
+    dispatch(log_out())
+  }
 
   //
   function getItem(label, key, icon, children, type, to, onClick) {
@@ -78,33 +78,45 @@ export default function Header() {
       label: to ? <Link to={to}>{label}</Link> : label,
       type,
       onClick,
-    };
+    }
   }
 
   // Item current user
   const items = [
     {
       label: <Link to="/">Thông tin cá nhân</Link>,
-      key: "0",
+      key: '0',
     },
     {
       label: <Link to="/purchase-history">Lịch sử mua hàng</Link>,
-      key: "1",
+      key: '1',
     },
     {
-      type: "divider",
+      type: 'divider',
     },
     {
       label: <Link onClick={handleLogOut}>Đăng xuất</Link>,
-      key: "3",
+      key: '3',
     },
-  ];
+  ]
+
+  const menuItems = [
+    getItem(currentUser?.username, 'sub1', <UserOutlined />, [
+      getItem('Thông tin cá nhân', '1', null, null, null, '/'),
+      getItem('Lịch sử mua hàng', '2', null, null, null, '/purchase-history'),
+      getItem('Đăng xuất', '3', null, null, null, null, handleLogOut),
+    ]),
+  ]
 
   if (currentUser?.role === ROLE.SELLER && shop) {
     items.splice(1, 0, {
       label: <Link to="/sellerspage">Kênh bán hàng</Link>,
-      key: "2",
-    });
+      key: '2',
+    })
+
+    const newItem = getItem('Kênh bán hàng', '4', null, null, null, '/sellerspage')
+    menuItems[0].children?.splice(1, 0, newItem)
+    
   }
 
   return (
@@ -137,7 +149,7 @@ export default function Header() {
           </button>
         </div>
         <div className="flex ">
-          <Link to={"/"} className="-m-1.5 p-1.5">
+          <Link to={'/'} className="-m-1.5 p-1.5">
             <img className="h-12 w-auto" src="/assets/image/logo.png" alt="" />
           </Link>
         </div>
@@ -146,20 +158,18 @@ export default function Header() {
             onClick={onClick}
             selectedKeys={[current]}
             mode="horizontal"
-            style={{ minWidth: "580px" }}
+            style={{ minWidth: '580px' }}
           >
             {transformedData?.map((menu) => {
               return (
                 <Menu.SubMenu key={menu.key} title={menu?.label}>
                   {menu?.children?.map((submenu) => (
                     <Menu.Item key={submenu.key}>
-                      <Link to={`/productsub/${submenu?.link}`}>
-                        {submenu?.label}
-                      </Link>
+                      <Link to={`/productsub/${submenu?.link}`}>{submenu?.label}</Link>
                     </Menu.Item>
                   ))}
                 </Menu.SubMenu>
-              );
+              )
             })}
           </Menu>
         </div>
@@ -174,7 +184,7 @@ export default function Header() {
           </div>
           <div>
             <Link
-              to={"/cart"}
+              to={'/cart'}
               className="text-md relative font-semibold leading-6 mr-7 pl-2 text-gray-900"
             >
               <FontAwesomeIcon icon={faCartShopping} bounce />
@@ -186,14 +196,10 @@ export default function Header() {
           <div className="hidden lg:block md:hidden">
             {currentUser?.username ? (
               <div className="text-center">
-                <Dropdown
-                  menu={{ items }}
-                  trigger={["click"]}
-                  placement="bottom"
-                >
+                <Dropdown menu={{ items }} trigger={['click']} placement="bottom">
                   <Link onClick={(e) => e.preventDefault()}>
                     <Space>
-                      <div style={{ marginTop: "-10px" }}>
+                      <div style={{ marginTop: '-10px' }}>
                         <UserOutlined />
                       </div>
                     </Space>
@@ -203,9 +209,9 @@ export default function Header() {
             ) : (
               <>
                 <Link
-                  to={"/login"}
+                  to={'/login'}
                   className="text-sm font-semibold leading-6 text-gray-900"
-                  style={{ paddingLeft: "20px" }}
+                  style={{ paddingLeft: '20px' }}
                 >
                   Log in <span aria-hidden="true">&rarr;</span>
                 </Link>
@@ -219,7 +225,7 @@ export default function Header() {
           <div className="fixed inset-0 z-10"></div>
           <div className="fixed inset-y-0 left-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
             <div className="flex items-center justify-between">
-              <Link to={"/"} className="-m-1.5 p-1.5">
+              <Link to={'/'} className="-m-1.5 p-1.5">
                 <span className="sr-only">Your Company</span>
                 <img
                   className="h-8 w-auto"
@@ -262,7 +268,7 @@ export default function Header() {
                         </Menu.Item>
                       ))}
                     </Menu.SubMenu>
-                  );
+                  )
                 })}
               </Menu>
               {currentUser?.username ? (
@@ -270,45 +276,17 @@ export default function Header() {
                   <Menu
                     mode="inline"
                     style={{
-                      width: "100%",
+                      width: '100%',
                     }}
-                    items={[
-                      getItem(currentUser?.username, "sub1", <UserOutlined />, [
-                        getItem(
-                          "Thông tin cá nhân",
-                          "1",
-                          null,
-                          null,
-                          null,
-                          "/"
-                        ),
-                        getItem(
-                          "Lịch sử mua hàng",
-                          "2",
-                          null,
-                          null,
-                          null,
-                          "/purchase-history"
-                        ),
-                        getItem(
-                          "Đăng xuất",
-                          "3",
-                          null,
-                          null,
-                          null,
-                          null,
-                          handleLogOut
-                        ),
-                      ]),
-                    ]}
+                    items={menuItems}
                   />
                 </>
               ) : (
                 <>
                   <Link
-                    to={"/login"}
+                    to={'/login'}
                     className="text-sm font-semibold leading-6 text-gray-900"
-                    style={{ paddingLeft: "27px" }}
+                    style={{ paddingLeft: '27px' }}
                   >
                     Log in <span aria-hidden="true">&rarr;</span>
                   </Link>
@@ -319,5 +297,5 @@ export default function Header() {
         </div>
       )}
     </header>
-  );
+  )
 }

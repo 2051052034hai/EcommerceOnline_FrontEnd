@@ -1,3 +1,4 @@
+//Libaries
 import { useEffect, useState } from "react";
 import {
   Row,
@@ -11,10 +12,13 @@ import {
 } from "antd";
 import Search from "antd/es/input/Search";
 
-import CardItem from "apps/components/molecules/CardItem";
+//Queries
 import { useGetDataProductPage } from "apps/queries/product";
 import { useGetSubCategories } from "apps/queries/subcategory";
 import { useGetAllShops } from "apps/queries/shop";
+
+//Molecules
+import CardItem from "apps/components/molecules/CardItem";
 
 const SearchPage = () => {
   const [productSubId, setProductSubId] = useState();
@@ -132,9 +136,9 @@ const SearchPage = () => {
       </Divider>
 
       <Row className="p-5 items-center w-full justify-center">
-        <Col lg={5} className="justify-center">
+        <Col lg={5} md ={7} xs = {24} className="lg:justify-center">
           <Search
-            className="w-11/12"
+            className="lg:w-11/12"
             placeholder="Nhập tên sản phẩm"
             onChange={handleValueChange}
             value={valueSeach}
@@ -142,11 +146,11 @@ const SearchPage = () => {
             onSearch={handleClickSearch}
           />
         </Col>
-        <Col lg={5} className="justify-center">
+        <Col lg={5} md ={7} xs = {24}className="lg:justify-center mt-3 lg:mt-0 md:mt-0 md:mx-1">
           <Select
             onChange={handleProductSubChange}
             showSearch
-            className="w-11/12"
+            className="lg:w-11/12 w-full"
             placeholder="Tìm kiếm theo loại"
             value={subName}
             optionFilterProp="children"
@@ -163,12 +167,12 @@ const SearchPage = () => {
           />
         </Col>
 
-        <Col lg={5} className="justify-center">
+        <Col lg={5} md ={7} xs = {24} className="lg:justify-center mt-3 lg:mt-0 md:mt-0">
           <Select
             onChange={handleShopChange}
             showSearch
             value={shopName}
-            className="w-11/12"
+            className="lg:w-11/12 w-full"
             placeholder="Tìm kiếm theo cửa hàng"
             optionFilterProp="children"
             filterOption={(input, option) =>
@@ -206,7 +210,7 @@ const SearchPage = () => {
         Kết quả
       </Divider>
 
-      <div className="grid gap-5 py-4 px-2 md:px-1 grid-cols-2 md:grid-cols-4 lg:grid-cols-5 mx-14">
+      <div className="grid gap-5 py-4 px-2 md:px-1 grid-cols-2 md:grid-cols-4 lg:grid-cols-5 lg:mx-14 ">
         {productLoading ? (
           <div style={{ width: "100%" }}>
             <Skeleton

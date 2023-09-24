@@ -18,10 +18,10 @@ code {
 
 
 @media (min-width: 992px) {
-  .ant-drawer-mask {
+  /* .ant-drawer-mask {
       background: transparent !important;
      
-  }
+  } */
   .ant-drawer-content-wrapper {
       height:0px !important;
       transition: 0s !important;
@@ -72,6 +72,19 @@ code {
 }
 .ant-btn-primary{
   background: #1677ff !important
+}
+
+/* Khi ở chế độ điện thoại (xs) */
+@media (max-width: 575px) {
+  .ant-statistic-content {
+    font-size: 12px !important; /* Điều chỉnh kích thước font cho xs */
+  }
+}
+/* Khi ở chế độ màn hình lớn (lg) */
+@media (min-width: 992px) {
+  .ant-statistic-content {
+    font-size: 25px !important; /* Điều chỉnh kích thước font cho lg */
+  }
 }
 
 @tailwind base;

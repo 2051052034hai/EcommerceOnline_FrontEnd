@@ -1,11 +1,10 @@
-import { get } from "./https";
+import { get } from './https'
 
-const pathUrl = "/order";
+const pathUrl = '/order'
 
 export const getOderByShop = async (id) => {
-  let url = `${pathUrl}-by-shop/${id}?populate=orderItems.product,userId`;
+  let url = `${pathUrl}-by-shop/${id}?populate=orderItems.product,userId`
 
-  const result = await get(url);
-
-  return result.data;
-};
+  const result = await get(url)
+  return result.data
+}
