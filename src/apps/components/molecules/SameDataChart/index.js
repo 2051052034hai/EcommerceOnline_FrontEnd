@@ -1,7 +1,6 @@
 import React from "react";
 import {
   ComposedChart,
-  Line,
   Bar,
   XAxis,
   YAxis,
@@ -33,8 +32,8 @@ const SameDataChart = ({data, loading}) => {
   if(data?.length > 0)
   {
     return (
-      <div>
-        <ResponsiveContainer width="80%" height={300}>
+      <div className="m:auto lg:w-11/12">
+        <ResponsiveContainer className="m-auto ml-5" width="85%"  height={300}>
           <ComposedChart
             width={500}
             height={400}
