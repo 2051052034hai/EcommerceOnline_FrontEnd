@@ -208,20 +208,20 @@ export const findTop3BuyersMonth = (data, month) => {
 
   data.forEach((item) => {
     if (item.price !== undefined) {
-    if (item.status) {
-      let newCreateAt = changeTimeChart(item.createdAt)
-      let getMonth = handelGetMonth(newCreateAt)
+      if (item.status) {
+        let newCreateAt = changeTimeChart(item.createdAt)
+        let getMonth = handelGetMonth(newCreateAt)
 
-      if (getMonth === month) {
-        const username = item.username
-        if (buyerCounts[username]) {
-          buyerCounts[username] += item.price * item.quantity
-        } else {
-          buyerCounts[username] = item.price * item.quantity
+        if (getMonth === month) {
+          const username = item.username
+          if (buyerCounts[username]) {
+            buyerCounts[username] += item.price * item.quantity
+          } else {
+            buyerCounts[username] = item.price * item.quantity
+          }
         }
       }
     }
-  }
   })
 
   const buyerCountsArray = Object.entries(buyerCounts)
@@ -243,19 +243,19 @@ export const findTop3BuyersYear = (data, year) => {
 
   data.forEach((item) => {
     if (item.price !== undefined) {
-    if (item.status) {
-      let newCreateAt = changeTimeChart(item.createdAt)
-      let getYear = handelGetYear(newCreateAt)
-      if (getYear === year) {
-        const username = item.username
-        if (buyerCounts[username]) {
-          buyerCounts[username] += item.price * item.quantity
-        } else {
-          buyerCounts[username] = item.price * item.quantity
+      if (item.status) {
+        let newCreateAt = changeTimeChart(item.createdAt)
+        let getYear = handelGetYear(newCreateAt)
+        if (getYear === year) {
+          const username = item.username
+          if (buyerCounts[username]) {
+            buyerCounts[username] += item.price * item.quantity
+          } else {
+            buyerCounts[username] = item.price * item.quantity
+          }
         }
       }
     }
-  }
   })
 
   const buyerCountsArray = Object.entries(buyerCounts)
@@ -277,19 +277,19 @@ export const findTop3BuyersPrecious = (data, precious) => {
 
   data.forEach((item) => {
     if (item.price !== undefined) {
-    if (item.status) {
-      let newCreateAt = changeTimeChart(item.createdAt)
-      let getMonth = handelGetMonth(newCreateAt)
-      if (Math.ceil(getMonth / 3) === precious) {
-        const username = item.username
-        if (buyerCounts[username]) {
-          buyerCounts[username] += item.price * item.quantity
-        } else {
-          buyerCounts[username] = item.price * item.quantity
+      if (item.status) {
+        let newCreateAt = changeTimeChart(item.createdAt)
+        let getMonth = handelGetMonth(newCreateAt)
+        if (Math.ceil(getMonth / 3) === precious) {
+          const username = item.username
+          if (buyerCounts[username]) {
+            buyerCounts[username] += item.price * item.quantity
+          } else {
+            buyerCounts[username] = item.price * item.quantity
+          }
         }
       }
     }
-  }
   })
 
   const buyerCountsArray = Object.entries(buyerCounts)
@@ -306,6 +306,15 @@ export const findTop3BuyersPrecious = (data, precious) => {
   return result
 }
 
-export const handleCountDataOrder = (data) => {
-  return data.length
+export const handleCountDataOrder = (data, dayAt) => {
+  let sum = 0
+  data?.forEach((item) => {
+    let newCreateAt = changeTimeChart(item.createdAt)
+
+    let getday = handelGetDay(newCreateAt)
+    if (dayAt === getday) {
+      sum += 1;
+    }
+  })
+  return sum
 }

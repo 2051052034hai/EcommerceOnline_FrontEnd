@@ -1,47 +1,128 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+// Libraries
+import { getRedirectResult, signInWithPopup, signInWithRedirect } from 'firebase/auth'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import cookie from 'react-cookies'
+import { useForm } from 'react-hook-form'
+import { Spin } from 'antd'
+import { useDispatch } from 'react-redux'
 
-//useForm
-import { useForm } from "react-hook-form";
-import { useLoginUser } from "apps/queries/auth/useLoginUser";
-import { Spin } from "antd";
+//Queries
+import { useLoginUser } from 'apps/queries/auth/useLoginUser'
+import { useCreateUser } from 'apps/queries/auth/useLoginOnlineUser'
+
+//Molecules
+import { auth, providerFb, providerGb } from 'apps/components/molecules/Firebase'
+
+//UserSlice
+import { save_user } from 'store/userSlice/userSlice'
+import { toast } from 'react-toastify'
 
 const Login = () => {
+  const { mutation: mutationRegister, checkEmail } = useCreateUser()
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
   //useForm
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm()
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const { mutation, isLoading } = useLoginUser();
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { mutation, isLoading } = useLoginUser()
 
   const handleKeyPress = (e) => {
-    if (e.key === "Enter" && !isSubmitting) {
-      setIsSubmitting(true);
-      handleSubmit(onSubmit)();
+    if (e.key === 'Enter' && !isSubmitting) {
+      setIsSubmitting(true)
+      handleSubmit(onSubmit)()
     }
-  };
+  }
 
-  // submit
   const onSubmit = (data) => {
-    mutation.mutate(data);
-  };
+    mutation.mutate(data)
+  }
+
+  const handleLoginGg = () => {
+  
+    signInWithPopup(auth, providerGb)
+      .then((result) => {
+        const user = result.user
+        const access_token = user.stsTokenManager.accessToken
+        const refresh_token = user.stsTokenManager.refreshToken
+        const userEmail = user.email
+        const userPassword = user.uid
+        const username = user.displayName
+
+        const data = {
+          access_token,
+          refresh_token,
+          username,
+          email: userEmail,
+          password: userPassword,
+        }
+
+        if (data) {
+          mutationRegister.mutate(data)
+          if (checkEmail) {
+            cookie.save('access-token', access_token)
+            cookie.save('refresh_token', refresh_token)
+            dispatch(save_user(data))
+            toast.success('Đăng nhập thành công')
+            navigate('/')
+          }
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
+  const handleLoginFb = () => {
+    signInWithPopup(auth, providerFb)
+      .then((result) => {
+        const user = result.user
+        const access_token = user.stsTokenManager.accessToken
+        const refresh_token = user.stsTokenManager.refreshToken
+        const userEmail = user.email
+        const userPassword = user.uid
+        const username = user.displayName
+
+        const data = {
+          access_token,
+          refresh_token,
+          username,
+          email: userEmail,
+          password: userPassword,
+        }
+
+        if (data) {
+          mutationRegister.mutate(data)
+          if (checkEmail) {
+            cookie.save('access-token', access_token)
+            cookie.save('refresh_token', refresh_token)
+            dispatch(save_user(data))
+            toast.success('Đăng nhập thành công')
+            navigate('/')
+          }
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
 
   return (
     <main className="w-full h-screen flex flex-col items-center justify-center px-4">
       <div className="max-w-sm w-full text-gray-600 space-y-8">
         <div className="text-center">
           <div className="mt-5 space-y-2">
-            <h3 className="text-gray-800 text-2xl font-bold sm:text-3xl">
-             Đăng nhập
-            </h3>
+            <h3 className="text-gray-800 text-2xl font-bold sm:text-3xl">Đăng nhập</h3>
             <p className="">
               Chưa có tài khoản?
               <Link
-                to={"/"}
+                to={'/'}
                 className="font-medium text-indigo-600 hover:text-indigo-500"
               >
                 Đăng kí
@@ -53,8 +134,8 @@ const Login = () => {
           <div>
             <label className="font-medium">Email</label>
             <input
-              {...register("email", {
-                required: "Vui lòng nhập trường này",
+              {...register('email', {
+                required: 'Vui lòng nhập trường này',
                 maxLength: 50,
               })}
               type="email"
@@ -62,17 +143,15 @@ const Login = () => {
             />
 
             {errors.email && (
-              <p style={{ color: "red", fontSize: 13 }}>
-                {errors.email.message}
-              </p>
+              <p style={{ color: 'red', fontSize: 13 }}>{errors.email.message}</p>
             )}
           </div>
 
           <div>
             <label className="font-medium">Password</label>
             <input
-              {...register("password", {
-                required: "Vui lòng nhập trường này",
+              {...register('password', {
+                required: 'Vui lòng nhập trường này',
                 maxLength: 50,
               })}
               type="password"
@@ -80,9 +159,7 @@ const Login = () => {
               className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
             />
             {errors.password && (
-              <p style={{ color: "red", fontSize: 13 }}>
-                {errors.password.message}
-              </p>
+              <p style={{ color: 'red', fontSize: 13 }}>{errors.password.message}</p>
             )}
           </div>
           <button
@@ -100,7 +177,10 @@ const Login = () => {
           </p>
         </div>
         <div className="space-y-4 text-sm font-medium">
-          <button className="w-full flex items-center justify-center gap-x-3 py-2.5 border rounded-lg hover:bg-gray-50 duration-150 active:bg-gray-100">
+          <button
+            onClick={handleLoginGg}
+            className="w-full flex items-center justify-center gap-x-3 py-2.5 border rounded-lg hover:bg-gray-50 duration-150 active:bg-gray-100"
+          >
             <svg
               className="w-5 h-5"
               viewBox="0 0 48 48"
@@ -133,17 +213,17 @@ const Login = () => {
             </svg>
             Continue with Google
           </button>
-          <button className="w-full flex items-center justify-center gap-x-3 py-2.5 border rounded-lg hover:bg-gray-50 duration-150 active:bg-gray-100">
+          <button
+            onClick={handleLoginFb}
+            className="w-full flex items-center justify-center gap-x-3 py-2.5 border rounded-lg hover:bg-gray-50 duration-150 active:bg-gray-100"
+          >
             <svg
               className="w-7 h-7 ml-3"
               viewBox="0 0 48 48"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <path
-                fill="#039be5"
-                d="M24 5A19 19 0 1 0 24 43A19 19 0 1 0 24 5Z"
-              ></path>
+              <path fill="#039be5" d="M24 5A19 19 0 1 0 24 43A19 19 0 1 0 24 5Z"></path>
               <path
                 fill="#fff"
                 d="M26.572,29.036h4.917l0.772-4.995h-5.69v-2.73c0-2.075,0.678-3.915,2.619-3.915h3.119v-4.359c-0.548-0.074-1.707-0.236-3.897-0.236c-4.573,0-7.254,2.415-7.254,7.917v3.323h-4.701v4.995h4.701v13.729C22.089,42.905,23.032,43,24,43c0.875,0,1.729-0.08,2.572-0.194V29.036z"
@@ -204,12 +284,12 @@ const Login = () => {
           </button>
         </div>
         <div className="text-center">
-          <Link to={"/"} className="text-indigo-600 hover:text-indigo-500">
+          <Link to={'/'} className="text-indigo-600 hover:text-indigo-500">
             Forgot password?
           </Link>
         </div>
       </div>
     </main>
-  );
-};
-export default Login;
+  )
+}
+export default Login
