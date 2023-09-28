@@ -10,7 +10,10 @@ export const userSlice = createSlice({
 
   reducers: {
     save_user: (state, action) => {
+      if(action.payload !== undefined)
+      {
         state.currentUser = {...action.payload}
+      }  
     },
 
     log_out: (state) => {

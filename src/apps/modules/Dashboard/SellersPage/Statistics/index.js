@@ -101,7 +101,7 @@ const StatisticsPage = () => {
   }
 
   if (dataTable) {
-    var countDataOrder = handleCountDataOrder(dataTable)
+    var countDataOrder = handleCountDataOrder(dataTable, currentDay)
     var revenueByDay = handleRevenueByDay(dataTable, currentDay)
     var revenueByMonth = handleRevenueByMonth(dataTable, monthAt)
     var revenueByYear = handleRevenueByYear(dataTable, yearAt)

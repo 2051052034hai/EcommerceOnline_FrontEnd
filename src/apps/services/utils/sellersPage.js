@@ -114,7 +114,7 @@ export const handleArrDataTable = (data) => {
   return dataTable
 }
 
-export const handleArrDataOrder = (data) => {
+export const handleArrDataOrder = (data, index) => {
   let dataTable = data?.reduce((result, items) => {
     let new_Time = handleChangeTime(items?.createdAt)
     let arrProducts = []
@@ -131,8 +131,15 @@ export const handleArrDataOrder = (data) => {
     return result.concat(arrProducts)
   }, [])
 
-  return dataTable
+  
+  dataTable = dataTable?.map((item, i) => ({
+    ...item,
+    key: i, 
+  }));
+
+  return dataTable;
 }
+
 
 export const handleArrProductByOrderId = (data, orderId) => {
   let dataTable = data?.reduce((result, items) => {

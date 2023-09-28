@@ -10,11 +10,15 @@ import { Link } from 'react-router-dom'
 import ViewInfoOrder from 'apps/components/molecules/ViewInfoOrder'
 
 //Queries
-import { useGetOrderByShop } from 'apps/queries/order'
+import { useGetOrderByShop, useUpdateStatusPayment } from 'apps/queries/order'
 import { useGetShopbyUserId } from 'apps/queries/shop/useGetShopbyUserId'
 
+
 //Utils
-import { handleArrDataOrder, handleArrProductByOrderId } from 'apps/services/utils/sellersPage'
+import {
+  handleArrDataOrder,
+  handleArrProductByOrderId,
+} from 'apps/services/utils/sellersPage'
 
 //Store
 import { selectCurrentUser } from 'store/userSlice/userSelector'
@@ -23,19 +27,19 @@ const OrderList = () => {
   const currentUser = useSelector(selectCurrentUser)
   const [orderData, setOrderData] = useState([])
   const [total, setTotal] = useState(0)
-  const [pageSize, setPageSize] = useState(5)
+  const [pageSize, setPageSize] = useState(10)
   const [status, setStatus] = useState(false)
   const [orderId, setOrderId] = useState()
 
   const { data: shop_data } = useGetShopbyUserId(currentUser?._id)
   const { data: new_data, isLoading } = useGetOrderByShop(shop_data?._id)
+  const { mutation } = useUpdateStatusPayment()
 
   useEffect(() => {
     setOrderData(new_data?.data)
     setTotal(new_data?.total)
   }, [new_data])
 
-  
   const dataOrderList = handleArrDataOrder(orderData)
   const dataProductByOrderId = handleArrProductByOrderId(orderData, orderId)
 
@@ -65,7 +69,7 @@ const OrderList = () => {
       title: 'Ngày Mua',
       dataIndex: 'createdAt',
       key: 'createdAt',
-      width: 150,
+      width: 250,
       render: (_, record) => <h3 className="font-medium ">{record?.createdAt}</h3>,
     },
     {
@@ -93,10 +97,15 @@ const OrderList = () => {
                 </span>
               </Popconfirm>
             )}
-
-            <Tag className="font-medium ml-3" color={color}>
-              {title.toUpperCase()}
-            </Tag>
+            {!record?.status ? (
+              <Tag className="font-medium ml-2" color={color}>
+                {title.toUpperCase()}
+              </Tag>
+            ) : (
+              <Tag className="font-medium ml-5" color={color}>
+                {title.toUpperCase()}
+              </Tag>
+            )}
           </>
         )
       },
@@ -107,7 +116,10 @@ const OrderList = () => {
       key: 'view',
 
       render: (_, record) => (
-        <h3 onClick={() => handleViewProductList(record?.orderId)} className="font-medium ">
+        <h3
+          onClick={() => handleViewProductList(record?.orderId)}
+          className="font-medium "
+        >
           <FontAwesomeIcon
             icon={faEye}
             style={{ color: '#516e9e', marginRight: '3px' }}
@@ -125,7 +137,6 @@ const OrderList = () => {
       key: 'thumbnail',
       width: 400,
       render: (_, record) => {
-       
         return (
           <Link to={`/product/${record?.id}`}>
             <img
@@ -172,7 +183,6 @@ const OrderList = () => {
     },
   ]
 
-
   //Pagination
   const paginationConfig = {
     pageSize: pageSize,
@@ -185,8 +195,15 @@ const OrderList = () => {
   }
 
   const handleUpdateStatusPayment = (shopId, orderId) => {
-    console.log('shopId:', shopId)
-    console.log('orderId:', orderId)
+    const data = {
+      shopId,
+      orderId
+    }
+    if(data)
+    {
+      mutation.mutate(data)
+    }
+   
   }
   return (
     <>
@@ -215,6 +232,8 @@ const OrderList = () => {
           data={dataProductByOrderId}
           status={status}
           onClose={() => setStatus(false)}
+          cursor="pointer"
+          total={dataProductByOrderId?.length}
         />
       </div>
     </>

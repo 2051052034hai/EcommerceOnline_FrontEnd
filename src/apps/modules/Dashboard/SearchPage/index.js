@@ -190,7 +190,7 @@ const SearchPage = () => {
 
         {(productSubId || shopId || valueSeach) && isDeleteteFilter ? (
           <>
-            <Col lg={5} className="justify-center">
+            <Col lg={5} md = {21} className="lg:justify-center justify-start mt-3 lg:mt-0 w-full">
               <Button
                 htmlType="text"
                 type="primary"

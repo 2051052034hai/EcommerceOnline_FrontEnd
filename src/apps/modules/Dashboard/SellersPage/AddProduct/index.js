@@ -17,9 +17,6 @@ import ReactQuill from "react-quill";
 //UserSlice
 import { selectCurrentUser } from "store/userSlice/userSelector";
 
-
-
-
 const AddProduct = () => {
   const { mutation } = useCreateProduct();
   const { data, isLoading } = useGetSubCategories();
