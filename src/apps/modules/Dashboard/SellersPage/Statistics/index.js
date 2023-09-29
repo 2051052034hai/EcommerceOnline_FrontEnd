@@ -12,10 +12,10 @@ import { useGetOrderByShop } from 'apps/queries/order'
 import { useGetShopbyUserId } from 'apps/queries/shop/useGetShopbyUserId'
 
 //Molecules
-import LineChartConnect from 'apps/components/molecules/LineChartConnect'
-import SameDataChart from 'apps/components/molecules/SameDataChart'
-import PieChartWith from 'apps/components/molecules/pieChart'
-import CustomContentOfTooltip from 'apps/components/molecules/CustomContentOfTooltip'
+import LineChartConnect from 'apps/components/molecules/Chart/LineChartConnect'
+import SameDataChart from 'apps/components/molecules/Chart/SameDataChart'
+import PieChartWith from 'apps/components/molecules/Chart/pieChart'
+import CustomContentOfTooltip from 'apps/components/molecules/Chart/CustomContentOfTooltip'
 
 //services/utils
 import {
@@ -114,7 +114,6 @@ const StatisticsPage = () => {
   return (
     <>
       <div className="overflow-x-hidden">
-        
         <Divider
           style={{
             fontSize: '24px',
@@ -180,7 +179,7 @@ const StatisticsPage = () => {
             </Card>
           </Col>
         </Row>
-        
+
         <Row className="w-full ">
           <Col lg={12} xs={24}>
             <Divider

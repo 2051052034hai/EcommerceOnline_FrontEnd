@@ -12,7 +12,7 @@ import { useLoginUser } from 'apps/queries/auth/useLoginUser'
 import { useCreateUser } from 'apps/queries/auth/useLoginOnlineUser'
 
 //Molecules
-import { auth, providerFb, providerGb } from 'apps/components/molecules/Firebase'
+import { auth, providerFb, providerGb } from 'apps/configs/Firebase'
 
 //UserSlice
 import { save_user } from 'store/userSlice/userSlice'
@@ -45,7 +45,6 @@ const Login = () => {
   }
 
   const handleLoginGg = () => {
-  
     signInWithPopup(auth, providerGb)
       .then((result) => {
         const user = result.user
