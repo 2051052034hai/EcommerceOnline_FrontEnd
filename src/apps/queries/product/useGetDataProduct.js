@@ -1,21 +1,21 @@
 // Libraries
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery, useQueryClient } from 'react-query'
 
 // Constants
-import { QUERIES_KEYS } from "apps/constants/queries";
+import { QUERIES_KEYS } from 'apps/constants/queries'
 
 // Services
-import { getProductsPage } from "apps/services/apis/product.api";
+import { getProductsPage } from 'apps/services/apis/product.api'
 
 export const useGetDataProductPage = (page, pageSize, keyWord, subcategory, shopId) => {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
-  const nextPage = page + 1;
+  const nextPage = page + 1
 
   queryClient.prefetchQuery(
     [QUERIES_KEYS.GET_PRODUCTS, nextPage, pageSize, keyWord, subcategory, shopId],
-    () => getProductsPage(nextPage, pageSize, keyWord, subcategory, shopId)
-  );
+    () => getProductsPage(nextPage, pageSize, keyWord, subcategory, shopId),
+  )
 
   const { data, isLoading } = useQuery(
     [QUERIES_KEYS.GET_PRODUCTS, page, pageSize, keyWord, subcategory, shopId],
@@ -23,8 +23,8 @@ export const useGetDataProductPage = (page, pageSize, keyWord, subcategory, shop
     {
       keepPreviousData: true,
       staleTime: 5 * 1000,
-    }
-  );
+    },
+  )
 
-  return { data: data, isLoading };
-};
+  return { data: data, isLoading }
+}

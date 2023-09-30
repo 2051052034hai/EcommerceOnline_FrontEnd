@@ -1,11 +1,11 @@
 // Libraries
-import { useQuery } from "react-query";
+import { useQuery } from 'react-query'
 
 // Constants
-import { QUERIES_KEYS } from "apps/constants/queries";
+import { QUERIES_KEYS } from 'apps/constants/queries'
 
 // Services
-import { getTopSaleProduct } from "apps/services/apis/product.api";
+import { getTopSaleProduct } from 'apps/services/apis/product.api'
 
 export const useGetTopSaleProduct = () => {
   const { data, isLoading } = useQuery(
@@ -14,8 +14,8 @@ export const useGetTopSaleProduct = () => {
     {
       keepPreviousData: true,
       staleTime: 5 * 1000,
-    }
-  );
+    },
+  )
 
-  return { data: data, isLoading };
-};
+  return { data: data, isLoading }
+}

@@ -1,18 +1,18 @@
 // Libraries
-import { BrowserRouter as Router } from "react-router-dom";
-import { QueryClientProvider, QueryClient } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
+import { BrowserRouter as Router } from 'react-router-dom'
+import { QueryClientProvider, QueryClient } from 'react-query'
+import { ReactQueryDevtools } from 'react-query/devtools'
 
 // Organnisms
-import { Main } from "apps/components/organisms/Main";
-import Footer from "./apps/components/organisms/Footer";
-import Header from "./apps/components/organisms/Header";
+import { Main } from 'apps/components/organisms/Main'
+import Footer from './apps/components/organisms/Footer'
+import Header from './apps/components/organisms/Header'
 
 // Modules
-import { Root } from "apps/modules";
-import { ToastContainer } from "react-toastify";
-import { useEffect, useState } from "react";
-import LoadingPage from "apps/components/molecules/LoadingPage";
+import { Root } from 'apps/modules'
+import { ToastContainer } from 'react-toastify'
+import { useEffect, useState } from 'react'
+import LoadingPage from 'apps/components/molecules/LoadingPage'
 
 // Turn off fresh data onfocus
 const queryClient = new QueryClient({
@@ -21,20 +21,20 @@ const queryClient = new QueryClient({
       refetchOnWindowFocus: false,
     },
   },
-});
+})
 
 function App() {
-  const [showApp, setShowApp] = useState(false);
+  const [showApp, setShowApp] = useState(false)
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      setShowApp(true);
-    }, 1000);
+      setShowApp(true)
+    }, 1000)
 
     return () => {
-      clearTimeout(timeout);
-    };
-  }, []);
+      clearTimeout(timeout)
+    }
+  }, [])
 
   return (
     <>
@@ -55,7 +55,7 @@ function App() {
         <LoadingPage />
       )}
     </>
-  );
+  )
 }
 
-export default App;
+export default App

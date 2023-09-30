@@ -1,8 +1,8 @@
-import { get } from "./https";
+import { get } from './https'
 
-const pathUrl = "/categories/";
+const pathUrl = '/categories/'
 
 export const getCategory = async () => {
-  const result = await get(`${pathUrl}?populate=subcategories`);
-  return result.data.data;
-};
+  const result = await get(`${pathUrl}?populate=subcategories`)
+  return result.data.data
+}

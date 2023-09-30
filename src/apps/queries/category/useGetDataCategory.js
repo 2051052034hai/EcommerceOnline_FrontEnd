@@ -1,11 +1,11 @@
 // Libraries
-import { useQuery } from "react-query";
+import { useQuery } from 'react-query'
 
 // Constants
-import { QUERIES_KEYS } from "apps/constants/queries";
+import { QUERIES_KEYS } from 'apps/constants/queries'
 
 // Services
-import { getCategory } from "apps/services/apis/category.api";
+import { getCategory } from 'apps/services/apis/category.api'
 
 export const useGetDataCategory = () => {
   const { data, isLoading } = useQuery({
@@ -13,7 +13,7 @@ export const useGetDataCategory = () => {
     queryFn: getCategory,
     keepPreviousData: true,
     staleTime: 5 * 1000,
-  });
+  })
 
-  return { data: data, isLoading };
-};
+  return { data: data, isLoading }
+}

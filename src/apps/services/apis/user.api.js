@@ -18,8 +18,7 @@ export const createUser = async (data) => {
       const result = await create(`${pathUrl}/register`, formData, config)
       return result.data.data
     } catch (error) {
-    return error
+      return error
     }
-
   }
 }

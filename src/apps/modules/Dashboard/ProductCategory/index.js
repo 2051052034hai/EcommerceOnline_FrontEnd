@@ -1,31 +1,31 @@
 //Libralies
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { AppstoreOutlined } from "@ant-design/icons";
-import { Menu, Dropdown, Drawer, Pagination, Col, Divider, Result, Row } from "antd";
-import { faFilter, faSortDown } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { AppstoreOutlined } from '@ant-design/icons'
+import { Menu, Dropdown, Drawer, Pagination, Col, Divider, Result, Row } from 'antd'
+import { faFilter, faSortDown } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 //Compoments
-import { useGetProductBySubId } from "apps/queries/subcategory";
-import CardItem from "apps/components/molecules/CardItem";
+import { useGetProductBySubId } from 'apps/queries/subcategory'
+import CardItem from 'apps/components/molecules/CardItem'
 
 //CSS from styled.js
-import { customItems, customStyle } from "./styled";
+import { customItems, customStyle } from './styled'
 
 const ProductCategory = () => {
-  const [open, setOpen] = useState(false);
-  const [selectedTitleId, setSelectedTitleId] = useState("0");
-  const [selectedPriceId, setSelectedPriceId] = useState("0");
-  const [maxPrice, setMaxPrice] = useState();
-  const [minPrice, setMinPrice] = useState();
-  const [sort, setSort] = useState();
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(4);
-  const [total, setTotal] = useState(0);
-  const [productsSub, setProductsSub] = useState([]);
+  const [open, setOpen] = useState(false)
+  const [selectedTitleId, setSelectedTitleId] = useState('0')
+  const [selectedPriceId, setSelectedPriceId] = useState('0')
+  const [maxPrice, setMaxPrice] = useState()
+  const [minPrice, setMinPrice] = useState()
+  const [sort, setSort] = useState()
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(4)
+  const [total, setTotal] = useState(0)
+  const [productsSub, setProductsSub] = useState([])
 
-  const { id } = useParams();
+  const { id } = useParams()
   const { data, isLoading } = useGetProductBySubId(
     id,
     minPrice,
@@ -33,60 +33,59 @@ const ProductCategory = () => {
     sort,
     page,
     pageSize,
-  );
+  )
 
   useEffect(() => {
     setTotal(data?.total)
-    setProductsSub(data?.product);
-  }, [data, isLoading]);
+    setProductsSub(data?.product)
+  }, [data, isLoading])
 
   useEffect(() => {
     setPage(1)
-  }, [id]);
-
+  }, [id])
 
   const showDrawer = (e) => {
-    e.stopPropagation();
-    setOpen(true);
-  };
+    e.stopPropagation()
+    setOpen(true)
+  }
   const onClose = () => {
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
   const handleFilterAll = (keyId, typeSoft) => {
-    setSelectedTitleId(keyId);
+    setSelectedTitleId(keyId)
 
     switch (typeSoft) {
-      case "default":
-        setSort(undefined);
-        break;
-      case "ascending":
-        setSort("price");
-        break;
-      case "promotion":
-        setSort("-discountPercentage");
-        break;
-      case "decrease":
-        setSort("-price");
-        break;
+      case 'default':
+        setSort(undefined)
+        break
+      case 'ascending':
+        setSort('price')
+        break
+      case 'promotion':
+        setSort('-discountPercentage')
+        break
+      case 'decrease':
+        setSort('-price')
+        break
 
       default:
-        break;
+        break
     }
-  };
+  }
 
   const handleOnchangePage = (page, pageSize) => {
-    setPage(page);
-    setPageSize(pageSize);
-  };
+    setPage(page)
+    setPageSize(pageSize)
+  }
 
   const softPrice = (a, b, keyPrice) => {
     return () => {
-      setSelectedPriceId(keyPrice);
-      setMinPrice(a);
-      setMaxPrice(b);
-    };
-  };
+      setSelectedPriceId(keyPrice)
+      setMinPrice(a)
+      setMaxPrice(b)
+    }
+  }
 
   const getItem = (label, key, icon, children, style, onClick) => {
     return {
@@ -96,109 +95,109 @@ const ProductCategory = () => {
       label,
       style,
       onClick,
-    };
-  };
+    }
+  }
 
   const menuLeftSlice = [
     getItem(
-      "Khoảng giá",
-      "sub1",
+      'Khoảng giá',
+      'sub1',
       <AppstoreOutlined />,
       [
         getItem(
-          "Tất cả",
-          "1",
+          'Tất cả',
+          '1',
           null,
           null,
           customItems,
-          softPrice(undefined, undefined, "1")
+          softPrice(undefined, undefined, '1'),
         ),
 
         getItem(
-          "Từ dưới 100k",
-          "2",
+          'Từ dưới 100k',
+          '2',
           null,
           null,
           customItems,
-          softPrice(1000, 100000, "2")
+          softPrice(1000, 100000, '2'),
         ),
         getItem(
-          "Từ 100 - 300k",
-          "3",
+          'Từ 100 - 300k',
+          '3',
           null,
           null,
           customItems,
-          softPrice(100000, 300000, "3")
+          softPrice(100000, 300000, '3'),
         ),
         getItem(
-          "Từ 300 - 700k",
-          "4",
+          'Từ 300 - 700k',
+          '4',
           null,
           null,
           customItems,
-          softPrice(300000, 700000, "4")
+          softPrice(300000, 700000, '4'),
         ),
         getItem(
-          "Từ 700 - 1 triệu",
-          "5",
+          'Từ 700 - 1 triệu',
+          '5',
           null,
           null,
           customItems,
-          softPrice(700000, 1000000, "5")
+          softPrice(700000, 1000000, '5'),
         ),
         getItem(
-          "Từ 1 triệu - 3 triệu",
-          "6",
+          'Từ 1 triệu - 3 triệu',
+          '6',
           null,
           null,
           customItems,
-          softPrice(1000000, 3000000, "5")
+          softPrice(1000000, 3000000, '5'),
         ),
       ],
-      customStyle
+      customStyle,
     ),
-  ];
+  ]
 
   function getSubItemsBySubKey(menuSlice, subKey) {
-    const subItem = menuSlice.find((item) => item.key === subKey);
-    return subItem ? subItem.children : [];
+    const subItem = menuSlice.find((item) => item.key === subKey)
+    return subItem ? subItem.children : []
   }
 
-  const sub1Items = getSubItemsBySubKey(menuLeftSlice, "sub1");
-  const sub2Items = getSubItemsBySubKey(menuLeftSlice, "sub2");
+  const sub1Items = getSubItemsBySubKey(menuLeftSlice, 'sub1')
+  const sub2Items = getSubItemsBySubKey(menuLeftSlice, 'sub2')
 
   const itemSlice = [
     {
-      label: "Mặc định",
-      key: "0",
-      value: "default",
+      label: 'Mặc định',
+      key: '0',
+      value: 'default',
     },
     {
-      label: "Khuyến mãi tốt",
-      key: "1",
-      value: "promotion",
+      label: 'Khuyến mãi tốt',
+      key: '1',
+      value: 'promotion',
     },
     {
-      label: "Giá giảm dần",
-      key: "2",
-      value: "decrease",
+      label: 'Giá giảm dần',
+      key: '2',
+      value: 'decrease',
     },
     {
-      label: "Giá tăng dần",
-      key: "3",
-      value: "ascending",
+      label: 'Giá tăng dần',
+      key: '3',
+      value: 'ascending',
     },
-  ];
+  ]
 
   const newItemSlice = itemSlice?.map((item, index) => {
-    const isSelected = selectedTitleId === item.key;
+    const isSelected = selectedTitleId === item.key
 
     return {
       label: (
         <div
           key={index}
           className={`${
-            isSelected ? "text-purple-900" : "text-black"
+            isSelected ? 'text-purple-900' : 'text-black'
           } border-b-2 border-gray-100 py-3 font-medium`}
           onClick={() => handleFilterAll(item.key, item.value)}
           data-key={item.key}
@@ -207,9 +206,8 @@ const ProductCategory = () => {
         </div>
       ),
       key: item.key,
-    };
-  });
-
+    }
+  })
 
   return (
     <>
@@ -224,7 +222,7 @@ const ProductCategory = () => {
             className="lg:hidden lg:bg-black"
           >
             <Row className="py-2.5 w-full ">
-              <Divider style={{ fontSize: "20px" }} orientation="left">
+              <Divider style={{ fontSize: '20px' }} orientation="left">
                 Theo giá
               </Divider>
               <Row gutter={[16, 16]}>
@@ -236,13 +234,13 @@ const ProductCategory = () => {
                           className={`px-1 py-1 border border-solid border-gray-300 rounded
                                         ${
                                           selectedPriceId === item.key
-                                            ? "bg-indigo-600"
-                                            : "bg-white"
+                                            ? 'bg-indigo-600'
+                                            : 'bg-white'
                                         }
                                         ${
                                           selectedPriceId === item.key
-                                            ? "text-white"
-                                            : "text-black"
+                                            ? 'text-white'
+                                            : 'text-black'
                                         }
                                         `}
                         >
@@ -250,9 +248,9 @@ const ProductCategory = () => {
                         </span>
                       </div>
                     </Col>
-                  );
+                  )
                 })}
-                <Divider style={{ fontSize: "20px" }} orientation="left">
+                <Divider style={{ fontSize: '20px' }} orientation="left">
                   Thương hiệu
                 </Divider>
                 <Row gutter={[4, 32]}>
@@ -265,7 +263,7 @@ const ProductCategory = () => {
                           </span>
                         </div>
                       </Col>
-                    );
+                    )
                   })}
                 </Row>
 
@@ -290,7 +288,7 @@ const ProductCategory = () => {
           menu={{
             items: newItemSlice,
           }}
-          trigger={["click"]}
+          trigger={['click']}
         >
           <Row className="bg-white lg:hidden">
             <Row className="mx-4 py-2.5 w-full">
@@ -305,10 +303,7 @@ const ProductCategory = () => {
                   onClick={(e) => e.preventDefault()}
                   className="text-red-600 text-base font-medium"
                 >
-                  <FontAwesomeIcon
-                    className="text-xl mb-0.5 ml-1"
-                    icon={faSortDown}
-                  />
+                  <FontAwesomeIcon className="text-xl mb-0.5 ml-1" icon={faSortDown} />
                 </span>
               </Col>
 
@@ -320,10 +315,7 @@ const ProductCategory = () => {
                   Bộ lọc
                 </span>
                 <span className="text-red-600 text-base font-medium">
-                  <FontAwesomeIcon
-                    className="text-sm mb-0 ml-1"
-                    icon={faFilter}
-                  />
+                  <FontAwesomeIcon className="text-sm mb-0 ml-1" icon={faFilter} />
                 </span>
               </Col>
             </Row>
@@ -333,8 +325,8 @@ const ProductCategory = () => {
           <Col xs={0} sm={10} md={8} lg={6}>
             <Menu
               className="lg:w-64 md:w-60 sm:w-48 w-24"
-              defaultSelectedKeys={["1"]}
-              defaultOpenKeys={["sub1", "sub2"]}
+              defaultSelectedKeys={['1']}
+              defaultOpenKeys={['sub1', 'sub2']}
               mode="inline"
               theme="light"
               items={menuLeftSlice}
@@ -344,7 +336,7 @@ const ProductCategory = () => {
             <Row gutter={[18, 16]}>
               <Col className="gutter-row text-center" lg={4} xs={0}>
                 <div className="font-medium py-2.5 pr-px text-black lg:text-base rounded-lg ">
-                  Sắp xếp theo:{" "}
+                  Sắp xếp theo:{' '}
                 </div>
               </Col>
               {itemSlice?.map((item, index) => (
@@ -356,14 +348,8 @@ const ProductCategory = () => {
                   onClick={() => handleFilterAll(item.key, item.value)}
                 >
                   <div
-                    className={`text-${
-                      selectedTitleId === item.key ? "white" : "black"
-                    } 
-                    ${
-                      selectedTitleId === item.key
-                        ? "bg-indigo-500"
-                        : "bg-white"
-                    } 
+                    className={`text-${selectedTitleId === item.key ? 'white' : 'black'} 
+                    ${selectedTitleId === item.key ? 'bg-indigo-500' : 'bg-white'} 
                   rounded-2xl py-2.5 font-medium`}
                   >
                     {item.label}
@@ -374,49 +360,36 @@ const ProductCategory = () => {
             <Row gutter={[18, 16]}>
               {productsSub && productsSub.length === 0 ? (
                 <div className="flex justify-center items-center w-full">
-                  <Result
-                    status="404"
-                    title="Không có sản phẩm phù hợp với bạn"
-                  />
+                  <Result status="404" title="Không có sản phẩm phù hợp với bạn" />
                 </div>
               ) : (
                 productsSub?.map((product, index) => (
-                  <Col
-                  key={index}
-                    className="gutter-row"
-                    xs={12}
-                    sm={12}
-                    md={8}
-                    lg={6}
-                  >
+                  <Col key={index} className="gutter-row" xs={12} sm={12} md={8} lg={6}>
                     <CardItem key={index} product={product} />
                   </Col>
                 ))
               )}
             </Row>
-            
-           
-            {productsSub && productsSub.length > 0 ? (
-                 <Row className="flex justify-center py-8">
-                  <div>
-                    <Pagination
-                      className="text-base"
-                      onChange={handleOnchangePage}
-                      defaultCurrent={page}
-                      total={total}
-                      current={page}
-                      pageSize={pageSize}
-                    />
-                  </div>
-                  </Row>
-                ): null}
-              
-          </Col>
 
+            {productsSub && productsSub.length > 0 ? (
+              <Row className="flex justify-center py-8">
+                <div>
+                  <Pagination
+                    className="text-base"
+                    onChange={handleOnchangePage}
+                    defaultCurrent={page}
+                    total={total}
+                    current={page}
+                    pageSize={pageSize}
+                  />
+                </div>
+              </Row>
+            ) : null}
+          </Col>
         </Row>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default ProductCategory;
+export default ProductCategory

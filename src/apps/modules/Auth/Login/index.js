@@ -1,7 +1,7 @@
 // Libraries
 import { signInWithPopup } from 'firebase/auth'
 import { useState } from 'react'
-import { Link,  } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { Spin } from 'antd'
 
@@ -12,9 +12,7 @@ import { useLoginUser } from 'apps/queries/auth/useLoginUser'
 import { auth, providerFb, providerGb } from 'apps/configs/Firebase'
 import { useLoginSocial } from 'apps/queries/auth/useLoginSocial'
 
-
 const Login = () => {
-
   //useForm
   const {
     register,
@@ -24,7 +22,7 @@ const Login = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { mutation, isLoading } = useLoginUser()
-  const  {mutation: mutationSocial}= useLoginSocial()
+  const { mutation: mutationSocial } = useLoginSocial()
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !isSubmitting) {
@@ -39,7 +37,7 @@ const Login = () => {
 
   const handleLoginGg = () => {
     signInWithPopup(auth, providerGb)
-      .then( (result) => {
+      .then((result) => {
         const user = result.user
         const userEmail = user.email
         const username = user.displayName
@@ -50,11 +48,8 @@ const Login = () => {
         }
 
         if (data) {
-           mutationSocial.mutate(data)
+          mutationSocial.mutate(data)
         }
-
-        
-        
       })
       .catch((error) => {
         console.log(error)
@@ -63,24 +58,23 @@ const Login = () => {
 
   const handleLoginFb = () => {
     signInWithPopup(auth, providerFb)
-    .then(async (result) => {
-      const user = result.user
-      const userEmail = user.email
-      const username = user.displayName
+      .then(async (result) => {
+        const user = result.user
+        const userEmail = user.email
+        const username = user.displayName
 
-      const data = {
-        username,
-        email: userEmail,
-      }
+        const data = {
+          username,
+          email: userEmail,
+        }
 
-      if (data) {
-        await mutationSocial.mutateAsync(data)
-      }
-
-    })
-    .catch((error) => {
-      console.log(error)
-    })
+        if (data) {
+          await mutationSocial.mutateAsync(data)
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   }
 
   return (

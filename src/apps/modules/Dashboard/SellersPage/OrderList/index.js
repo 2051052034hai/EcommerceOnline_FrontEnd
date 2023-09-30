@@ -13,7 +13,6 @@ import ViewInfoOrder from 'apps/components/molecules/ViewInfoOrder'
 import { useGetOrderByShop, useUpdateStatusPayment } from 'apps/queries/order'
 import { useGetShopbyUserId } from 'apps/queries/shop/useGetShopbyUserId'
 
-
 //Utils
 import {
   handleArrDataOrder,
@@ -197,13 +196,11 @@ const OrderList = () => {
   const handleUpdateStatusPayment = (shopId, orderId) => {
     const data = {
       shopId,
-      orderId
+      orderId,
     }
-    if(data)
-    {
+    if (data) {
       mutation.mutate(data)
     }
-   
   }
   return (
     <>
@@ -224,7 +221,6 @@ const OrderList = () => {
           loading={isLoading}
           scroll={{ x: 1100 }}
         />
-        
       </div>
 
       <div>

@@ -1,9 +1,9 @@
 // Libraries
-import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
-import Rating from "react-rating";
-import { LazyLoadImage } from "react-lazy-load-image-component";
+import { Link } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faStar } from '@fortawesome/free-solid-svg-icons'
+import Rating from 'react-rating'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 
 // Styled
 import {
@@ -11,11 +11,11 @@ import {
   ProductPercenDiscount,
   ProductPrice,
   ProductPriceDiscount,
-} from "./styled";
-import { Badge } from "antd";
+} from './styled'
+import { Badge } from 'antd'
 
 const CardItem = (props) => {
-  const { product } = props;
+  const { product } = props
 
   return (
     <Link to={`/product/${product?._id}`}>
@@ -36,7 +36,7 @@ const CardItem = (props) => {
                     <img
                       className="w-24 md:w-36 m-auto"
                       alt="test"
-                      src={"/assets/image/sold_out.png"}
+                      src={'/assets/image/sold_out.png'}
                     />
                   </span>
                 )}
@@ -54,10 +54,7 @@ const CardItem = (props) => {
                     <FontAwesomeIcon icon={faStar} className="text-gray-300" />
                   }
                   fullSymbol={
-                    <FontAwesomeIcon
-                      icon={faStar}
-                      className="text-yellow-500"
-                    />
+                    <FontAwesomeIcon icon={faStar} className="text-yellow-500" />
                   }
                   readonly
                 />
@@ -68,7 +65,7 @@ const CardItem = (props) => {
               {product?.discountPercentage !== 0 ? (
                 <div className="font-normal text-xs text-zinc-400 mt-1">
                   <ProductPriceDiscount>
-                    {Math.ceil(product?.price).toLocaleString("vi-VN")} VND
+                    {Math.ceil(product?.price).toLocaleString('vi-VN')} VND
                   </ProductPriceDiscount>
                   <ProductPercenDiscount>
                     {product?.discountPercentage}%
@@ -77,17 +74,16 @@ const CardItem = (props) => {
                     {(
                       Math.ceil(
                         (product?.price -
-                          (product?.price * product?.discountPercentage) /
-                            100) /
-                          1000
+                          (product?.price * product?.discountPercentage) / 100) /
+                          1000,
                       ) * 1000
-                    ).toLocaleString("vi-VN")}{" "}
+                    ).toLocaleString('vi-VN')}{' '}
                     VND
                   </ProductPrice>
                 </div>
               ) : (
                 <ProductPrice>
-                  {Math.ceil(product?.price).toLocaleString("vi-VN")} VND
+                  {Math.ceil(product?.price).toLocaleString('vi-VN')} VND
                 </ProductPrice>
               )}
             </div>
@@ -109,7 +105,7 @@ const CardItem = (props) => {
                   <img
                     className="w-24 md:w-36 m-auto"
                     alt="test"
-                    src={"/assets/image/sold_out.png"}
+                    src={'/assets/image/sold_out.png'}
                   />
                 </span>
               )}
@@ -123,12 +119,8 @@ const CardItem = (props) => {
             <div>
               <Rating
                 initialRating={product?.rating}
-                emptySymbol={
-                  <FontAwesomeIcon icon={faStar} className="text-gray-300" />
-                }
-                fullSymbol={
-                  <FontAwesomeIcon icon={faStar} className="text-yellow-500" />
-                }
+                emptySymbol={<FontAwesomeIcon icon={faStar} className="text-gray-300" />}
+                fullSymbol={<FontAwesomeIcon icon={faStar} className="text-yellow-500" />}
                 readonly
               />
               <span className="text-xs md:text-sm text-zinc-400 pl-1">
@@ -138,7 +130,7 @@ const CardItem = (props) => {
             {product?.discountPercentage !== 0 ? (
               <div className="font-normal text-xs text-zinc-400 mt-1">
                 <ProductPriceDiscount>
-                  {Math.ceil(product?.price).toLocaleString("vi-VN")} VND
+                  {Math.ceil(product?.price).toLocaleString('vi-VN')} VND
                 </ProductPriceDiscount>
                 <ProductPercenDiscount>
                   {product?.discountPercentage}%
@@ -148,21 +140,21 @@ const CardItem = (props) => {
                     Math.ceil(
                       (product?.price -
                         (product?.price * product?.discountPercentage) / 100) /
-                        1000
+                        1000,
                     ) * 1000
-                  ).toLocaleString("vi-VN")}{" "}
+                  ).toLocaleString('vi-VN')}{' '}
                   VND
                 </ProductPrice>
               </div>
             ) : (
               <ProductPrice>
-                {Math.ceil(product?.price).toLocaleString("vi-VN")} VND
+                {Math.ceil(product?.price).toLocaleString('vi-VN')} VND
               </ProductPrice>
             )}
           </div>
         </ProductItemStyle>
       )}
     </Link>
-  );
-};
-export default CardItem;
+  )
+}
+export default CardItem

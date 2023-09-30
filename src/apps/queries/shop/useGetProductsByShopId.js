@@ -1,11 +1,11 @@
 // Libraries
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery, useQueryClient } from 'react-query'
 
 // Constants
-import { QUERIES_KEYS } from "apps/constants/queries";
+import { QUERIES_KEYS } from 'apps/constants/queries'
 
 // Services
-import { getProductsByShopId } from "apps/services/apis/shop.api";
+import { getProductsByShopId } from 'apps/services/apis/shop.api'
 
 export const useGetProductsByShopId = (id) => {
   const { data, isLoading, error } = useQuery(
@@ -14,7 +14,7 @@ export const useGetProductsByShopId = (id) => {
     {
       keepPreviousData: true,
       staleTime: 5 * 1000,
-    }
-  );
-  return { data, isLoading, error };
-};
+    },
+  )
+  return { data, isLoading, error }
+}

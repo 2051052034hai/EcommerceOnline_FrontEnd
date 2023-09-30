@@ -1,10 +1,9 @@
 //libaries
-import React, {useState } from 'react'
+import React, { useState } from 'react'
 import {
   AppstoreOutlined,
   AreaChartOutlined,
   BorderInnerOutlined,
-
 } from '@ant-design/icons'
 import { Col, Row } from 'antd'
 
@@ -15,10 +14,8 @@ import MenuSellerPage from 'apps/components/molecules/MenuSellerPage'
 //Services
 import { getItem, renderPage } from 'apps/services/utils/sellersPage'
 
-
 const SellersPage = (key) => {
   const [selectedKeys, setSelectedKeys] = useState('1')
-
 
   const items = [
     getItem('Quản Lý Sản Phẩm', 'sub1', <AppstoreOutlined />, [
@@ -39,10 +36,7 @@ const SellersPage = (key) => {
     setSelectedKeys(key)
   }
 
-
-  const handleCheckedPage = (isHidden) => {
-   
-  }
+  const handleCheckedPage = (isHidden) => {}
 
   return (
     <>

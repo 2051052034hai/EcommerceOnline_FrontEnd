@@ -1,11 +1,11 @@
 // Libraries
-import { useQuery } from "react-query";
+import { useQuery } from 'react-query'
 
 // Constants
-import { QUERIES_KEYS } from "apps/constants/queries";
+import { QUERIES_KEYS } from 'apps/constants/queries'
 
 // Services
-import { getOrderById } from "apps/services/apis/order.api";
+import { getOrderById } from 'apps/services/apis/order.api'
 
 export const useGetOrderById = (id) => {
   const { data, isLoading, error } = useQuery(
@@ -14,7 +14,7 @@ export const useGetOrderById = (id) => {
     {
       keepPreviousData: true,
       staleTime: 5 * 1000,
-    }
-  );
-  return { data, isLoading, error };
-};
+    },
+  )
+  return { data, isLoading, error }
+}

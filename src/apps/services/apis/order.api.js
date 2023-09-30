@@ -10,13 +10,12 @@ export const getOderByShop = async (id) => {
 }
 
 export const handleUpdateStatusPayment = async (data) => {
-  const result = await update(`${pathUrl}/status`, data);
-  return result.data;
-};
+  const result = await update(`${pathUrl}/status`, data)
+  return result.data
+}
 
 export const getOrderById = async (id) => {
-  console.log("id_get:", id)
-  const result = await get(`${pathUrl}/${id}`);
-  return result.data.data;
-};
-
+  console.log('id_get:', id)
+  const result = await get(`${pathUrl}/${id}`)
+  return result.data.data
+}

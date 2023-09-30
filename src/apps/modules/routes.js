@@ -1,15 +1,15 @@
 // Constants
-import { ROUTER } from "../constants/routes";
+import { ROUTER } from '../constants/routes'
 
 // Components
-import Home from "./Dashboard/Home";
-import Login from "./Auth/Login";
-import ProductDetail from "./Dashboard/ProductDetail";
-import Cart from "apps/modules/Cart";
-import ProductCategory from "./Dashboard/ProductCategory";
-import { Purchase_History } from "./Dashboard/Purchase_History";
-import sellersPage from "./Dashboard/SellersPage";
-import SearchPage from "./Dashboard/SearchPage";
+import Home from './Dashboard/Home'
+import Login from './Auth/Login'
+import ProductDetail from './Dashboard/ProductDetail'
+import Cart from 'apps/modules/Cart'
+import ProductCategory from './Dashboard/ProductCategory'
+import { Purchase_History } from './Dashboard/Purchase_History'
+import sellersPage from './Dashboard/SellersPage'
+import SearchPage from './Dashboard/SearchPage'
 
 export const routes = [
   {
@@ -60,4 +60,4 @@ export const routes = [
     name: ROUTER.SEARCHPAGE.name,
     component: SearchPage,
   },
-];
+]

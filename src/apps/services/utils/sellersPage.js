@@ -7,7 +7,7 @@ import ProductList from 'apps/modules/Dashboard/SellersPage/ProductList'
 import StatisticsPage from 'apps/modules/Dashboard/SellersPage/Statistics'
 
 export const renderPage = (key) => {
-  let content = null 
+  let content = null
   switch (key) {
     case '1':
       content = <ProductList />

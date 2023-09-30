@@ -1,8 +1,8 @@
 // Libraries
-import React, { useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
-import { faCheck, faStar } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useEffect, useRef, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { faCheck, faStar } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import {
   faChartBar,
@@ -10,14 +10,14 @@ import {
   faShieldHalved,
   faGlobe,
   faHeart,
-} from "@fortawesome/free-solid-svg-icons";
-import { useParams } from "react-router-dom";
+} from '@fortawesome/free-solid-svg-icons'
+import { useParams } from 'react-router-dom'
 
 // Query
-import { useGetDataProductById } from "apps/queries/product/useGetDataProductById";
+import { useGetDataProductById } from 'apps/queries/product/useGetDataProductById'
 
 // Store
-import { add_cart } from "store/cartSlice/cartSlice";
+import { add_cart } from 'store/cartSlice/cartSlice'
 
 // Style
 import {
@@ -41,46 +41,46 @@ import {
   SupplierTitle,
   SupplierTitleName,
   TextIconRating,
-} from "./styled";
-import Rating from "react-rating";
-import SlideProduct from "apps/components/molecules/SliderProduct";
-import ProductSkeleton from "apps/components/molecules/ProductSkeleton";
-import { Button, Col, Skeleton, Typography } from "antd";
-import { useGetProductBySubId } from "apps/queries/subcategory";
+} from './styled'
+import Rating from 'react-rating'
+import SlideProduct from 'apps/components/molecules/SliderProduct'
+import ProductSkeleton from 'apps/components/molecules/ProductSkeleton'
+import { Button, Col, Skeleton, Typography } from 'antd'
+import { useGetProductBySubId } from 'apps/queries/subcategory'
 
-const { Paragraph } = Typography;
+const { Paragraph } = Typography
 const ProductDetail = () => {
-  const { id } = useParams();
-  const imgRef = useRef(null);
-  const dispatch = useDispatch();
-  const [product, setProduct] = useState({});
+  const { id } = useParams()
+  const imgRef = useRef(null)
+  const dispatch = useDispatch()
+  const [product, setProduct] = useState({})
 
-  const [relatedProducts, setRelatedProducts] = useState([]);
-  const { data, isLoading } = useGetDataProductById(id);
+  const [relatedProducts, setRelatedProducts] = useState([])
+  const { data, isLoading } = useGetDataProductById(id)
 
   useEffect(() => {
-    setProduct(data);
-  }, [data]);
+    setProduct(data)
+  }, [data])
 
-  const subcategory = product?.subcategory;
-  const shop = product?.shop;
+  const subcategory = product?.subcategory
+  const shop = product?.shop
 
-  const { data: relatedProductsData } = useGetProductBySubId(subcategory?._id);
+  const { data: relatedProductsData } = useGetProductBySubId(subcategory?._id)
   useEffect(() => {
     if (Array.isArray(relatedProductsData?.product)) {
-      setRelatedProducts(relatedProductsData?.product);
+      setRelatedProducts(relatedProductsData?.product)
     }
-  }, [relatedProductsData?.product]);
+  }, [relatedProductsData?.product])
 
   const handleAddToCart = () => {
-    dispatch(add_cart({ ...product, quantity: 1 }));
-  };
+    dispatch(add_cart({ ...product, quantity: 1 }))
+  }
 
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(false)
 
   const toggleExpanded = () => {
-    setExpanded(!expanded);
-  };
+    setExpanded(!expanded)
+  }
 
   return (
     <>
@@ -115,7 +115,7 @@ const ProductDetail = () => {
                             <img
                               src={image}
                               onClick={() => {
-                                imgRef.current.src = image;
+                                imgRef.current.src = image
                               }}
                               alt="2"
                             />
@@ -152,10 +152,7 @@ const ProductDetail = () => {
                           <Rating
                             initialRating={product?.rating}
                             emptySymbol={
-                              <FontAwesomeIcon
-                                icon={faStar}
-                                className="text-gray-300"
-                              />
+                              <FontAwesomeIcon icon={faStar} className="text-gray-300" />
                             }
                             fullSymbol={
                               <FontAwesomeIcon
@@ -183,17 +180,17 @@ const ProductDetail = () => {
                       <div className="md:text-xl text-xl font-medium mr-2 text-red-500">
                         {Math.round(
                           product?.price -
-                            (product?.price * product?.discountPercentage) / 100
-                        ).toLocaleString("vi-VN", {
-                          style: "currency",
-                          currency: "VND",
+                            (product?.price * product?.discountPercentage) / 100,
+                        ).toLocaleString('vi-VN', {
+                          style: 'currency',
+                          currency: 'VND',
                         })}
                       </div>
                       <div className="flex items-center ">
                         <span className="line-through text-sm md:text-base font-medium mr-2 text-gray-400">
-                          {Math.round(product?.price).toLocaleString("vi-VN", {
-                            style: "currency",
-                            currency: "VND",
+                          {Math.round(product?.price).toLocaleString('vi-VN', {
+                            style: 'currency',
+                            currency: 'VND',
                           })}
                         </span>
                         <span>{Math.round(product?.discountPercentage)}%</span>
@@ -234,7 +231,7 @@ const ProductDetail = () => {
                     <SupplierButton>
                       <AddCart
                         style={{
-                          color: "#ffffff",
+                          color: '#ffffff',
                         }}
                         disabled={product?.stock === 0}
                         onClick={handleAddToCart}
@@ -264,12 +261,10 @@ const ProductDetail = () => {
           <RelatedProduct>Giới thiệu sản phẩm</RelatedProduct>
 
           <Paragraph
-            style={{ maxHeight: expanded ? "none" : 200, overflow: "hidden" }}
-            className={expanded ? "expanded-paragraph" : ""}
+            style={{ maxHeight: expanded ? 'none' : 200, overflow: 'hidden' }}
+            className={expanded ? 'expanded-paragraph' : ''}
           >
-            <div
-              dangerouslySetInnerHTML={{ __html: product?.description }}
-            ></div>
+            <div dangerouslySetInnerHTML={{ __html: product?.description }}></div>
           </Paragraph>
           {!expanded && (
             <Button type="link" onClick={toggleExpanded}>
@@ -292,7 +287,7 @@ const ProductDetail = () => {
         )}
       </section>
     </>
-  );
-};
+  )
+}
 
-export default ProductDetail;
+export default ProductDetail

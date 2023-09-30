@@ -313,7 +313,7 @@ export const handleCountDataOrder = (data, dayAt) => {
 
     let getday = handelGetDay(newCreateAt)
     if (dayAt === getday) {
-      sum += 1;
+      sum += 1
     }
   })
   return sum
