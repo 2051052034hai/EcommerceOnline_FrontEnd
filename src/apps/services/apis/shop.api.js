@@ -1,4 +1,4 @@
-import { get } from './https'
+import { create, get } from './https'
 
 const pathUrl = '/shop/'
 
@@ -27,4 +27,9 @@ export const getShopbyUserId = async (id) => {
     const result = await get(url)
     return result.data.data
   }
+}
+
+export const handleCreateShop = async (shop) => {
+  const result = await create(pathUrl, shop)
+  return result.data
 }
