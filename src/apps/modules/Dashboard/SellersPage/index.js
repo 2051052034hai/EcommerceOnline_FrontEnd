@@ -1,9 +1,10 @@
 //libaries
-import React, { useState } from 'react'
+import React, {useState } from 'react'
 import {
   AppstoreOutlined,
   AreaChartOutlined,
   BorderInnerOutlined,
+
 } from '@ant-design/icons'
 import { Col, Row } from 'antd'
 
@@ -12,15 +13,12 @@ import DrawerLeft from 'apps/components/molecules/DrawerLeft'
 import MenuSellerPage from 'apps/components/molecules/MenuSellerPage'
 
 //Services
-import { getItem } from 'apps/services/utils/sellersPage'
+import { getItem, renderPage } from 'apps/services/utils/sellersPage'
 
-import ProductList from './ProductList'
-import AddProduct from './AddProduct'
-import OrderList from './OrderList'
-import StatisticsPage from './Statistics'
 
-const SellersPage = () => {
+const SellersPage = (key) => {
   const [selectedKeys, setSelectedKeys] = useState('1')
+
 
   const items = [
     getItem('Quản Lý Sản Phẩm', 'sub1', <AppstoreOutlined />, [
@@ -41,34 +39,22 @@ const SellersPage = () => {
     setSelectedKeys(key)
   }
 
-  const renderPage = (key) => {
-    switch (key) {
-      case '1':
-        return <ProductList />
-      case '2':
-        return <AddProduct />
 
-      case '5':
-        return <OrderList />
-
-      case '8':
-        return <StatisticsPage />
-      
-      default:
-        return 'not found key'
-    }
+  const handleCheckedPage = (isHidden) => {
+   
   }
 
   return (
     <>
-      <Row className="block lg:hidden ">
+      <Row className="block lg:hidden">
         <DrawerLeft data={items} onClick={handleOnclick} />
       </Row>
       <Row>
         <Col lg={5} className="hidden lg:block ">
           <MenuSellerPage data={items} onClick={handleOnclick} />
         </Col>
-        <Col lg={19}>{renderPage(selectedKeys)}</Col>
+
+        <Col lg={19}>{renderPage(selectedKeys, handleCheckedPage)}</Col>
       </Row>
     </>
   )

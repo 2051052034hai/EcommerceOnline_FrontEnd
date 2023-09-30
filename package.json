@@ -21,6 +21,7 @@
     "react-cookie": "^6.1.0",
     "react-cookies": "^0.1.1",
     "react-dom": "^18.2.0",
+    "react-highlight-words": "^0.20.0",
     "react-hook-form": "^7.45.4",
     "react-lazy-load-image-component": "^1.6.0",
     "react-paypal-button-v2": "^2.6.3",

@@ -1,5 +1,36 @@
 import { Input, Tooltip } from 'antd'
 
+//SellersPage
+import AddProduct from 'apps/modules/Dashboard/SellersPage/AddProduct'
+import OrderList from 'apps/modules/Dashboard/SellersPage/OrderList'
+import ProductList from 'apps/modules/Dashboard/SellersPage/ProductList'
+import StatisticsPage from 'apps/modules/Dashboard/SellersPage/Statistics'
+
+export const renderPage = (key) => {
+  let content = null 
+  switch (key) {
+    case '1':
+      content = <ProductList />
+      break
+    case '2':
+      content = <AddProduct />
+
+      break
+    case '5':
+      content = <OrderList />
+
+      break
+    case '8':
+      content = <StatisticsPage />
+
+      break
+    default:
+      content = 'not found key'
+  }
+
+  return content
+}
+
 export const getItem = (label, key, icon, children, type, onClick) => {
   return {
     key,
@@ -131,15 +162,13 @@ export const handleArrDataOrder = (data, index) => {
     return result.concat(arrProducts)
   }, [])
 
-  
   dataTable = dataTable?.map((item, i) => ({
     ...item,
-    key: i, 
-  }));
+    key: i,
+  }))
 
-  return dataTable;
+  return dataTable
 }
-
 
 export const handleArrProductByOrderId = (data, orderId) => {
   let dataTable = data?.reduce((result, items) => {

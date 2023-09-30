@@ -1,5 +1,5 @@
 //Libaries
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
   Row,
   Col,
@@ -12,8 +12,10 @@ import {
   Drawer,
   Upload,
   Modal,
+  Divider,
 } from 'antd'
-import { PlusOutlined } from '@ant-design/icons'
+import { PlusOutlined, SearchOutlined } from '@ant-design/icons'
+import Highlighter from 'react-highlight-words'
 import ImgCrop from 'antd-img-crop'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
@@ -37,6 +39,7 @@ import ReactQuill from 'react-quill'
 
 //Services
 import { uploadImage } from 'apps/services/utils/uploadImage'
+import TableFilterAll from 'apps/components/molecules/TableFilterAll'
 
 const ProductList = () => {
   const { mutationDelete } = useDeleteProduct()
@@ -121,6 +124,7 @@ const ProductList = () => {
           </Link>
         )
       },
+      
     },
     {
       title: 'Tên sản phẩm',
@@ -597,17 +601,28 @@ const ProductList = () => {
           </Row>
         </Drawer>
       </Form>
+      <Divider
+        style={{
+          fontSize: '24px',
+          color: '#31a9e0',
+          textTransform: 'uppercase',
+        }}
+      >
+        Danh sách sản phẩm
+      </Divider>
 
       <Row className="lg:w-full">
         <Col lg={24} xs={24}>
-          <Table
+          {/* <Table
             className="overscroll-x-auto"
             columns={columns}
             dataSource={data}
             pagination={paginationConfig}
             loading={isLoadingGetProducts}
             scroll={{ x: 1100 }}
-          />
+          /> */}
+
+          <TableFilterAll dataSource={data} columns={columns} />
         </Col>
       </Row>
     </>
