@@ -74,35 +74,30 @@ const Login = () => {
 
   const handleLoginFb = () => {
     signInWithPopup(auth, providerFb)
-      .then(async (result) => {
-        const user = result.user
-        const access_token = user.stsTokenManager.accessToken
-        const refresh_token = user.stsTokenManager.refreshToken
-        const userEmail = user.email
-        const userPassword = user.uid
-        const username = user.displayName
+    .then(async (result) => {
+      const user = result.user
+      const userEmail = user.email
+      const userPassword = user.uid
+      const username = user.displayName
 
-        const data = {
-          access_token,
-          refresh_token,
-          username,
-          email: userEmail,
-          password: userPassword,
-        }
+      const data = {
+        username,
+        email: userEmail,
+        password: userPassword,
+      }
 
-        if (data) {
-          await mutationRegister.mutate(data)
+      if (data) {
+        await mutationRegister.mutateAsync(data)
+      }
 
-          cookie.save('access-token', access_token)
-          cookie.save('refresh_token', refresh_token)
-          dispatch(save_user(data))
-          toast.success('Đăng nhập thành công')
-          navigate('/')
-        }
+      await mutation.mutateAsync({
+        email: data.email,
+        password: data.password,
       })
-      .catch((error) => {
-        console.log(error)
-      })
+    })
+    .catch((error) => {
+      console.log(error)
+    })
   }
 
   return (
