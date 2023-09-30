@@ -39,7 +39,7 @@ const Login = () => {
 
   const handleLoginGg = () => {
     signInWithPopup(auth, providerGb)
-      .then(async (result) => {
+      .then( (result) => {
         const user = result.user
         const userEmail = user.email
         const username = user.displayName
@@ -50,7 +50,7 @@ const Login = () => {
         }
 
         if (data) {
-          await mutationSocial.mutateAsync(data)
+           mutationSocial.mutate(data)
         }
 
         
