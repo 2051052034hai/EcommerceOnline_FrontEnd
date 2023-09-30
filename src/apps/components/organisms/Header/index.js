@@ -32,6 +32,8 @@ export default function Header() {
   const currentUser = useSelector(selectCurrentUser)
   const { data: shop } = useGetShopbyUserId(currentUser?._id)
 
+  console.log("currentUser:", currentUser)
+
   useEffect(() => {
     setMenuData(data)
   }, [isLoading])

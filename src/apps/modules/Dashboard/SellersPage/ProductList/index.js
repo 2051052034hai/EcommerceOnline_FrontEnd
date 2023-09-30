@@ -124,7 +124,6 @@ const ProductList = () => {
           </Link>
         )
       },
-      
     },
     {
       title: 'Tên sản phẩm',
@@ -149,18 +148,21 @@ const ProductList = () => {
           }).format(text)}
         </h3>
       ),
+      sorter: (a, b) => a.price - b.price,
     },
     {
       title: 'Tồn Kho',
       dataIndex: 'stock',
       key: 'stock',
       render: (text) => <h3 className="font-medium">{text}</h3>,
+      sorter: (a, b) => a.stock - b.stock,
     },
     {
       title: 'Đã bán',
       dataIndex: 'sold',
       key: 'sold',
       render: (text) => <h3 className="font-medium">{text}</h3>,
+      sorter: (a, b) => a.sold - b.sold,
     },
     {
       title: 'Loại sản phẩm',
@@ -614,15 +616,20 @@ const ProductList = () => {
       <Row className="lg:w-full">
         <Col lg={24} xs={24}>
           {/* <Table
-            className="overscroll-x-auto"
+           
             columns={columns}
             dataSource={data}
             pagination={paginationConfig}
             loading={isLoadingGetProducts}
-            scroll={{ x: 1100 }}
+           
           /> */}
 
-          <TableFilterAll dataSource={data} columns={columns} />
+          <TableFilterAll
+            dataSource={data}
+            columns={columns}
+            pagination={paginationConfig}
+            loading={isLoadingGetProducts}
+          />
         </Col>
       </Row>
     </>

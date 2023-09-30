@@ -19,7 +19,7 @@ import { save_user } from 'store/userSlice/userSlice'
 import { toast } from 'react-toastify'
 
 const Login = () => {
-  const { mutation: mutationRegister, checkEmail } = useCreateUser()
+  const { mutation: mutationRegister } = useCreateUser()
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -46,32 +46,26 @@ const Login = () => {
 
   const handleLoginGg = () => {
     signInWithPopup(auth, providerGb)
-      .then((result) => {
+      .then(async (result) => {
         const user = result.user
-        const access_token = user.stsTokenManager.accessToken
-        const refresh_token = user.stsTokenManager.refreshToken
         const userEmail = user.email
         const userPassword = user.uid
         const username = user.displayName
 
         const data = {
-          access_token,
-          refresh_token,
           username,
           email: userEmail,
           password: userPassword,
         }
 
         if (data) {
-          mutationRegister.mutate(data)
-          if (checkEmail) {
-            cookie.save('access-token', access_token)
-            cookie.save('refresh_token', refresh_token)
-            dispatch(save_user(data))
-            toast.success('Đăng nhập thành công')
-            navigate('/')
-          }
+          await mutationRegister.mutateAsync(data)
         }
+
+        await mutation.mutateAsync({
+          email: data.email,
+          password: data.password,
+        })
       })
       .catch((error) => {
         console.log(error)
@@ -80,7 +74,7 @@ const Login = () => {
 
   const handleLoginFb = () => {
     signInWithPopup(auth, providerFb)
-      .then((result) => {
+      .then(async (result) => {
         const user = result.user
         const access_token = user.stsTokenManager.accessToken
         const refresh_token = user.stsTokenManager.refreshToken
@@ -97,14 +91,13 @@ const Login = () => {
         }
 
         if (data) {
-          mutationRegister.mutate(data)
-          if (checkEmail) {
-            cookie.save('access-token', access_token)
-            cookie.save('refresh_token', refresh_token)
-            dispatch(save_user(data))
-            toast.success('Đăng nhập thành công')
-            navigate('/')
-          }
+          await mutationRegister.mutate(data)
+
+          cookie.save('access-token', access_token)
+          cookie.save('refresh_token', refresh_token)
+          dispatch(save_user(data))
+          toast.success('Đăng nhập thành công')
+          navigate('/')
         }
       })
       .catch((error) => {

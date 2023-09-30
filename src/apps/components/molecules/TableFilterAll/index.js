@@ -1,25 +1,20 @@
-import { SearchOutlined } from '@ant-design/icons';
-import React, { useRef, useState } from 'react';
-import Highlighter from 'react-highlight-words';
-import { Button, Input, Space, Table } from 'antd';
+import { SearchOutlined } from '@ant-design/icons'
+import React, { useRef, useState } from 'react'
+import Highlighter from 'react-highlight-words'
+import { Button, Input, Space, Table } from 'antd'
 
-const TableFilterAll = ({dataSource, columns}) => {
-  const [searchText, setSearchText] = useState('');
-  const [searchedColumn, setSearchedColumn] = useState('');
-  const searchInput = useRef(null);
+const TableFilterAll = ({ dataSource, columns, pagination, loading}) => {
+  const [searchText, setSearchText] = useState('')
+  const [searchedColumn, setSearchedColumn] = useState('')
+  const searchInput = useRef(null)
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
-    confirm();
-    setSearchText(selectedKeys[0]);
-    setSearchedColumn(dataIndex);
-  };
+    confirm()
+    setSearchText(selectedKeys[0])
+    setSearchedColumn(dataIndex)
+  }
   const handleReset = (clearFilters) => {
-    clearFilters();
-    setSearchText('');
-  };
-
-
-  if(columns){
-    
+    clearFilters()
+    setSearchText('')
   }
 
   const getColumnSearchProps = (dataIndex) => ({
@@ -39,7 +34,6 @@ const TableFilterAll = ({dataSource, columns}) => {
           style={{
             marginBottom: 8,
             display: 'block',
-         
           }}
         />
         <Space>
@@ -69,9 +63,9 @@ const TableFilterAll = ({dataSource, columns}) => {
             onClick={() => {
               confirm({
                 closeDropdown: false,
-              });
-              setSearchText(selectedKeys[0]);
-              setSearchedColumn(dataIndex);
+              })
+              setSearchText(selectedKeys[0])
+              setSearchedColumn(dataIndex)
             }}
           >
             Filter
@@ -80,7 +74,7 @@ const TableFilterAll = ({dataSource, columns}) => {
             type="link"
             size="small"
             onClick={() => {
-              close();
+              close()
             }}
           >
             close
@@ -99,7 +93,7 @@ const TableFilterAll = ({dataSource, columns}) => {
       record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
     onFilterDropdownOpenChange: (visible) => {
       if (visible) {
-        setTimeout(() => searchInput.current?.select(), 100);
+        setTimeout(() => searchInput.current?.select(), 100)
       }
     },
     render: (text) =>
@@ -116,7 +110,28 @@ const TableFilterAll = ({dataSource, columns}) => {
       ) : (
         text
       ),
-  });
-  return <Table columns={columns} dataSource={dataSource} />;
-};
-export default TableFilterAll;
+  })
+
+  const modifiedColumns = columns.map((item) => {
+    if (item.key === 'name' || item.key === 'subCategory') {
+      return {
+        ...getColumnSearchProps(item.key),
+        ...item,
+      }
+    } else {
+      return item
+    }
+  })
+
+  return (
+    <Table
+      columns={modifiedColumns}
+      dataSource={dataSource}
+      className="overscroll-x-auto"
+      scroll={{ x: 1100 }}
+      pagination={pagination}
+      loading={loading}
+    />
+  )
+}
+export default TableFilterAll
