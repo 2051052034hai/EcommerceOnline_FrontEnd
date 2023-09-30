@@ -1,13 +1,11 @@
 // Libraries
-import { useMutation, useQueryClient } from 'react-query'
+import { useMutation } from 'react-query'
 
 // services
 import { createProduct } from 'apps/services/apis/product.api'
 import { toast } from 'react-toastify'
-import { QUERIES_KEYS } from 'apps/constants/queries'
 
 export const useCreateProduct = () => {
-  const queryClient = useQueryClient()
   const mutation = useMutation({
     mutationFn: async (product) => createProduct(product),
     onSuccess: (data) => {

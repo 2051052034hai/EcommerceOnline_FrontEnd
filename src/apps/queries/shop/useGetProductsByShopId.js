@@ -1,5 +1,5 @@
 // Libraries
-import { useQuery, useQueryClient } from 'react-query'
+import { useQuery } from 'react-query'
 
 // Constants
 import { QUERIES_KEYS } from 'apps/constants/queries'

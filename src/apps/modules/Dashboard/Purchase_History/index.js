@@ -1,4 +1,4 @@
-import { Button, Divider } from 'antd'
+import { Divider } from 'antd'
 import { useGetCartByUserId } from 'apps/queries/cart/useGetCartByUserId'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'

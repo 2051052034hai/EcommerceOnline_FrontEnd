@@ -1,12 +1,11 @@
 //Libaries
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Row,
   Col,
   Input,
   Select,
   Space,
-  Table,
   Form,
   Button,
   Drawer,
@@ -14,8 +13,7 @@ import {
   Modal,
   Divider,
 } from 'antd'
-import { PlusOutlined, SearchOutlined } from '@ant-design/icons'
-import Highlighter from 'react-highlight-words'
+import { PlusOutlined } from '@ant-design/icons'
 import ImgCrop from 'antd-img-crop'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
