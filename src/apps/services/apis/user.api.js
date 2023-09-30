@@ -18,11 +18,7 @@ export const createUser = async (data) => {
       const result = await create(`${pathUrl}/register`, formData, config)
       return result.data.data
     } catch (error) {
-      if (error.response && error.response.status === 400) {
-        console.log("Email đã tồn tại, tiếp tục với tài khoản google"); 
-      } else {
-        throw error;
-      }
+    return error
     }
 
   }

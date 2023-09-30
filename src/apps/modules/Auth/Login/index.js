@@ -1,27 +1,19 @@
 // Libraries
-import { getRedirectResult, signInWithPopup, signInWithRedirect } from 'firebase/auth'
+import { signInWithPopup } from 'firebase/auth'
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import cookie from 'react-cookies'
+import { Link,  } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { Spin } from 'antd'
-import { useDispatch } from 'react-redux'
 
 //Queries
 import { useLoginUser } from 'apps/queries/auth/useLoginUser'
-import { useCreateUser } from 'apps/queries/auth/useLoginOnlineUser'
 
 //Molecules
 import { auth, providerFb, providerGb } from 'apps/configs/Firebase'
+import { useLoginSocial } from 'apps/queries/auth/useLoginSocial'
 
-//UserSlice
-import { save_user } from 'store/userSlice/userSlice'
-import { toast } from 'react-toastify'
 
 const Login = () => {
-  const { mutation: mutationRegister } = useCreateUser()
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
 
   //useForm
   const {
@@ -32,6 +24,7 @@ const Login = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { mutation, isLoading } = useLoginUser()
+  const  {mutation: mutationSocial}= useLoginSocial()
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !isSubmitting) {
@@ -49,23 +42,19 @@ const Login = () => {
       .then(async (result) => {
         const user = result.user
         const userEmail = user.email
-        const userPassword = user.uid
         const username = user.displayName
 
         const data = {
           username,
           email: userEmail,
-          password: userPassword,
         }
 
         if (data) {
-          await mutationRegister.mutateAsync(data)
+          await mutationSocial.mutateAsync(data)
         }
 
-        await mutation.mutateAsync({
-          email: data.email,
-          password: data.password,
-        })
+        
+        
       })
       .catch((error) => {
         console.log(error)
@@ -77,23 +66,17 @@ const Login = () => {
     .then(async (result) => {
       const user = result.user
       const userEmail = user.email
-      const userPassword = user.uid
       const username = user.displayName
 
       const data = {
         username,
         email: userEmail,
-        password: userPassword,
       }
 
       if (data) {
-        await mutationRegister.mutateAsync(data)
+        await mutationSocial.mutateAsync(data)
       }
 
-      await mutation.mutateAsync({
-        email: data.email,
-        password: data.password,
-      })
     })
     .catch((error) => {
       console.log(error)
