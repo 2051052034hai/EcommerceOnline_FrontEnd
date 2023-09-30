@@ -63,10 +63,12 @@ export default function Header() {
 
   //Log out
   const handleLogOut = () => {
-    navigate('/')
+   
     cookie.remove('access-token')
     cookie.remove('refresh_token')
     dispatch(log_out())
+    navigate('/')
+    window.location.href = '/'
   }
 
   //
