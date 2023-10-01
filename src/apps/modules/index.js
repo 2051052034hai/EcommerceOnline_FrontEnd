@@ -22,6 +22,12 @@ export const Root = () => {
         if (route.path === ROUTER.SELLERSPAGE.path && currentUser?.role !== ROLE.SELLER) {
           return null
         }
+        if (
+          route.path === ROUTER.REGISTERSELLER.path &&
+          currentUser?.role !== ROLE.USER
+        ) {
+          return null
+        }
 
         return <Route key={route?.key} path={route?.path} Component={route?.component} />
       })}

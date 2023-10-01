@@ -6,7 +6,7 @@ import { useGetDataCategory } from 'apps/queries/category'
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
-import { SearchOutlined, DownOutlined, UserOutlined } from '@ant-design/icons'
+import { SearchOutlined, UserOutlined } from '@ant-design/icons'
 import cookie from 'react-cookies'
 import { Dropdown, Space } from 'antd'
 //UserSlice
@@ -17,8 +17,6 @@ import { selectCurrentUser } from 'store/userSlice/userSelector'
 import { ROLE } from 'apps/constants'
 import { useGetShopbyUserId } from 'apps/queries/shop/useGetShopbyUserId'
 import { SearchStyle } from './styled'
-
-const { SubMenu } = Menu
 
 export default function Header() {
   const { data, isLoading } = useGetDataCategory()
@@ -31,8 +29,6 @@ export default function Header() {
   const countCart = useSelector((state) => state.cart.count)
   const currentUser = useSelector(selectCurrentUser)
   const { data: shop } = useGetShopbyUserId(currentUser?._id)
-
-  console.log("currentUser:", currentUser)
 
   useEffect(() => {
     setMenuData(data)
@@ -65,7 +61,6 @@ export default function Header() {
 
   //Log out
   const handleLogOut = () => {
-   
     cookie.remove('access-token')
     cookie.remove('refresh_token')
     dispatch(log_out())
@@ -120,7 +115,6 @@ export default function Header() {
 
     const newItem = getItem('Kênh bán hàng', '4', null, null, null, '/sellerspage')
     menuItems[0].children?.splice(1, 0, newItem)
-    
   }
 
   return (
@@ -157,6 +151,10 @@ export default function Header() {
             <img className="h-12 w-auto" src="/assets/image/logo.png" alt="" />
           </Link>
         </div>
+        {currentUser?.role === ROLE.USER && (
+          <Link to={'/register-seller'}>Đăng kí bán hàng</Link>
+        )}
+
         <div className="hidden md:flex lg:flex">
           <Menu
             onClick={onClick}
