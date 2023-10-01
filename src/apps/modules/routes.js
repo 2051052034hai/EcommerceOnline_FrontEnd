@@ -10,6 +10,7 @@ import ProductCategory from './Dashboard/ProductCategory'
 import { Purchase_History } from './Dashboard/Purchase_History'
 import sellersPage from './Dashboard/SellersPage'
 import SearchPage from './Dashboard/SearchPage'
+import Register from './Auth/Register'
 import RegisterSeller from './Dashboard/Register_Seller'
 
 export const routes = [
@@ -62,7 +63,12 @@ export const routes = [
     component: SearchPage,
   },
   {
-    key: ROUTER.REGISTERSELLER.key,
+    key: ROUTER.REGISTER.key,
+    path: ROUTER.REGISTER.path,
+    name: ROUTER.REGISTER.name,
+    component: Register,
+  },
+  {key: ROUTER.REGISTERSELLER.key,
     path: ROUTER.REGISTERSELLER.path,
     name: ROUTER.REGISTERSELLER.name,
     component: RegisterSeller,
