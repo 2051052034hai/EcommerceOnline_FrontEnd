@@ -3,17 +3,17 @@ import { useQuery } from 'react-query'
 
 // Constants
 import { QUERIES_KEYS } from 'apps/constants/queries'
-import { getProductBySubId } from 'apps/services/apis/sub.api'
 
 // Services
+import { getComment } from 'apps/services/apis/comment.api'
 
-export const useGetProductBySubId = (id) => {
+export const useGetComment = (id) => {
   const { data, isLoading } = useQuery({
-    queryKey: [QUERIES_KEYS.SUBCATEGORY, id],
-    queryFn: () => getProductBySubId(id),
+    queryKey: [QUERIES_KEYS.COMMENT, id],
+    queryFn: () => getComment(id),
     keepPreviousData: true,
     staleTime: 10 * 1000,
   })
 
-  return { data: data, isLoading }
+  return { dataComment: data, isLoading }
 }

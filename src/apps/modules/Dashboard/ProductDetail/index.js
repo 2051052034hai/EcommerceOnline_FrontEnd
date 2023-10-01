@@ -1,20 +1,24 @@
 // Libraries
 import React, { useEffect, useRef, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { faCheck, faStar } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Rating from 'react-rating'
+import { Avatar, Button, Col, List, Skeleton, Typography } from 'antd'
 
 import {
-  faChartBar,
   faBasketShopping,
   faShieldHalved,
   faGlobe,
   faHeart,
 } from '@fortawesome/free-solid-svg-icons'
+
 import { useParams } from 'react-router-dom'
 
 // Query
 import { useGetDataProductById } from 'apps/queries/product/useGetDataProductById'
+import { useGetProductBySubId } from 'apps/queries/subcategory'
+import { useGetComment } from 'apps/queries/comment/useGetComment'
 
 // Store
 import { add_cart } from 'store/cartSlice/cartSlice'
@@ -22,7 +26,6 @@ import { add_cart } from 'store/cartSlice/cartSlice'
 // Style
 import {
   AddCart,
-  Comment,
   IconRating,
   InStock,
   ProductContent,
@@ -40,17 +43,20 @@ import {
   SupplierTitleName,
   TextIconRating,
 } from './styled'
-import Rating from 'react-rating'
+
+// Components
 import SlideProduct from 'apps/components/molecules/SliderProduct'
 import ProductSkeleton from 'apps/components/molecules/ProductSkeleton'
-import { Button, Col, Skeleton, Typography } from 'antd'
-import { useGetProductBySubId } from 'apps/queries/subcategory'
+import CommentForm from 'apps/components/molecules/CommentForm'
+import { selectCurrentUser } from 'store/userSlice/userSelector'
+import { useCreateComment } from 'apps/queries/comment/useCreateComment'
 
 const { Paragraph } = Typography
 const ProductDetail = () => {
   const { id } = useParams()
   const imgRef = useRef(null)
   const dispatch = useDispatch()
+  const currentUser = useSelector(selectCurrentUser)
   const [product, setProduct] = useState({})
 
   const [relatedProducts, setRelatedProducts] = useState([])
@@ -64,6 +70,8 @@ const ProductDetail = () => {
   const shop = product?.shop
 
   const { data: relatedProductsData } = useGetProductBySubId(subcategory?._id)
+  const { mutationComment } = useCreateComment()
+
   useEffect(() => {
     if (Array.isArray(relatedProductsData?.product)) {
       setRelatedProducts(relatedProductsData?.product)
@@ -78,6 +86,19 @@ const ProductDetail = () => {
 
   const toggleExpanded = () => {
     setExpanded(!expanded)
+  }
+
+  const { dataComment, isLoading: isLoadingComment } = useGetComment(id)
+
+  const handleSubmit = (newComment) => {
+    const { comment, rating } = newComment
+    const dataComment = {
+      content: comment,
+      rating,
+      userId: currentUser?._id,
+      productId: product?._id,
+    }
+    mutationComment.mutate(dataComment)
   }
 
   return (
@@ -163,11 +184,6 @@ const ProductDetail = () => {
                         </IconRating>
                         {product?.rating}
                       </TextIconRating>
-
-                      <Comment>
-                        <FontAwesomeIcon icon={faChartBar} />
-                        <p>32 reviews</p>
-                      </Comment>
                       <Sold>
                         <FontAwesomeIcon icon={faBasketShopping} />
                         <p>{product?.stock} sold </p>
@@ -268,6 +284,36 @@ const ProductDetail = () => {
             <Button type="link" onClick={toggleExpanded}>
               Xem thêm
             </Button>
+          )}
+        </section>
+      </div>
+      <div>
+        <section className="mt-10 mx-auto px-3 max-w-screen-xl md:px-0 mb-8  ">
+          <RelatedProduct>Bình luận về sản phẩm</RelatedProduct>
+          <CommentForm onSubmit={handleSubmit} />
+          {dataComment?.length === 0 ? (
+            <p>Chưa có bình luận nào cho sản phẩm</p>
+          ) : (
+            <List
+              pagination={{
+                pageSize: 5,
+              }}
+              loading={isLoadingComment}
+              dataSource={dataComment}
+              renderItem={(item, index) => (
+                <List.Item>
+                  <List.Item.Meta
+                    avatar={
+                      <Avatar
+                        src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`}
+                      />
+                    }
+                    title={<a href="https://ant.design">{item?.userId?.username}</a>}
+                    description={item?.content}
+                  />
+                </List.Item>
+              )}
+            />
           )}
         </section>
       </div>
