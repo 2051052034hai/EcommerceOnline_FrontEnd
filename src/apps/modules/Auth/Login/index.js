@@ -86,7 +86,7 @@ const Login = () => {
             <p className="">
               Chưa có tài khoản?
               <Link
-                to={'/'}
+                to={'/register'}
                 className="font-medium text-indigo-600 hover:text-indigo-500"
               >
                 Đăng kí

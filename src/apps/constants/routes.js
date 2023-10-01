@@ -54,4 +54,10 @@ export const ROUTER = {
     path: "/searchpage",
     isPrivate: false,
   },
+  REGISTER: {
+    key:"register",
+    name: "register",
+    path: "/register",
+    isPrivate: false,
+  }
 };

@@ -10,6 +10,7 @@ import ProductCategory from './Dashboard/ProductCategory'
 import { Purchase_History } from './Dashboard/Purchase_History'
 import sellersPage from './Dashboard/SellersPage'
 import SearchPage from './Dashboard/SearchPage'
+import Register from './Auth/Register'
 
 export const routes = [
   {
@@ -59,5 +60,11 @@ export const routes = [
     path: ROUTER.SEARCHPAGE.path,
     name: ROUTER.SEARCHPAGE.name,
     component: SearchPage,
+  },
+  {
+    key: ROUTER.REGISTER.key,
+    path: ROUTER.REGISTER.path,
+    name: ROUTER.REGISTER.name,
+    component: Register,
   },
 ]
