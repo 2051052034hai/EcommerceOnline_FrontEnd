@@ -1,24 +1,24 @@
-import * as styles from "./styled";
-import { useDispatch } from "react-redux";
-import {
-  decrease_cart,
-  increase_cart,
-  remove_product,
-} from "store/cartSlice/cartSlice";
+import * as styles from './styled'
+import { useDispatch } from 'react-redux'
+import { toast } from 'react-toastify'
+import { decrease_cart, increase_cart, remove_product } from 'store/cartSlice/cartSlice'
 
 function CartItem(props) {
-  const { cart } = props;
-  const dispatch = useDispatch();
+  const { cart } = props
+  const dispatch = useDispatch()
   const handleOnClickDecrease = () => {
-    dispatch(decrease_cart({ _id: cart._id }));
-  };
+    dispatch(decrease_cart({ _id: cart._id }))
+  }
   const handleOnClickIncrease = () => {
-    dispatch(increase_cart({ _id: cart._id }));
-  };
+    if (cart?.quantity < cart?.stock) {
+      dispatch(increase_cart({ _id: cart._id }))
+    } else {
+      toast.error('Không đủ sản phẩm cho bạn')
+    }
+  }
   const handleOnClickRemoveProduct = () => {
-    dispatch(remove_product({ _id: cart._id }));
-  };
-
+    dispatch(remove_product({ _id: cart._id }))
+  }
   return (
     <>
       <div>
@@ -51,10 +51,10 @@ function CartItem(props) {
           </div>
 
           <div className="lg:col-span-3 md:col-span-3">
-            <div style={{ textAlign: "right" }}>
+            <div style={{ textAlign: 'right' }}>
               <styles.price>
                 <p className="line-through">
-                  {Math.round(cart?.price).toLocaleString("vi-VN")} VND
+                  {Math.round(cart?.price).toLocaleString('vi-VN')} VND
                 </p>
               </styles.price>
 
@@ -74,14 +74,13 @@ function CartItem(props) {
                 </button>
               </styles.quantity>
               <styles.price>
-                <p style={{ color: "red" }}>
+                <p style={{ color: 'red' }}>
                   {(
                     Math.ceil(
-                      (cart?.price -
-                        (cart?.price * cart?.discountPercentage) / 100) /
-                        1000
+                      (cart?.price - (cart?.price * cart?.discountPercentage) / 100) /
+                        1000,
                     ) * 1000
-                  ).toLocaleString("vi-VN")}
+                  ).toLocaleString('vi-VN')}
                   VND
                 </p>
               </styles.price>
@@ -91,6 +90,6 @@ function CartItem(props) {
         <hr className=" mt-2" />
       </div>
     </>
-  );
+  )
 }
-export default CartItem;
+export default CartItem

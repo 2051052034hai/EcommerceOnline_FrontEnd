@@ -111,6 +111,7 @@ const StatisticsPage = () => {
     var top3BuyersPrecious = findTop3BuyersPrecious(dataTable, Math.ceil(monthAt / 3))
   }
 
+  console.log("revenueByMonth:", revenueByMonth)
   return (
     <>
       <div className="overflow-x-hidden">

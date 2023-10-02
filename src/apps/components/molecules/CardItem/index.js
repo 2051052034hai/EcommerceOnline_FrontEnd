@@ -44,11 +44,12 @@ const CardItem = (props) => {
             </div>
 
             <div className="pt-3 ml-2 mr-2 mb-3">
-              <h3 className=" text-gray-900 h-10  md:text-sm lg:text-sm overflow-clip  font-medium">
-                <span className="line-clamp-2">{product?.title}</span>
+              <h3 className=" text-gray-900 lg:h-10 h-8 md:text-sm lg:text-sm overflow-clip font-medium text-xs">
+                <span className="line-clamp-2 ">{product?.title}</span>
               </h3>
               <div>
                 <Rating
+                  className="text-xs lg:text-sm"
                   initialRating={product?.rating}
                   emptySymbol={
                     <FontAwesomeIcon icon={faStar} className="text-gray-300" />
@@ -113,11 +114,12 @@ const CardItem = (props) => {
           </div>
 
           <div className="pt-3 ml-2 mr-2 mb-3">
-            <h3 className=" text-gray-900 h-10 overflow-x-clip  overflow-clip  md:text-sm lg:text-sm font-medium">
+            <h3 className=" text-gray-900 h-8 lg:h-10 overflow-x-clip  overflow-clip  md:text-sm lg:text-sm font-medium text-xs">
               <span className="line-clamp-2"> {product?.title}</span>
             </h3>
             <div>
               <Rating
+                className="text-xs lg:text-sm"
                 initialRating={product?.rating}
                 emptySymbol={<FontAwesomeIcon icon={faStar} className="text-gray-300" />}
                 fullSymbol={<FontAwesomeIcon icon={faStar} className="text-yellow-500" />}
