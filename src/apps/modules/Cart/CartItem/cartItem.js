@@ -15,10 +15,12 @@ function CartItem(props) {
     } else {
       toast.error('Không đủ sản phẩm cho bạn')
     }
+   
   }
   const handleOnClickRemoveProduct = () => {
     dispatch(remove_product({ _id: cart._id }))
   }
+
   return (
     <>
       <div>
@@ -76,12 +78,13 @@ function CartItem(props) {
               <styles.price>
                 <p style={{ color: 'red' }}>
                   {(
-                    Math.ceil(
-                      (cart?.price - (cart?.price * cart?.discountPercentage) / 100) /
-                        1000,
-                    ) * 1000
-                  ).toLocaleString('vi-VN')}
-                  VND
+                    cart?.price -
+                    Math.round(cart?.price * cart?.discountPercentage) / 100
+                  ).toLocaleString('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND',
+                  })}
+
                 </p>
               </styles.price>
             </div>
