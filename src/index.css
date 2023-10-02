@@ -68,6 +68,7 @@ code {
   .ant-statistic-content {
     font-size: 12px !important; /* Điều chỉnh kích thước font cho xs */
   }
+  
 }
 /* Khi ở chế độ màn hình lớn (lg) */
 @media (min-width: 992px) {
@@ -75,6 +76,7 @@ code {
     font-size: 25px !important; /* Điều chỉnh kích thước font cho lg */
   }
 }
+
 
 @tailwind base;
 @tailwind components;

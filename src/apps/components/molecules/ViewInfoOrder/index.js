@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Drawer, Space, Table } from 'antd'
 
-const ViewInfoOrder = ({ columns, data, status, onClose, total}) => {
+const ViewInfoOrder = ({ columns, data, status, onClose, total }) => {
   const [pageSize, setPageSize] = useState(5)
   const [open, setOpen] = useState(status)
-  
+
   useEffect(() => {
     setOpen(status)
   }, [status])
@@ -41,11 +41,13 @@ const ViewInfoOrder = ({ columns, data, status, onClose, total}) => {
             </Space>
           }
         >
-          <Table columns={columns} dataSource={data}  pagination={paginationConfig}/>
-         {/* <div>
-          <h3>Số lượng: <span>150</span></h3>
-          <h3>Tổng tiền: <span>150000 vnđ</span></h3>
-         </div> */}
+          <Table
+            columns={columns}
+            dataSource={data}
+            pagination={paginationConfig}
+            className="overscroll-x-auto"
+            scroll={{ x: 500 }}
+          />
         </Drawer>
       </>
     )

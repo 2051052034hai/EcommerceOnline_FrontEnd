@@ -21,6 +21,7 @@ import {
 
 //Store
 import { selectCurrentUser } from 'store/userSlice/userSelector'
+import TableFilterAll from 'apps/components/molecules/TableFilterAll'
 
 const OrderList = () => {
   const currentUser = useSelector(selectCurrentUser)
@@ -108,6 +109,18 @@ const OrderList = () => {
           </>
         )
       },
+
+      filters: [
+        {
+          text: 'Chưa thanh toán',
+          value: false,
+        },
+        {
+          text: 'Đã thanh toán',
+          value: true,
+        },
+      ],
+      onFilter: (value, record) => record?.status === value,
     },
     {
       title: 'Danh sách sản phẩm',
@@ -214,12 +227,11 @@ const OrderList = () => {
         >
           Đơn Hàng
         </Divider>
-        <Table
-          columns={columns}
+        <TableFilterAll
           dataSource={dataOrderList}
+          columns={columns}
           pagination={paginationConfig}
           loading={isLoading}
-          scroll={{ x: 1100 }}
         />
       </div>
 

@@ -454,7 +454,7 @@ const ProductList = () => {
         onFinishFailed={onFinishFailed}
       >
         <Drawer
-          title="Thông Tin Sản Phẩm"
+          title={<div className="custom-drawer-title">Thông Tin Sản Phẩm</div>}
           width={720}
           onClose={onClose}
           open={open}
@@ -463,7 +463,6 @@ const ProductList = () => {
           }}
           extra={
             <Space>
-              <Button onClick={onClose}>Huỷ bỏ</Button>
               <Button
                 htmlType="submit"
                 type="primary"
@@ -613,15 +612,6 @@ const ProductList = () => {
 
       <Row className="lg:w-full">
         <Col lg={24} xs={24}>
-          {/* <Table
-           
-            columns={columns}
-            dataSource={data}
-            pagination={paginationConfig}
-            loading={isLoadingGetProducts}
-           
-          /> */}
-
           <TableFilterAll
             dataSource={data}
             columns={columns}
