@@ -2,6 +2,9 @@
 import { BrowserRouter as Router } from 'react-router-dom'
 import { QueryClientProvider, QueryClient } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
+import { FloatButton } from 'antd'
+import { ToastContainer } from 'react-toastify'
+import { useEffect, useState } from 'react'
 
 // Organnisms
 import { Main } from 'apps/components/organisms/Main'
@@ -10,8 +13,6 @@ import Header from './apps/components/organisms/Header'
 
 // Modules
 import { Root } from 'apps/modules'
-import { ToastContainer } from 'react-toastify'
-import { useEffect, useState } from 'react'
 import LoadingPage from 'apps/components/molecules/LoadingPage'
 
 // Turn off fresh data onfocus
@@ -46,6 +47,7 @@ function App() {
               <Root />
               <ToastContainer autoClose={2000} />
             </Main>
+            <FloatButton.BackTop />
             <Footer />
           </Router>
 
