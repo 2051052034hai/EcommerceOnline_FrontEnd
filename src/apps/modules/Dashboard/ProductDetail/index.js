@@ -167,34 +167,47 @@ const ProductDetail = () => {
                     </ProductContentTitle>
                     <ProductContentValuate>
                       <TextIconRating>
-                        <IconRating>
-                          <Rating
-                            initialRating={product?.rating}
-                            emptySymbol={
-                              <FontAwesomeIcon icon={faStar} className="text-gray-300" />
-                            }
-                            fullSymbol={
-                              <FontAwesomeIcon
-                                icon={faStar}
-                                className="text-yellow-500"
+                        {product?.rating === 0 ? (
+                          <p>Chưa có đánh giá</p>
+                        ) : (
+                          <>
+                            <IconRating>
+                              <Rating
+                                initialRating={product?.rating}
+                                emptySymbol={
+                                  <FontAwesomeIcon
+                                    icon={faStar}
+                                    className="text-gray-300"
+                                  />
+                                }
+                                fullSymbol={
+                                  <FontAwesomeIcon
+                                    icon={faStar}
+                                    className="text-yellow-500"
+                                  />
+                                }
+                                readonly
                               />
-                            }
-                            readonly
-                          />
-                        </IconRating>
-                        {product?.rating}
+                            </IconRating>
+                            {product?.rating}
+                          </>
+                        )}
                       </TextIconRating>
                       <Sold>
                         <FontAwesomeIcon icon={faBasketShopping} />
-                        <p>{product?.stock} sold </p>
+                        <p> Đã bán {product?.sold}</p>
+                      </Sold>
+                      <Sold>
+                        <FontAwesomeIcon icon={faBasketShopping} />
+                        <p>Còn {product?.stock} sản phẩm</p>
                       </Sold>
                     </ProductContentValuate>
 
                     <div className="flex items-center bg-gray-100 mt-2 md:px-3 px-2 md:py-5 py-3 rounded">
                       <div className="md:text-xl text-xl font-medium mr-2 text-red-500">
-                        {Math.round(
+                        {(
                           product?.price -
-                            (product?.price * product?.discountPercentage) / 100,
+                          Math.round(product?.price * product?.discountPercentage) / 100
                         ).toLocaleString('vi-VN', {
                           style: 'currency',
                           currency: 'VND',
