@@ -80,11 +80,15 @@ const ProductCategory = () => {
   }
 
   const softPrice = (a, b, keyPrice) => {
-    return () => {
-      setSelectedPriceId(keyPrice)
-      setMinPrice(a)
-      setMaxPrice(b)
-    }
+    setSelectedPriceId(keyPrice)
+    setMinPrice(a)
+    setMaxPrice(b)
+  }
+
+  const handleDeleteFillter = () => {
+    setSelectedPriceId('1')
+    setMinPrice(undefined)
+    setMaxPrice(undefined)
   }
 
   const getItem = (label, key, icon, children, style, onClick) => {
@@ -104,53 +108,23 @@ const ProductCategory = () => {
       'sub1',
       <AppstoreOutlined />,
       [
-        getItem(
-          'Tất cả',
-          '1',
-          null,
-          null,
-          customItems,
+        getItem('Tất cả', '1', null, null, customItems, () =>
           softPrice(undefined, undefined, '1'),
         ),
 
-        getItem(
-          'Từ dưới 100k',
-          '2',
-          null,
-          null,
-          customItems,
+        getItem('Từ dưới 100k', '2', null, null, customItems, () =>
           softPrice(1000, 100000, '2'),
         ),
-        getItem(
-          'Từ 100 - 300k',
-          '3',
-          null,
-          null,
-          customItems,
+        getItem('Từ 100 - 300k', '3', null, null, customItems, () =>
           softPrice(100000, 300000, '3'),
         ),
-        getItem(
-          'Từ 300 - 700k',
-          '4',
-          null,
-          null,
-          customItems,
+        getItem('Từ 300 - 700k', '4', null, null, customItems, () =>
           softPrice(300000, 700000, '4'),
         ),
-        getItem(
-          'Từ 700 - 1 triệu',
-          '5',
-          null,
-          null,
-          customItems,
+        getItem('Từ 700 - 1 triệu', '5', null, null, customItems, () =>
           softPrice(700000, 1000000, '5'),
         ),
-        getItem(
-          'Từ 1 triệu - 3 triệu',
-          '6',
-          null,
-          null,
-          customItems,
+        getItem('Từ 1 triệu - 3 triệu', '6', null, null, customItems, () =>
           softPrice(1000000, 3000000, '5'),
         ),
       ],
@@ -250,7 +224,7 @@ const ProductCategory = () => {
                     </Col>
                   )
                 })}
-                <Divider style={{ fontSize: '20px' }} orientation="left">
+                {/* <Divider style={{ fontSize: '20px' }} orientation="left">
                   Thương hiệu
                 </Divider>
                 <Row gutter={[4, 32]}>
@@ -265,12 +239,12 @@ const ProductCategory = () => {
                       </Col>
                     )
                   })}
-                </Row>
+                </Row> */}
 
                 <Row className="mt-32 w-full">
                   <Col className="text-center p-1" onClose="false" span={12}>
                     <div className="border-indigo-600 border-2 border-solid bg-indigo-600 text-white py-2.5 rounded font-semibold text-base">
-                      <span>Xoá bộ lọc</span>
+                      <span onClick={handleDeleteFillter}>Xoá bộ lọc</span>
                     </div>
                   </Col>
 

@@ -22,8 +22,8 @@ const PieChartWith = ({ data, loading }) => {
   if (data?.length > 0) {
     return (
       <>
-        <div className="m:auto lg:w-11/12 w-full md:ml-32">
-          <ResponsiveContainer className="m-auto ml-0 " width={300} height={300}>
+        <div className="m:auto lg:w-11/12 w-full md:ml-32 ml-16">
+          <ResponsiveContainer className="m-auto ml-0 " width={280} height={300}>
             <PieChart width={400} height={400}>
               <Pie dataKey="Total" isAnimationActive={true} data={data} fill="#0088FE">
                 {data.map((entry, index) => {

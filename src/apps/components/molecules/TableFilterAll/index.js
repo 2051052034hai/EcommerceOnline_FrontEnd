@@ -3,7 +3,7 @@ import React, { useRef, useState } from 'react'
 import Highlighter from 'react-highlight-words'
 import { Button, Input, Space, Table } from 'antd'
 
-const TableFilterAll = ({ dataSource, columns, pagination, loading}) => {
+const TableFilterAll = ({ dataSource, columns, pagination, loading }) => {
   const [searchText, setSearchText] = useState('')
   const [searchedColumn, setSearchedColumn] = useState('')
   const searchInput = useRef(null)
@@ -113,7 +113,12 @@ const TableFilterAll = ({ dataSource, columns, pagination, loading}) => {
   })
 
   const modifiedColumns = columns.map((item) => {
-    if (item.key === 'name' || item.key === 'subCategory') {
+    if (
+      item.key === 'name' ||
+      item.key === 'subCategory' ||
+      item.key === 'username' ||
+      item.key === 'createdAt'
+    ) {
       return {
         ...getColumnSearchProps(item.key),
         ...item,
