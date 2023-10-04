@@ -22,6 +22,7 @@ import {
 //Store
 import { selectCurrentUser } from 'store/userSlice/userSelector'
 import TableFilterAll from 'apps/components/molecules/TableFilterAll'
+import { Helmet } from 'react-helmet'
 
 const OrderList = () => {
   const currentUser = useSelector(selectCurrentUser)
@@ -217,6 +218,9 @@ const OrderList = () => {
   }
   return (
     <>
+      <Helmet>
+        <title>Bán hàng | Danh sách đơn đặt hàng</title>
+      </Helmet>
       <div>
         <Divider
           style={{

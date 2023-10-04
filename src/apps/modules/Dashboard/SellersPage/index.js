@@ -13,6 +13,7 @@ import MenuSellerPage from 'apps/components/molecules/MenuSellerPage'
 
 //Services
 import { getItem, renderPage } from 'apps/services/utils/sellersPage'
+import { Helmet } from 'react-helmet'
 
 const SellersPage = (key) => {
   const [selectedKeys, setSelectedKeys] = useState('1')
@@ -40,6 +41,9 @@ const SellersPage = (key) => {
 
   return (
     <>
+      <Helmet>
+        <title>Quản lý bán hàng</title>
+      </Helmet>
       <Row className="block lg:hidden">
         <DrawerLeft data={items} onClick={handleOnclick} />
       </Row>

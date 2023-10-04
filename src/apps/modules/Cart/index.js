@@ -12,6 +12,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button, Radio } from 'antd'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import { Helmet } from 'react-helmet'
+
 
 //Components
 import CartItem from './CartItem/cartItem'
@@ -102,6 +104,9 @@ const Cart = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Giỏ hàng</title>
+      </Helmet>
       <div>
         <div className="grid md:grid-cols-12 lg:grid-cols-12 gap-4 mt-5 lg:px-8 ">
           <div className="lg:col-span-9 md:col-span-7 p-1 rounded-md mb-5">
