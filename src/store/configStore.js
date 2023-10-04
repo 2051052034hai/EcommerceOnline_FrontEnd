@@ -20,6 +20,10 @@ export const store = configureStore({
     cart: persistedReducer,
     user: persistedUserReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 })
 
 export const persistor = persistStore(store)

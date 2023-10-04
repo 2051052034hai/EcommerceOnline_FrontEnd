@@ -12,6 +12,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button, Radio } from 'antd'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import { Helmet } from 'react-helmet'
+
 
 //Components
 import CartItem from './CartItem/cartItem'
@@ -21,7 +23,6 @@ import { selectCurrentUser } from 'store/userSlice/userSelector'
 
 // Queries
 import { useSaveCart } from 'apps/queries/cart/useSaveCart'
-import { Helmet } from 'react-helmet'
 
 const Cart = () => {
   const [valuePayment, setValuePayment] = useState(1)
@@ -108,10 +109,10 @@ const Cart = () => {
       </Helmet>
       <div>
         <div className="grid md:grid-cols-12 lg:grid-cols-12 gap-4 mt-5 lg:px-8 ">
-          <div className="lg:col-span-9 md:col-span-7 bg-gray-300 p-4 rounded-md">
+          <div className="lg:col-span-9 md:col-span-7 p-1 rounded-md mb-5">
             <styles.block__cart_item>
-              {listCart?.map((cart, index) => (
-                <CartItem cart={cart} key={cart?.id} />
+              {listCart?.map((cart) => (
+                <CartItem cart={cart} key={cart?._id} />
               ))}
 
               <styles.button__navigation>
@@ -119,12 +120,12 @@ const Cart = () => {
                   <Link to="/">
                     <button>
                       <FontAwesomeIcon icon={faArrowLeft} />
-                      <span>Back to Home</span>
+                      <span>Quay về trang chủ</span>
                     </button>
                   </Link>
                 </styles.button__navigation_back>
                 <styles.button__navigation_remote>
-                  <button>Remove All</button>
+                  <button>Xoá tất cả</button>
                 </styles.button__navigation_remote>
               </styles.button__navigation>
               <div>
@@ -134,46 +135,14 @@ const Cart = () => {
                 </Radio.Group>
               </div>
             </styles.block__cart_item>
-
-            <styles.supply__policy>
-              <styles.supply__policy_items>
-                <styles.supply__policy_item>
-                  <styles.icon>
-                    <FontAwesomeIcon icon={faLock} />
-                  </styles.icon>
-                  <styles.text>
-                    <h4>Secure payment</h4>
-                    <p>Have you ever finally just </p>
-                  </styles.text>
-                </styles.supply__policy_item>
-                <styles.supply__policy_item>
-                  <styles.icon>
-                    <FontAwesomeIcon icon={faChartBar} />
-                  </styles.icon>
-                  <styles.text>
-                    <h4>Customer support</h4>
-                    <p>Have you ever finally just </p>
-                  </styles.text>
-                </styles.supply__policy_item>
-                <styles.supply__policy_item>
-                  <styles.icon>
-                    <FontAwesomeIcon icon={faTruckFast} />
-                  </styles.icon>
-                  <styles.text>
-                    <h4>Free delivery</h4>
-                    <p>Have you ever finally just </p>
-                  </styles.text>
-                </styles.supply__policy_item>
-              </styles.supply__policy_items>
-            </styles.supply__policy>
           </div>
           <div className="lg:col-span-3 md:col-span-5 items-end  p-4  ">
             <styles.block__coupons>
-              <h3>Have a coupon?</h3>
+              <h3>Thêm mã giảm giá?</h3>
               <div>
                 <styles.InputCoupon
                   style={{ border: '1px solid #DEE2E7', fontSize: '13px' }}
-                  placeholder="Add Coupons"
+                  placeholder="Nhập mã giảm giá"
                   aria-label="Recipient's username"
                   aria-describedby="basic-addon2"
                 />
@@ -186,7 +155,7 @@ const Cart = () => {
                     fontSize: '13px',
                   }}
                 >
-                  Apply
+                  Áp dụng
                 </button>
               </div>
             </styles.block__coupons>
@@ -245,8 +214,8 @@ const Cart = () => {
                     </div>
                   ) : null
                 ) : (
-                  <Link to="/login">
-                    <button>Đăng nhập</button>
+                  <Link to="/login" className="w-full">
+                    <Button className="w-full ">Đăng nhập</Button>
                   </Link>
                 )}
               </styles.block__pay_checout>

@@ -1,5 +1,6 @@
 import * as styles from './styled'
 import { useDispatch } from 'react-redux'
+import { toast } from 'react-toastify'
 import { decrease_cart, increase_cart, remove_product } from 'store/cartSlice/cartSlice'
 
 function CartItem(props) {
@@ -9,7 +10,12 @@ function CartItem(props) {
     dispatch(decrease_cart({ _id: cart._id }))
   }
   const handleOnClickIncrease = () => {
-    dispatch(increase_cart({ _id: cart._id }))
+    if (cart?.quantity < cart?.stock) {
+      dispatch(increase_cart({ _id: cart._id }))
+    } else {
+      toast.error('Không đủ sản phẩm cho bạn')
+    }
+   
   }
   const handleOnClickRemoveProduct = () => {
     dispatch(remove_product({ _id: cart._id }))
@@ -78,7 +84,7 @@ function CartItem(props) {
                     style: 'currency',
                     currency: 'VND',
                   })}
-                  VND
+
                 </p>
               </styles.price>
             </div>
