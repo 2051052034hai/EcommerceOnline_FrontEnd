@@ -1,0 +1,12 @@
+{
+    "title": "Welcome to react using react-i18next",
+    "HOME": {
+      "login": "Log in",
+      "men_fashion":"Men's Fashion",
+      "women_fashion":"Women's Fashion",
+      "electronic_device":"Electronic Device",
+      "beauty":"Beauty",
+      "women_purse":"Women Purse"
+
+    }
+  }
