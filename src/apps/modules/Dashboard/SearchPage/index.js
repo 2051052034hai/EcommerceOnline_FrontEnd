@@ -10,6 +10,7 @@ import { useGetAllShops } from 'apps/queries/shop'
 
 //Molecules
 import CardItem from 'apps/components/molecules/CardItem'
+import { Helmet } from 'react-helmet'
 
 const SearchPage = () => {
   const [productSubId, setProductSubId] = useState()
@@ -116,6 +117,9 @@ const SearchPage = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Tìm kiếm sản phẩm</title>
+      </Helmet>
       <Divider
         style={{
           fontSize: '24px',

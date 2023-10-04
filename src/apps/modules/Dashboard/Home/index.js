@@ -7,6 +7,7 @@ import Slider from 'apps/components/molecules/Slider'
 import SlideProduct from 'apps/components/molecules/SliderProduct'
 import { useGetDataProductPage, useGetTopSaleProduct } from 'apps/queries/product'
 import ProductSkeleton from 'apps/components/molecules/ProductSkeleton'
+import { Helmet } from 'react-helmet'
 
 const Home = () => {
   const [page, setPage] = useState(1)
@@ -36,6 +37,9 @@ const Home = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Trang chủ</title>
+      </Helmet>
       <Slider />
       <div className="mx-auto px-2 max-w-screen-xl md:px-2 sm:px-1">
         <Divider

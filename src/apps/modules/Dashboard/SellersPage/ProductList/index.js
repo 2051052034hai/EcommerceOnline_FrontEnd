@@ -38,6 +38,7 @@ import ReactQuill from 'react-quill'
 //Services
 import { uploadImage } from 'apps/services/utils/uploadImage'
 import TableFilterAll from 'apps/components/molecules/TableFilterAll'
+import { Helmet } from 'react-helmet'
 
 const ProductList = () => {
   const { mutationDelete } = useDeleteProduct()
@@ -187,22 +188,27 @@ const ProductList = () => {
         }
 
         return (
-          <Space size="middle">
-            <span>
-              <FontAwesomeIcon
-                onClick={() => handleDeleteProduct(record.id)}
-                icon={faTrash}
-                style={{ color: '#e74023', cursor: 'pointer' }}
-              />
-            </span>
-            <span>
-              <FontAwesomeIcon
-                onClick={showDrawer(record_Data)}
-                icon={faPen}
-                style={{ color: '#1b61da', cursor: 'pointer' }}
-              />
-            </span>
-          </Space>
+          <>
+            <Helmet>
+              <title>Bán hàng | Quản lý sản phẩm</title>
+            </Helmet>
+            <Space size="middle">
+              <span>
+                <FontAwesomeIcon
+                  onClick={() => handleDeleteProduct(record.id)}
+                  icon={faTrash}
+                  style={{ color: '#e74023', cursor: 'pointer' }}
+                />
+              </span>
+              <span>
+                <FontAwesomeIcon
+                  onClick={showDrawer(record_Data)}
+                  icon={faPen}
+                  style={{ color: '#1b61da', cursor: 'pointer' }}
+                />
+              </span>
+            </Space>
+          </>
         )
       },
     },

@@ -50,6 +50,7 @@ import ProductSkeleton from 'apps/components/molecules/ProductSkeleton'
 import CommentForm from 'apps/components/molecules/CommentForm'
 import { selectCurrentUser } from 'store/userSlice/userSelector'
 import { useCreateComment } from 'apps/queries/comment/useCreateComment'
+import { Helmet } from 'react-helmet'
 
 const { Paragraph } = Typography
 const ProductDetail = () => {
@@ -103,6 +104,10 @@ const ProductDetail = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Sản phẩm | {data ? `${data?.title}` : ''}</title>
+        <meta property="og:description" content={product?.description} />
+      </Helmet>
       <div>
         <section className="mt-10 mx-auto px-3 max-w-screen-xl md:px-0  ">
           <div className="flex  gap-y-6 flex-wrap  justify-center ">

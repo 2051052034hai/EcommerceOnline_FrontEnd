@@ -1,111 +1,111 @@
 // Libraries
-import React, { useEffect, useState } from "react";
-import * as styles from "./styledCart";
+import React, { useEffect, useState } from 'react'
+import * as styles from './styledCart'
 import {
   faArrowLeft,
   faChartBar,
   faLock,
   faTruckFast,
-} from "@fortawesome/free-solid-svg-icons";
-import { PayPalButton } from "react-paypal-button-v2";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Radio } from "antd";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+} from '@fortawesome/free-solid-svg-icons'
+import { PayPalButton } from 'react-paypal-button-v2'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Button, Radio } from 'antd'
+import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 //Components
-import CartItem from "./CartItem/cartItem";
+import CartItem from './CartItem/cartItem'
 
 // Store
-import { selectCurrentUser } from "store/userSlice/userSelector";
+import { selectCurrentUser } from 'store/userSlice/userSelector'
 
 // Queries
-import { useSaveCart } from "apps/queries/cart/useSaveCart";
+import { useSaveCart } from 'apps/queries/cart/useSaveCart'
+import { Helmet } from 'react-helmet'
 
 const Cart = () => {
-  const [valuePayment, setValuePayment] = useState(1);
-  const [skdReady, setSdkReady] = useState(false);
-  const [loadingAdd, setLoadingAdd] = useState(false);
+  const [valuePayment, setValuePayment] = useState(1)
+  const [skdReady, setSdkReady] = useState(false)
+  const [loadingAdd, setLoadingAdd] = useState(false)
 
-  const listCart = useSelector((state) => state?.cart?.products);
-  const totalAfterDiscount = useSelector(
-    (state) => state?.cart?.totalAfterDiscount
-  );
-  const totalBeforeDiscount = useSelector(
-    (state) => state?.cart?.totalBeforeDiscount
-  );
+  const listCart = useSelector((state) => state?.cart?.products)
+  const totalAfterDiscount = useSelector((state) => state?.cart?.totalAfterDiscount)
+  const totalBeforeDiscount = useSelector((state) => state?.cart?.totalBeforeDiscount)
 
-  const totalDiscount = useSelector((state) => state?.cart?.totalDiscount);
-  const currentUser = useSelector(selectCurrentUser);
-  const { mutation } = useSaveCart();
+  const totalDiscount = useSelector((state) => state?.cart?.totalDiscount)
+  const currentUser = useSelector(selectCurrentUser)
+  const { mutation } = useSaveCart()
 
   const handleOrder = async () => {
-    setLoadingAdd(true);
-    const saveNewCart = [];
+    setLoadingAdd(true)
+    const saveNewCart = []
     for (var i = 0; i < listCart.length; i++) {
-      var item = listCart[i];
+      var item = listCart[i]
       var newItem = {
         product: item._id,
         qty: item.quantity,
         shop: item.shop._id,
-      };
-      saveNewCart.push(newItem);
+      }
+      saveNewCart.push(newItem)
     }
     const data_save = {
       userId: currentUser?._id,
       orderItems: saveNewCart,
       total: totalAfterDiscount,
-    };
-    await mutation.mutateAsync(data_save);
-    setLoadingAdd(false);
-  };
+    }
+    await mutation.mutateAsync(data_save)
+    setLoadingAdd(false)
+  }
 
   const onChange = (e) => {
-    setValuePayment(e.target.value);
-  };
+    setValuePayment(e.target.value)
+  }
 
   const addPayPalScript = async () => {
-    const script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src = `https://www.paypal.com/sdk/js?client-id=${process.env.REACT_APP_CLIENT_ID_PAYPAL}`;
-    script.async = true;
+    const script = document.createElement('script')
+    script.type = 'text/javascript'
+    script.src = `https://www.paypal.com/sdk/js?client-id=${process.env.REACT_APP_CLIENT_ID_PAYPAL}`
+    script.async = true
     script.onload = () => {
-      setSdkReady(true);
-    };
-    document.body.appendChild(script);
-  };
+      setSdkReady(true)
+    }
+    document.body.appendChild(script)
+  }
 
   useEffect(() => {
     if (!window.paypal) {
-      addPayPalScript();
+      addPayPalScript()
     } else {
-      setSdkReady(true);
+      setSdkReady(true)
     }
-  }, []);
+  }, [])
 
   const onSuccessPayment = (details, data) => {
-    const saveNewCart = [];
+    const saveNewCart = []
     for (var i = 0; i < listCart.length; i++) {
-      var item = listCart[i];
+      var item = listCart[i]
       var newItem = {
         product: item._id,
         qty: item.quantity,
         shop: item.shop._id,
         statusPayment: true,
-      };
-      saveNewCart.push(newItem);
+      }
+      saveNewCart.push(newItem)
     }
     const data_save = {
       userId: currentUser?._id,
       orderItems: saveNewCart,
       total: totalAfterDiscount,
       updatedAt: details.update_time,
-    };
-    mutation.mutate(data_save);
-  };
+    }
+    mutation.mutate(data_save)
+  }
 
   return (
     <>
+      <Helmet>
+        <title>Giỏ hàng</title>
+      </Helmet>
       <div>
         <div className="grid md:grid-cols-12 lg:grid-cols-12 gap-4 mt-5 lg:px-8 ">
           <div className="lg:col-span-9 md:col-span-7 bg-gray-300 p-4 rounded-md">
@@ -172,7 +172,7 @@ const Cart = () => {
               <h3>Have a coupon?</h3>
               <div>
                 <styles.InputCoupon
-                  style={{ border: "1px solid #DEE2E7", fontSize: "13px" }}
+                  style={{ border: '1px solid #DEE2E7', fontSize: '13px' }}
                   placeholder="Add Coupons"
                   aria-label="Recipient's username"
                   aria-describedby="basic-addon2"
@@ -180,10 +180,10 @@ const Cart = () => {
                 <button
                   variant="outline-secondary"
                   style={{
-                    padding: "10px 20px",
-                    color: "#0D6EFD",
-                    border: "1px solid #DEE2E7",
-                    fontSize: "13px",
+                    padding: '10px 20px',
+                    color: '#0D6EFD',
+                    border: '1px solid #DEE2E7',
+                    fontSize: '13px',
                   }}
                 >
                   Apply
@@ -196,14 +196,14 @@ const Cart = () => {
                 <styles.subtotal>
                   <styles.key>Tổng tiền:</styles.key>
                   <styles.value>
-                    {Math.ceil(totalBeforeDiscount).toLocaleString("vi-VN")}
+                    {Math.ceil(totalBeforeDiscount).toLocaleString('vi-VN')}
                     VND
                   </styles.value>
                 </styles.subtotal>
                 <styles.discount>
                   <styles.key>Giảm giá:</styles.key>
                   <styles.value>
-                    {Math.ceil(totalDiscount).toLocaleString("vi-VN")} VND
+                    {Math.ceil(totalDiscount).toLocaleString('vi-VN')} VND
                   </styles.value>
                 </styles.discount>
                 <styles.tax>
@@ -214,9 +214,9 @@ const Cart = () => {
               </styles.block__pay_caculator>
 
               <styles.block__pay_total>
-                <div style={{ fontSize: "16px" }}>Tổng tiền phải trả:</div>
-                <div style={{ fontSize: "16px" }}>
-                  {Math.ceil(totalAfterDiscount).toLocaleString("vi-VN")} VND
+                <div style={{ fontSize: '16px' }}>Tổng tiền phải trả:</div>
+                <div style={{ fontSize: '16px' }}>
+                  {Math.ceil(totalAfterDiscount).toLocaleString('vi-VN')} VND
                 </div>
               </styles.block__pay_total>
 
@@ -225,7 +225,7 @@ const Cart = () => {
                   valuePayment === 1 && skdReady ? (
                     <Button
                       style={{
-                        width: "300px",
+                        width: '300px',
                       }}
                       loading={loadingAdd}
                       onClick={handleOrder}
@@ -233,13 +233,13 @@ const Cart = () => {
                       Đặt hàng
                     </Button>
                   ) : valuePayment === 2 ? (
-                    <div style={{ width: "300px" }}>
+                    <div style={{ width: '300px' }}>
                       <PayPalButton
                         amount={Math.ceil(totalAfterDiscount / 30000)}
                         // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
                         onSuccess={onSuccessPayment}
                         onError={() => {
-                          alert("Error");
+                          alert('Error')
                         }}
                       />
                     </div>
@@ -272,7 +272,7 @@ const Cart = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Cart;
+export default Cart

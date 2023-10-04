@@ -1,5 +1,6 @@
 import { Divider } from 'antd'
 import { useGetCartByUserId } from 'apps/queries/cart/useGetCartByUserId'
+import { Helmet } from 'react-helmet'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { selectCurrentUser } from 'store/userSlice/userSelector'
@@ -10,6 +11,9 @@ export const Purchase_History = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Lịch sử mua hàng</title>
+      </Helmet>
       <Divider
         style={{
           fontSize: '24px',
