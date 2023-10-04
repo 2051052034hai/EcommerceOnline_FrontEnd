@@ -62,7 +62,9 @@ code {
 .ant-btn-primary{
   background: #1677ff !important
 }
-
+.ant-menu-horizontal {
+  border-bottom:none !important
+}
 /* Khi ở chế độ điện thoại (xs) */
 @media (max-width: 575px) {
   .ant-statistic-content {
