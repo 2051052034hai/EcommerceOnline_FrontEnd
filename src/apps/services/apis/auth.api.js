@@ -13,8 +13,16 @@ export const handleLoginSocial = async (user) => {
 }
 
 export const handleCreateUser = async (user) => {
-  console.log('user:', user)
   const result = await create('/user/register', user)
-  console.log('result:', result)
+  return result.data
+}
+
+export const handelResetPassword = async (user) => {
+  const result = await create('/user/resetPassword', user)
+  return result.data
+}
+
+export const handleResendMail = async (data) => {
+  const result = await create('/user/resend-email', data)
   return result.data
 }

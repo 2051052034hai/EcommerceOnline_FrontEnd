@@ -79,6 +79,10 @@ code {
   }
 }
 
+.ant-statistic-content{
+  font-size:16px !important;
+  color: red !important;
+}
 
 @tailwind base;
 @tailwind components;

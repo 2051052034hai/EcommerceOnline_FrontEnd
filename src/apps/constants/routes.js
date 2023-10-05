@@ -55,15 +55,21 @@ export const ROUTER = {
     isPrivate: false,
   },
   REGISTER: {
-    key:"register",
-    name: "register",
-    path: "/register",
+    key: 'register',
+    name: 'register',
+    path: '/register',
     isPrivate: false,
   },
   REGISTERSELLER: {
     key: 'registerSeller',
     name: 'registerSeller',
     path: '/register-seller',
+    isPrivate: false,
+  },
+  RESETPASSWORD: {
+    key: 'resetPassword',
+    name: 'resetPassword',
+    path: '/resetPassword',
     isPrivate: false,
   },
 }
