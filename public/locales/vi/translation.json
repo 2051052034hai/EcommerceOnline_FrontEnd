@@ -69,6 +69,31 @@
       "address": "Địa chỉ",
       "register":"Đăng ký",
       "please_enter_this_field":"Vui lòng nhập trường này"
+    },
+    "PURCHARE_HISTORRY":{
+      "title":"Lịch sử mua hàng",
+      "purchase_date":"Ngày mua hàng",
+      "quantity":"Số lượng",
+      "paid":"Đã thanh toán",
+      "unpaid":" Chưa thanh toán",
+      "total_amount":"Tổng tiền"
+    },
+    "PRODUCT_CATEGORY":{
+      "price_range":"Khoảng giá",
+      "all":"Tất cả",
+      "from_below":"Giá từ",
+      "from":"Từ",
+      "default":"Mặc định",
+      "good_promotion":"Khuyến mãi tốt",
+      "prices_gradually_decrease":"Giá giảm dần",
+      "prices_gradually_increase":"Giá tăng dần",
+      "product_portfolio":"Danh mục sản phẩm",
+      "according_to_price":"Theo giá",
+      "clear_filter":"Xoá bộ lọc",
+      "close":"Đóng",
+      "filter":"Bộ lọc",
+      "sorted_by":"Sắp xếp theo",
+      "million":"triệu"
 
     }
   }

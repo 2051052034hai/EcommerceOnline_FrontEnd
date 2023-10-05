@@ -69,5 +69,30 @@
       "address": "Address",
       "register":"Register",
       "please_enter_this_field":"Please enter this field"
+    },
+    "PURCHARE_HISTORRY":{
+      "title":"Purchare history",
+      "purchase_date":"Purchase date",
+      "quantity":"Quantity",
+      "paid":"Paid",
+      "unpaid":"Unpaid",
+      "total_amount":"Total amount"
+    },
+    "PRODUCT_CATEGORY":{
+      "price_range":"Price range",
+      "all":"All",
+      "from_below":"From below",
+      "from":"From",
+      "default":"Default",
+      "good_promotion":"Good promotion",
+      "prices_gradually_decrease":"Prices gradually decrease",
+      "prices_gradually_increase":"Prices gradually increase",
+      "product_portfolio":"Product portfolio",
+      "according_to_price":"According to price",
+      "clear_filter":"Clear filter",
+      "close":"Close",
+      "filter":"Filter",
+      "sorted_by":"Sorted by",
+      "million":"million"
     }
   }
