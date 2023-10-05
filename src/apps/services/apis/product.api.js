@@ -47,7 +47,6 @@ export const deleteProduct = async (id) => {
 }
 
 export const createProduct = async (data) => {
-  console.log(data)
   const formData = new FormData()
 
   // Thêm thông tin sản phẩm vào FormData
@@ -72,6 +71,5 @@ export const createProduct = async (data) => {
     },
   }
   const result = await create(pathUrl, formData, config)
-  console.log('resullt', result)
   return result.data.data
 }

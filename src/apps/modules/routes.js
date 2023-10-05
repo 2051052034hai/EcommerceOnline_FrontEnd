@@ -12,6 +12,7 @@ import sellersPage from './Dashboard/SellersPage'
 import SearchPage from './Dashboard/SearchPage'
 import Register from './Auth/Register'
 import RegisterSeller from './Dashboard/Register_Seller'
+import ResetPassword from './Auth/ResetPassword'
 
 export const routes = [
   {
@@ -68,9 +69,16 @@ export const routes = [
     name: ROUTER.REGISTER.name,
     component: Register,
   },
-  {key: ROUTER.REGISTERSELLER.key,
+  {
+    key: ROUTER.REGISTERSELLER.key,
     path: ROUTER.REGISTERSELLER.path,
     name: ROUTER.REGISTERSELLER.name,
     component: RegisterSeller,
+  },
+  {
+    key: ROUTER.RESETPASSWORD.key,
+    path: ROUTER.RESETPASSWORD.path,
+    name: ROUTER.RESETPASSWORD.name,
+    component: ResetPassword,
   },
 ]

@@ -149,11 +149,7 @@ const Register = () => {
             {isLoading ? <Spin /> : <span>Đăng ký</span>}
           </button>
         </form>
-        <div className="text-center">
-          <Link to={'/'} className="text-indigo-600 hover:text-indigo-500">
-            Bạn quên mật khẩu?
-          </Link>
-        </div>
+      
       </div>
     </main>
   )
