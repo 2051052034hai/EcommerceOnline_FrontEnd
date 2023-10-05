@@ -30,6 +30,7 @@ import {
   handleCountDataOrder,
 } from 'apps/services/utils/chart'
 import { handleArrDataTable } from 'apps/services/utils/sellersPage'
+import { Helmet } from 'react-helmet'
 
 const StatisticsPage = () => {
   const currentUser = useSelector(selectCurrentUser)
@@ -114,6 +115,9 @@ const StatisticsPage = () => {
   console.log("revenueByMonth:", revenueByMonth)
   return (
     <>
+      <Helmet>
+        <title>Bán hàng | Thống kê</title>
+      </Helmet>
       <div className="overflow-x-hidden">
         <Divider
           style={{

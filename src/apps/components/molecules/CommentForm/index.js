@@ -3,10 +3,12 @@ import { Form, Input, Rate, Button } from 'antd'
 import { useSelector } from 'react-redux'
 import { selectCurrentUser } from 'store/userSlice/userSelector'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 const { TextArea } = Input
 
 const CommentForm = ({ onSubmit }) => {
+  const { t } = useTranslation()
   const [form] = Form.useForm()
   const currentUser = useSelector(selectCurrentUser)
   const navigate = useNavigate()
@@ -31,11 +33,11 @@ const CommentForm = ({ onSubmit }) => {
     <Form form={form} onFinish={onFinish}>
       <Form.Item
         name="comment"
-        label="Nội dung"
+        label={t('PRODUCT_DETAIL.content')}
         rules={[
           {
             required: true,
-            message: 'Vui lòng nhập nội dung comment!',
+            message: `${t('PRODUCT_DETAIL.please_enter_comment_content')}!`,
           },
         ]}
       >
@@ -43,11 +45,11 @@ const CommentForm = ({ onSubmit }) => {
       </Form.Item>
       <Form.Item
         name="rating"
-        label="Đánh giá "
+        label={t('PRODUCT_DETAIL.rating')}
         rules={[
           {
             required: true,
-            message: 'Vui lòng đánh giá!',
+            message: `${t('PRODUCT_DETAIL.please_rate')}!`,
           },
         ]}
       >
@@ -55,7 +57,7 @@ const CommentForm = ({ onSubmit }) => {
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit">
-          Đăng comment
+          {t('PRODUCT_DETAIL.post_comment')}
         </Button>
       </Form.Item>
     </Form>

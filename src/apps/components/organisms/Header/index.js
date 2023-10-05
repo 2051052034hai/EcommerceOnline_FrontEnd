@@ -1,7 +1,7 @@
 // Libraries
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Menu } from 'antd'
+import { Menu, Select } from 'antd'
 import { useGetDataCategory } from 'apps/queries/category'
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
@@ -17,8 +17,17 @@ import { selectCurrentUser } from 'store/userSlice/userSelector'
 import { ROLE } from 'apps/constants'
 import { useGetShopbyUserId } from 'apps/queries/shop/useGetShopbyUserId'
 import { SearchStyle } from './styled'
+import { useTranslation } from 'react-i18next'
+import { value } from 'apps/modules/Cart/styledCart'
 
 export default function Header() {
+  // Translations
+  const { t, i18n, ready } = useTranslation()
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng)
+  }
+
   const { data, isLoading } = useGetDataCategory()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [menuData, setMenuData] = useState([])
@@ -45,19 +54,176 @@ export default function Header() {
     setIsMobileMenuOpen(false)
   }
 
-  const transformedData = data?.map((category) => {
-    const subcategories = category.subcategories.map((subcategory) => ({
-      label: subcategory.name,
-      key: subcategory._id,
-      link: subcategory._id,
-    }))
+  // const transformedData = data?.map((category) => {
+  //   const subcategories = category.subcategories.map((subcategory) => ({
+  //     label: subcategory.name,
+  //     key: subcategory._id,
+  //     link: subcategory._id,
+  //   }))
 
-    return {
-      label: category.name,
-      key: category._id,
-      children: subcategories,
-    }
-  })
+  //   return {
+  //     label: category.name,
+  //     key: category._id,
+  //     children: subcategories,
+  //   }
+  // })
+  const transformedData = [
+    {
+      label: t('HOME.men_fashion'),
+      key: '64ea08f80aa5dbf9b67df09f',
+      children: [
+        {
+          label: 'Áo Khoác',
+          key: '64ea0a5a0aa5dbf9b67df0a9',
+          link: '64ea0a5a0aa5dbf9b67df0a9',
+        },
+        {
+          label: 'Áo Vest và Blazer',
+          key: '64ea0a850aa5dbf9b67df0ad',
+          link: '64ea0a850aa5dbf9b67df0ad',
+        },
+        {
+          label: 'Áo Hoodie, Áo Len & Áo Nỉ',
+          key: '64ea0aae0aa5dbf9b67df0b1',
+          link: '64ea0aae0aa5dbf9b67df0b1',
+        },
+        {
+          label: 'Quần Jeans',
+          key: '64ea0abe0aa5dbf9b67df0b5',
+          link: '64ea0abe0aa5dbf9b67df0b5',
+        },
+        {
+          label: 'Quần Dài/ Quần Âu',
+          key: '64ea0ace0aa5dbf9b67df0b9',
+          link: '64ea0ace0aa5dbf9b67df0b9',
+        },
+      ],
+    },
+    {
+      label: t('HOME.women_fashion'),
+      key: '64ea09370aa5dbf9b67df0a1',
+      children: [
+        {
+          label: 'Chân váy',
+          key: '64ea0b0d0aa5dbf9b67df0bd',
+          link: '64ea0b0d0aa5dbf9b67df0bd',
+        },
+        {
+          label: 'Quần jeans',
+          key: '64ea0b1e0aa5dbf9b67df0c1',
+          link: '64ea0b1e0aa5dbf9b67df0c1',
+        },
+        {
+          label: 'Đầm/Váy',
+          key: '64ea0b280aa5dbf9b67df0c5',
+          link: '64ea0b280aa5dbf9b67df0c5',
+        },
+        {
+          label: 'Váy cưới',
+          key: '64ea0b390aa5dbf9b67df0c9',
+          link: '64ea0b390aa5dbf9b67df0c9',
+        },
+        {
+          label: 'Áo len & Cardigan',
+          key: '64ea0b500aa5dbf9b67df0cd',
+          link: '64ea0b500aa5dbf9b67df0cd',
+        },
+      ],
+    },
+    {
+      label: t('HOME.electronic_device'),
+      key: '64ea095a0aa5dbf9b67df0a3',
+      children: [
+        {
+          label: 'Thiết bị đeo thông minh',
+          key: '64ea0b7b0aa5dbf9b67df0d1',
+          link: '64ea0b7b0aa5dbf9b67df0d1',
+        },
+        {
+          label: 'Phụ kiện tivi',
+          key: '64ea0b840aa5dbf9b67df0d5',
+          link: '64ea0b840aa5dbf9b67df0d5',
+        },
+        {
+          label: 'Máy Game Console',
+          key: '64ea0b930aa5dbf9b67df0d9',
+          link: '64ea0b930aa5dbf9b67df0d9',
+        },
+        {
+          label: 'Tai nghe',
+          key: '64ea0baa0aa5dbf9b67df0dd',
+          link: '64ea0baa0aa5dbf9b67df0dd',
+        },
+        {
+          label: 'Loa',
+          key: '64ea0bbb0aa5dbf9b67df0e1',
+          link: '64ea0bbb0aa5dbf9b67df0e1',
+        },
+      ],
+    },
+    {
+      label: t('HOME.beauty'),
+      key: '64ea097e0aa5dbf9b67df0a5',
+      children: [
+        {
+          label: 'Chăm sóc da mặt',
+          key: '64ea0be10aa5dbf9b67df0e5',
+          link: '64ea0be10aa5dbf9b67df0e5',
+        },
+        {
+          label: 'Trang điểm',
+          key: '64ea0beb0aa5dbf9b67df0e9',
+          link: '64ea0beb0aa5dbf9b67df0e9',
+        },
+        {
+          label: 'Chăm sóc tóc',
+          key: '64ea0bf20aa5dbf9b67df0ed',
+          link: '64ea0bf20aa5dbf9b67df0ed',
+        },
+        {
+          label: 'Dụng cụ & Phụ kiện làm đẹp',
+          key: '64ea0bff0aa5dbf9b67df0f1',
+          link: '64ea0bff0aa5dbf9b67df0f1',
+        },
+        {
+          label: 'Nước hoa',
+          key: '64ea0c090aa5dbf9b67df0f5',
+          link: '64ea0c090aa5dbf9b67df0f5',
+        },
+      ],
+    },
+    {
+      label: t('HOME.women_purse'),
+      key: '64ea09860aa5dbf9b67df0a7',
+      children: [
+        {
+          label: 'Ba Lô Nữ',
+          key: '64ea0c330aa5dbf9b67df0f9',
+          link: '64ea0c330aa5dbf9b67df0f9',
+        },
+        {
+          label: 'Ví Dự Tiệc & Ví Cầm Tay',
+          key: '64ea0c4e0aa5dbf9b67df0fd',
+          link: '64ea0c4e0aa5dbf9b67df0fd',
+        },
+        {
+          label: 'Túi Đeo Ngực',
+          key: '64ea0c640aa5dbf9b67df101',
+          link: '64ea0c640aa5dbf9b67df101',
+        },
+        {
+          label: 'Túi Tote',
+          key: '64ea0c6e0aa5dbf9b67df105',
+          link: '64ea0c6e0aa5dbf9b67df105',
+        },
+        {
+          label: 'Phụ Kiện Túi',
+          key: '64ea0c840aa5dbf9b67df109',
+          link: '64ea0c840aa5dbf9b67df109',
+        },
+      ],
+    },
+  ]
 
   //Log out
   const handleLogOut = () => {
@@ -160,7 +326,7 @@ export default function Header() {
             onClick={onClick}
             selectedKeys={[current]}
             mode="horizontal"
-            style={{ minWidth: '580px' }}
+            style={{ minWidth: '620px' }}
           >
             {transformedData?.map((menu) => {
               return (
@@ -198,6 +364,12 @@ export default function Header() {
           <div className="hidden lg:block md:hidden">
             {currentUser?.username ? (
               <div className="text-center">
+                <Select
+                  defaultValue="vi"
+                  style={{ width: 60 }}
+                  onChange={changeLanguage}
+                  options={['en', 'vi'].map((lang) => ({ label: lang, value: lang }))}
+                />
                 <Dropdown menu={{ items }} trigger={['click']} placement="bottom">
                   <Link onClick={(e) => e.preventDefault()}>
                     <Space>
@@ -210,12 +382,18 @@ export default function Header() {
               </div>
             ) : (
               <>
+                <Select
+                  defaultValue="vi"
+                  style={{ width: 60 }}
+                  onChange={changeLanguage}
+                  options={['en', 'vi'].map((lang) => ({ label: lang, value: lang }))}
+                />
                 <Link
                   to={'/login'}
                   className="text-sm font-semibold leading-6 text-gray-900"
                   style={{ paddingLeft: '20px' }}
                 >
-                  Log in <span aria-hidden="true">&rarr;</span>
+                  {t('HOME.login')} <span aria-hidden="true">&rarr;</span>
                 </Link>
               </>
             )}

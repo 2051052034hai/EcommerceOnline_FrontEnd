@@ -12,8 +12,11 @@ import CardItem from 'apps/components/molecules/CardItem'
 
 //CSS from styled.js
 import { customItems, customStyle } from './styled'
+import { Helmet } from 'react-helmet'
+import { useTranslation } from 'react-i18next'
 
 const ProductCategory = () => {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const [selectedTitleId, setSelectedTitleId] = useState('0')
   const [selectedPriceId, setSelectedPriceId] = useState('0')
@@ -104,28 +107,53 @@ const ProductCategory = () => {
 
   const menuLeftSlice = [
     getItem(
-      'Khoảng giá',
+      `${t('PRODUCT_CATEGORY.price_range')}`,
       'sub1',
       <AppstoreOutlined />,
       [
-        getItem('Tất cả', '1', null, null, customItems, () =>
+        getItem(`${t('PRODUCT_CATEGORY.all')}`, '1', null, null, customItems, () =>
           softPrice(undefined, undefined, '1'),
         ),
 
-        getItem('Từ dưới 100k', '2', null, null, customItems, () =>
-          softPrice(1000, 100000, '2'),
+        getItem(
+          `${t('PRODUCT_CATEGORY.from_below')} 100k`,
+          '2',
+          null,
+          null,
+          customItems,
+          () => softPrice(1000, 100000, '2'),
         ),
-        getItem('Từ 100 - 300k', '3', null, null, customItems, () =>
-          softPrice(100000, 300000, '3'),
+        getItem(
+          `${t('PRODUCT_CATEGORY.from')} 100 - 300k`,
+          '3',
+          null,
+          null,
+          customItems,
+          () => softPrice(100000, 300000, '3'),
         ),
-        getItem('Từ 300 - 700k', '4', null, null, customItems, () =>
-          softPrice(300000, 700000, '4'),
+        getItem(
+          `${t('PRODUCT_CATEGORY.from')} 300 - 700k`,
+          '4',
+          null,
+          null,
+          customItems,
+          () => softPrice(300000, 700000, '4'),
         ),
-        getItem('Từ 700 - 1 triệu', '5', null, null, customItems, () =>
-          softPrice(700000, 1000000, '5'),
+        getItem(
+          `${t('PRODUCT_CATEGORY.from')} 700 - 1 ${t('PRODUCT_CATEGORY.million')} `,
+          '5',
+          null,
+          null,
+          customItems,
+          () => softPrice(700000, 1000000, '5'),
         ),
-        getItem('Từ 1 triệu - 3 triệu', '6', null, null, customItems, () =>
-          softPrice(1000000, 3000000, '5'),
+        getItem(
+          `${t('PRODUCT_CATEGORY.from')}  1 triệu - 3 ${t('PRODUCT_CATEGORY.million')}`,
+          '6',
+          null,
+          null,
+          customItems,
+          () => softPrice(1000000, 3000000, '5'),
         ),
       ],
       customStyle,
@@ -138,26 +166,25 @@ const ProductCategory = () => {
   }
 
   const sub1Items = getSubItemsBySubKey(menuLeftSlice, 'sub1')
-  const sub2Items = getSubItemsBySubKey(menuLeftSlice, 'sub2')
 
   const itemSlice = [
     {
-      label: 'Mặc định',
+      label: `${t('PRODUCT_CATEGORY.default')}`,
       key: '0',
       value: 'default',
     },
     {
-      label: 'Khuyến mãi tốt',
+      label: `${t('PRODUCT_CATEGORY.good_promotion')}`,
       key: '1',
       value: 'promotion',
     },
     {
-      label: 'Giá giảm dần',
+      label: `${t('PRODUCT_CATEGORY.prices_gradually_decrease')}`,
       key: '2',
       value: 'decrease',
     },
     {
-      label: 'Giá tăng dần',
+      label: `${t('PRODUCT_CATEGORY.prices_gradually_increase')}`,
       key: '3',
       value: 'ascending',
     },
@@ -185,6 +212,9 @@ const ProductCategory = () => {
 
   return (
     <>
+      <Helmet>
+        <title>{t('PRODUCT_CATEGORY.product_portfolio')}</title>
+      </Helmet>
       <div className="bg-slate-100">
         <Row className="lg:hidden lg:bg-black">
           <Drawer
@@ -197,7 +227,7 @@ const ProductCategory = () => {
           >
             <Row className="py-2.5 w-full ">
               <Divider style={{ fontSize: '20px' }} orientation="left">
-                Theo giá
+                {t('PRODUCT_CATEGORY.according_to_price')}
               </Divider>
               <Row gutter={[16, 16]}>
                 {sub1Items?.map((item, index) => {
@@ -244,13 +274,15 @@ const ProductCategory = () => {
                 <Row className="mt-32 w-full">
                   <Col className="text-center p-1" onClose="false" span={12}>
                     <div className="border-indigo-600 border-2 border-solid bg-indigo-600 text-white py-2.5 rounded font-semibold text-base">
-                      <span onClick={handleDeleteFillter}>Xoá bộ lọc</span>
+                      <span onClick={handleDeleteFillter}>
+                        {t('PRODUCT_CATEGORY.clear_filter')}
+                      </span>
                     </div>
                   </Col>
 
                   <Col span={12} onClick={onClose} className="text-center p-1">
                     <div className="border-indigo-600 border-2 border-solid text-blue-500 py-2.5 rounded font-semibold text-base">
-                      <span>Đóng</span>
+                      <span> {t('PRODUCT_CATEGORY.close')}</span>
                     </div>
                   </Col>
                 </Row>
@@ -271,7 +303,7 @@ const ProductCategory = () => {
                   className="text-red-600 text-base font-medium"
                   onClick={(e) => e.preventDefault()}
                 >
-                  Mặc định
+                  {t('PRODUCT_CATEGORY.default')}
                 </span>
                 <span
                   onClick={(e) => e.preventDefault()}
@@ -286,7 +318,7 @@ const ProductCategory = () => {
                   className="text-red-600 text-base font-medium"
                   onClick={(e) => showDrawer(e)}
                 >
-                  Bộ lọc
+                  {t('PRODUCT_CATEGORY.filter')}
                 </span>
                 <span className="text-red-600 text-base font-medium">
                   <FontAwesomeIcon className="text-sm mb-0 ml-1" icon={faFilter} />
@@ -310,7 +342,7 @@ const ProductCategory = () => {
             <Row gutter={[18, 16]}>
               <Col className="gutter-row text-center" lg={4} xs={0}>
                 <div className="font-medium py-2.5 pr-px text-black lg:text-base rounded-lg ">
-                  Sắp xếp theo:{' '}
+                  {t('PRODUCT_CATEGORY.sorted_by')}:
                 </div>
               </Col>
               {itemSlice?.map((item, index) => (

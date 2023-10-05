@@ -7,8 +7,11 @@ import Slider from 'apps/components/molecules/Slider'
 import SlideProduct from 'apps/components/molecules/SliderProduct'
 import { useGetDataProductPage, useGetTopSaleProduct } from 'apps/queries/product'
 import ProductSkeleton from 'apps/components/molecules/ProductSkeleton'
+import { Helmet } from 'react-helmet'
+import { useTranslation } from 'react-i18next'
 
 const Home = () => {
+  const { t } = useTranslation()
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const [products, setProduct] = useState([])
@@ -36,6 +39,9 @@ const Home = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Trang chủ</title>
+      </Helmet>
       <Slider />
       <div className="mx-auto px-2 max-w-screen-xl md:px-2 sm:px-1">
         <Divider
@@ -45,7 +51,7 @@ const Home = () => {
             textTransform: 'uppercase',
           }}
         >
-          Sản Phẩm Bán Chạy
+          {t('HOME.selling_products')}
         </Divider>
 
         {isLoadingDataTop ? (
@@ -67,7 +73,7 @@ const Home = () => {
             textTransform: 'uppercase',
           }}
         >
-          TẤT CẢ SẢN PHẨM
+          {t('HOME.all_products')}
         </Divider>
         <div className="grid gap-5 py-4 px-2 md:px-1 grid-cols-2 md:grid-cols-4 lg:grid-cols-5">
           {products?.map((items, index) => (

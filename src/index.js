@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css'
 
 // Import Swiper styles
 import 'swiper/css'
-
+import './i18n'
 // Store
 // src/index.js
 import { persistor, store } from 'store/configStore'

@@ -1,15 +1,21 @@
 import { Divider } from 'antd'
 import { useGetCartByUserId } from 'apps/queries/cart/useGetCartByUserId'
+import { Helmet } from 'react-helmet'
+import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { selectCurrentUser } from 'store/userSlice/userSelector'
 
 export const Purchase_History = () => {
+  const { t } = useTranslation()
   const currentUser = useSelector(selectCurrentUser)
   const { data } = useGetCartByUserId(currentUser?._id)
 
   return (
     <>
+      <Helmet>
+        <title>{t('PURCHARE_HISTORRY.title')}</title>
+      </Helmet>
       <Divider
         style={{
           fontSize: '24px',
@@ -17,7 +23,7 @@ export const Purchase_History = () => {
           textTransform: 'uppercase',
         }}
       >
-        Lịch sử mua hàng
+        {t('PURCHARE_HISTORRY.title')}
       </Divider>
 
       {data?.map((orderItem, index) => {
@@ -31,7 +37,7 @@ export const Purchase_History = () => {
             <div className="max-w-screen-lg mx-auto px-4 md:px-8 mb-3">
               <div className="max-w-md">
                 <h3 className="text-gray-800 text-base font-extrabold ">
-                  Ngày mua hàng : {day}-{month}-{year}
+                  {t('PURCHARE_HISTORRY.purchase_date')} : {day}-{month}-{year}
                 </h3>
               </div>
               <ul className="mt-12 divide-y space-y-3">
@@ -50,13 +56,17 @@ export const Purchase_History = () => {
                             <h3 className="text-base text-gray-800 font-semibold mt-1">
                               {item?.product?.title}
                             </h3>
-                            <p>Số lượng: {item?.qty}</p>
+                            <p>
+                              {t('PURCHARE_HISTORRY.quantity')}: {item?.qty}
+                            </p>
                           </div>
                           <div>
                             {orderItem?.statusPayment ? (
-                              <p>Đã Thanh Toán</p>
+                              <p>{t('PURCHARE_HISTORRY.paid')}</p>
                             ) : (
-                              <p className="text-red-800">Chưa thanh toán</p>
+                              <p className="text-red-800">
+                                {t('PURCHARE_HISTORRY.unpaid')}
+                              </p>
                             )}
                           </div>
                         </div>
@@ -65,7 +75,7 @@ export const Purchase_History = () => {
                   )
                 })}
                 <p className="flex justify-end py-3 font-medium">
-                  Tổng tiền :
+                  {t('PURCHARE_HISTORRY.total_amount')} :
                   <span className="ml-4 text-md  text-red-600">
                     {Math.ceil(orderItem?.total).toLocaleString('vi-VN')} VND
                   </span>

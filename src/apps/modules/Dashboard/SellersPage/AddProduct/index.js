@@ -16,6 +16,7 @@ import ReactQuill from 'react-quill'
 
 //UserSlice
 import { selectCurrentUser } from 'store/userSlice/userSelector'
+import { Helmet } from 'react-helmet'
 
 const AddProduct = () => {
   const { mutation } = useCreateProduct()
@@ -208,6 +209,9 @@ const AddProduct = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Bán hàng | Thêm sản phẩm</title>
+      </Helmet>
       <div className="px-5 overflow-x-hidden">
         <Divider
           style={{
