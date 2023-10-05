@@ -12,8 +12,11 @@ import CardItem from 'apps/components/molecules/CardItem'
 
 //CSS from styled.js
 import { customItems, customStyle } from './styled'
+import { Helmet } from 'react-helmet'
+import { useTranslation } from 'react-i18next'
 
 const ProductCategory = () => {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const [selectedTitleId, setSelectedTitleId] = useState('0')
   const [selectedPriceId, setSelectedPriceId] = useState('0')
@@ -185,6 +188,9 @@ const ProductCategory = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Danh mục sản phẩm</title>
+      </Helmet>
       <div className="bg-slate-100">
         <Row className="lg:hidden lg:bg-black">
           <Drawer

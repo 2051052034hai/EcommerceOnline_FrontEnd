@@ -6,7 +6,68 @@
       "women_fashion":"Women's Fashion",
       "electronic_device":"Electronic Device",
       "beauty":"Beauty",
-      "women_purse":"Women Purse"
+      "women_purse":"Women Purse",
+      "selling_products":"SELLING PRODUCTS",
+      "all_products":"ALL PRODUCTS"
+    },
+    "CART":{
+      "add_discount": "Add discount",
+      "apply":"Apply",
+      "total_amount":"Total amount",
+      "discount":"Discount",
+      "transport_fee":"Transport fee",
+      "total_amount_payable":"Total amount payable",
+      "order":"Order",
+      "back_home":"Back home ",
+      "remove_all":"Remove all",
+      "payment_on_delivery":"Payment on delivery",
+      "payment_by_paypal":"Payment by Paypal",
+      "enter_discount_code":"Enter discount code"
 
+    },
+    "SEARCHPRODUCT":{
+      "search_products":"SEARCH PRODUCTS",
+      "enter_product_name":"Enter product name",
+      "search_by_type":"Search by type",
+      "product_type":"Product type",
+      "shop_type":"Search by shop",
+      "result":"Result",
+      "clear_filter":"Clear filter"
+    },
+    "LOGIN":{
+      "title":"LOG IN",
+      "no_account":"No account",
+      "register":"Register",
+      "password":"Password"
+    },
+    "PRODUCT_DETAIL":{
+      "Product":"Product",
+      "stocking":"Stocking",
+      "out_of_stock":"Out of stock",
+      "no_reviews":"There are no reviews yet",
+      "sold":"Sold",
+      "still":"Still",
+      "product":"product",
+      "store":"Store",
+      "add_to_cart": "Add to cart",
+      "view_store":"View store",
+      "favourite":"Favourite",
+      "product_introduction":"PRODUCT INTRODUCTION",
+      "see_more":"See more",
+      "product_comments":"PRODUCT COMMENTS",
+      "content":"Content",
+      "rating":"Rating",
+      "post_comment":"Post comment",
+      "no_comment":"There are no comments for this product yet",
+      "related_product":"RELATED PRODUCTS",
+      "please_rate":"Please rate",
+      "please_enter_comment_content":"Please enter comment content"
+    },
+    "SELLER_REGISTER":{
+      "title":"REGISTER SELLER",
+      "name_of_your_shop":"Name of your shop",
+      "address": "Address",
+      "register":"Register",
+      "please_enter_this_field":"Please enter this field"
     }
   }

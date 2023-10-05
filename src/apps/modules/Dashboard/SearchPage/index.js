@@ -11,8 +11,10 @@ import { useGetAllShops } from 'apps/queries/shop'
 //Molecules
 import CardItem from 'apps/components/molecules/CardItem'
 import { Helmet } from 'react-helmet'
+import { useTranslation } from 'react-i18next'
 
 const SearchPage = () => {
+  const { t } = useTranslation()
   const [productSubId, setProductSubId] = useState()
   const [shopId, setShopId] = useState()
   const [subData, setSubdata] = useState([])
@@ -24,8 +26,8 @@ const SearchPage = () => {
   const [keyWord, setKeyWord] = useState()
   const [valueSeach, setValueSeach] = useState('')
   const [productLoading, setProductLoading] = useState(true)
-  const [subName, setSubName] = useState('Loại sản phẩm')
-  const [shopName, setShopName] = useState('Cửa hàng')
+  const [subName, setSubName] = useState()
+  const [shopName, setShopName] = useState(t('SEARCHPRODUCT.shop_type'))
   const [isDeleteteFilter, setIsDeleteteFilter] = useState(true)
 
   const { data: subcateData, isLoading: subLoading } = useGetSubCategories()
@@ -127,14 +129,14 @@ const SearchPage = () => {
           textTransform: 'uppercase',
         }}
       >
-        Tìm kiếm sản phẩm
+        {t('SEARCHPRODUCT.search_products')}
       </Divider>
 
       <Row className="p-5 items-center w-full justify-center">
         <Col lg={5} md={7} xs={24} className="lg:justify-center">
           <Search
             className="lg:w-11/12"
-            placeholder="Nhập tên sản phẩm"
+            placeholder={t('SEARCHPRODUCT.enter_product_name')}
             onChange={handleValueChange}
             value={valueSeach}
             enterButton
@@ -151,7 +153,7 @@ const SearchPage = () => {
             onChange={handleProductSubChange}
             showSearch
             className="lg:w-11/12 w-full"
-            placeholder="Tìm kiếm theo loại"
+            placeholder={t('SEARCHPRODUCT.search_by_type')}
             value={subName}
             optionFilterProp="children"
             filterOption={(input, option) =>
@@ -173,7 +175,7 @@ const SearchPage = () => {
             showSearch
             value={shopName}
             className="lg:w-11/12 w-full"
-            placeholder="Tìm kiếm theo cửa hàng"
+            placeholder={t('SEARCHPRODUCT.product_type')}
             optionFilterProp="children"
             filterOption={(input, option) =>
               (option?.label?.toLowerCase() ?? '').includes(input.toLowerCase())
@@ -196,7 +198,7 @@ const SearchPage = () => {
               className="lg:justify-center justify-start mt-3 lg:mt-0 w-full"
             >
               <Button htmlType="text" type="primary" onClick={handleDeleteFilter}>
-                Xoá bộ lọc
+                {t('SEARCHPRODUCT.clear_filter')}
               </Button>
             </Col>
           </>
@@ -204,7 +206,7 @@ const SearchPage = () => {
       </Row>
 
       <Divider style={{ fontSize: '20px', fontWeight: 'bold' }} orientation="left">
-        Kết quả
+        {t('SEARCHPRODUCT.result')}
       </Divider>
 
       <div className="grid gap-5 py-4 px-2 md:px-1 grid-cols-2 md:grid-cols-4 lg:grid-cols-5 lg:mx-14 ">

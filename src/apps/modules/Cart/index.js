@@ -14,7 +14,6 @@ import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
-
 //Components
 import CartItem from './CartItem/cartItem'
 
@@ -23,11 +22,13 @@ import { selectCurrentUser } from 'store/userSlice/userSelector'
 
 // Queries
 import { useSaveCart } from 'apps/queries/cart/useSaveCart'
+import { useTranslation } from 'react-i18next'
 
 const Cart = () => {
   const [valuePayment, setValuePayment] = useState(1)
   const [skdReady, setSdkReady] = useState(false)
   const [loadingAdd, setLoadingAdd] = useState(false)
+  const { t } = useTranslation()
 
   const listCart = useSelector((state) => state?.cart?.products)
   const totalAfterDiscount = useSelector((state) => state?.cart?.totalAfterDiscount)
@@ -120,29 +121,29 @@ const Cart = () => {
                   <Link to="/">
                     <button>
                       <FontAwesomeIcon icon={faArrowLeft} />
-                      <span>Quay về trang chủ</span>
+                      <span>{t('CART.back_home')}</span>
                     </button>
                   </Link>
                 </styles.button__navigation_back>
                 <styles.button__navigation_remote>
-                  <button>Xoá tất cả</button>
+                  <button>{t('CART.remove_all')}</button>
                 </styles.button__navigation_remote>
               </styles.button__navigation>
               <div>
                 <Radio.Group onChange={onChange} value={valuePayment}>
-                  <Radio value={1}>Thanh toán khi nhận hàng</Radio>
-                  <Radio value={2}>Thanh toán PayPal</Radio>
+                  <Radio value={1}>{t('CART.payment_on_delivery')}</Radio>
+                  <Radio value={2}>{t('CART.payment_by_paypal')}</Radio>
                 </Radio.Group>
               </div>
             </styles.block__cart_item>
           </div>
           <div className="lg:col-span-3 md:col-span-5 items-end  p-4  ">
             <styles.block__coupons>
-              <h3>Thêm mã giảm giá?</h3>
+              <h3>{t('CART.add_discount')}?</h3>
               <div>
                 <styles.InputCoupon
                   style={{ border: '1px solid #DEE2E7', fontSize: '13px' }}
-                  placeholder="Nhập mã giảm giá"
+                  placeholder={t('CART.enter_discount_code')}
                   aria-label="Recipient's username"
                   aria-describedby="basic-addon2"
                 />
@@ -155,7 +156,7 @@ const Cart = () => {
                     fontSize: '13px',
                   }}
                 >
-                  Áp dụng
+                  {t('CART.apply')}
                 </button>
               </div>
             </styles.block__coupons>
@@ -163,27 +164,27 @@ const Cart = () => {
             <styles.block__pay>
               <styles.block__pay_caculator>
                 <styles.subtotal>
-                  <styles.key>Tổng tiền:</styles.key>
+                  <styles.key>{t('CART.total_amount')}</styles.key>
                   <styles.value>
                     {Math.ceil(totalBeforeDiscount).toLocaleString('vi-VN')}
                     VND
                   </styles.value>
                 </styles.subtotal>
                 <styles.discount>
-                  <styles.key>Giảm giá:</styles.key>
+                  <styles.key>{t('CART.discount')}:</styles.key>
                   <styles.value>
                     {Math.ceil(totalDiscount).toLocaleString('vi-VN')} VND
                   </styles.value>
                 </styles.discount>
                 <styles.tax>
-                  <styles.key>Phí vận chuyển:</styles.key>
+                  <styles.key>{t('CART.transport_fee')}:</styles.key>
                   <styles.value>+ $0</styles.value>
                 </styles.tax>
                 <hr className="my-3" />
               </styles.block__pay_caculator>
 
               <styles.block__pay_total>
-                <div style={{ fontSize: '16px' }}>Tổng tiền phải trả:</div>
+                <div style={{ fontSize: '16px' }}>{t('CART.total_amount_payable')}:</div>
                 <div style={{ fontSize: '16px' }}>
                   {Math.ceil(totalAfterDiscount).toLocaleString('vi-VN')} VND
                 </div>
@@ -199,7 +200,7 @@ const Cart = () => {
                       loading={loadingAdd}
                       onClick={handleOrder}
                     >
-                      Đặt hàng
+                      {t('CART.order')}
                     </Button>
                   ) : valuePayment === 2 ? (
                     <div style={{ width: '300px' }}>
@@ -215,7 +216,7 @@ const Cart = () => {
                   ) : null
                 ) : (
                   <Link to="/login" className="w-full">
-                    <Button className="w-full ">Đăng nhập</Button>
+                    <Button className="w-full ">{t('HOME.login')}</Button>
                   </Link>
                 )}
               </styles.block__pay_checout>

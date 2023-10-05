@@ -12,6 +12,7 @@ import { useLoginUser } from 'apps/queries/auth/useLoginUser'
 import { auth, providerFb, providerGb } from 'apps/configs/Firebase'
 import { useLoginSocial } from 'apps/queries/auth/useLoginSocial'
 import { Helmet } from 'react-helmet'
+import { useTranslation } from 'react-i18next'
 
 const Login = () => {
   //useForm
@@ -20,6 +21,7 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm()
+  const { t } = useTranslation()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { mutation, isLoading } = useLoginUser()
@@ -87,14 +89,16 @@ const Login = () => {
         <div className="max-w-sm w-full text-gray-600 space-y-8">
           <div className="text-center">
             <div className="mt-5 space-y-2">
-              <h3 className="text-gray-800 text-2xl font-bold sm:text-3xl">Đăng nhập</h3>
+              <h3 className="text-gray-800 text-2xl font-bold sm:text-3xl">
+                {t('LOGIN.title')}
+              </h3>
               <p className="">
-                Chưa có tài khoản?
+                {t('LOGIN.no_account')}?
                 <Link
                   to={'/register'}
                   className="font-medium text-indigo-600 hover:text-indigo-500"
                 >
-                  Đăng kí
+                  {t('LOGIN.register')}
                 </Link>
               </p>
             </div>
@@ -117,7 +121,7 @@ const Login = () => {
             </div>
 
             <div>
-              <label className="font-medium">Password</label>
+              <label className="font-medium">{t('LOGIN.password')}</label>
               <input
                 {...register('password', {
                   required: 'Vui lòng nhập trường này',
@@ -136,7 +140,7 @@ const Login = () => {
               disabled={isLoading}
               className="w-full mt-4 px-4 py-2 text-white font-medium bg-cyan-500 hover:bg-cyan-400 rounded-lg duration-150"
             >
-              {isLoading ? <Spin /> : <span>Đăng nhập</span>}
+              {isLoading ? <Spin /> : <span>{t('HOME.login')}</span>}
             </button>
           </form>
           <div className="relative">

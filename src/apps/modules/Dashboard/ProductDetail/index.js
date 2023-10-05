@@ -51,9 +51,11 @@ import CommentForm from 'apps/components/molecules/CommentForm'
 import { selectCurrentUser } from 'store/userSlice/userSelector'
 import { useCreateComment } from 'apps/queries/comment/useCreateComment'
 import { Helmet } from 'react-helmet'
+import { useTranslation } from 'react-i18next'
 
 const { Paragraph } = Typography
 const ProductDetail = () => {
+  const { t } = useTranslation()
   const { id } = useParams()
   const imgRef = useRef(null)
   const dispatch = useDispatch()
@@ -105,7 +107,9 @@ const ProductDetail = () => {
   return (
     <>
       <Helmet>
-        <title>Sản phẩm | {data ? `${data?.title}` : ''}</title>
+        <title>
+          {t('PRODUCT_DETAIL.Product')} | {data ? `${data?.title}` : ''}
+        </title>
         <meta property="og:description" content={product?.description} />
       </Helmet>
       <div>
@@ -159,12 +163,12 @@ const ProductDetail = () => {
                     {product?.stock !== 0 ? (
                       <InStock>
                         <FontAwesomeIcon icon={faCheck} />
-                        <p>Còn hàng</p>
+                        <p>{t('PRODUCT_DETAIL.stocking')}</p>
                       </InStock>
                     ) : (
                       <InStock>
                         <FontAwesomeIcon icon={faCheck} />
-                        <p>Hết hàng</p>
+                        <p>{t('PRODUCT_DETAIL.out_of_stock')}</p>
                       </InStock>
                     )}
                     <ProductContentTitle>
@@ -173,7 +177,7 @@ const ProductDetail = () => {
                     <ProductContentValuate>
                       <TextIconRating>
                         {product?.rating === 0 ? (
-                          <p>Chưa có đánh giá</p>
+                          <p>{t('PRODUCT_DETAIL.no_reviews')}</p>
                         ) : (
                           <>
                             <IconRating>
@@ -200,11 +204,16 @@ const ProductDetail = () => {
                       </TextIconRating>
                       <Sold>
                         <FontAwesomeIcon icon={faBasketShopping} />
-                        <p> Đã bán {product?.sold}</p>
+                        <p>
+                          {t('PRODUCT_DETAIL.sold')} {product?.sold}
+                        </p>
                       </Sold>
                       <Sold>
                         <FontAwesomeIcon icon={faBasketShopping} />
-                        <p>Còn {product?.stock} sản phẩm</p>
+                        <p>
+                          {t('PRODUCT_DETAIL.still')} {product?.stock}{' '}
+                          {t('PRODUCT_DETAIL.product')}
+                        </p>
                       </Sold>
                     </ProductContentValuate>
 
@@ -240,7 +249,7 @@ const ProductDetail = () => {
                     <SupplierTitle>
                       <img src={product?.thumbnail} alt={product?.title} />
                       <SupplierTitleName>
-                        <h3>Cửa hàng</h3>
+                        <h3>{t('PRODUCT_DETAIL.store')} </h3>
                         <h3>{shop?.name}</h3>
                       </SupplierTitleName>
                     </SupplierTitle>
@@ -250,7 +259,7 @@ const ProductDetail = () => {
                         <p>{shop?.address}</p>
                       </SupplierInfoItem>
 
-                      <SupplierInfoItem>
+                      {/* <SupplierInfoItem>
                         <FontAwesomeIcon icon={faShieldHalved} />
                         <p>Đã chứng thực</p>
                       </SupplierInfoItem>
@@ -258,7 +267,7 @@ const ProductDetail = () => {
                       <SupplierInfoItem>
                         <FontAwesomeIcon icon={faGlobe} />
                         <p>Free ship</p>
-                      </SupplierInfoItem>
+                      </SupplierInfoItem> */}
                     </div>
                     <SupplierButton>
                       <AddCart
@@ -268,17 +277,17 @@ const ProductDetail = () => {
                         disabled={product?.stock === 0}
                         onClick={handleAddToCart}
                       >
-                        Thêm vào giỏ
+                        {t('PRODUCT_DETAIL.add_to_cart')}
                       </AddCart>
                       <SupplierButtonProfile>
-                        <button> Xem cửa hàng</button>
+                        <button> {t('PRODUCT_DETAIL.view_store')} </button>
                       </SupplierButtonProfile>
                     </SupplierButton>
 
                     <SaveLater>
                       <button>
                         <FontAwesomeIcon icon={faHeart} />
-                        <span>Yêu thích</span>
+                        <span>{t('PRODUCT_DETAIL.favourite')}</span>
                       </button>
                     </SaveLater>
                   </div>
@@ -290,7 +299,7 @@ const ProductDetail = () => {
       </div>
       <div>
         <section className="mt-10 mx-auto px-3 max-w-screen-xl md:px-0 mb-8  ">
-          <RelatedProduct>Giới thiệu sản phẩm</RelatedProduct>
+          <RelatedProduct>{t('PRODUCT_DETAIL.product_introduction')}</RelatedProduct>
 
           <Paragraph
             style={{ maxHeight: expanded ? 'none' : 200, overflow: 'hidden' }}
@@ -300,17 +309,17 @@ const ProductDetail = () => {
           </Paragraph>
           {!expanded && (
             <Button type="link" onClick={toggleExpanded}>
-              Xem thêm
+              {t('PRODUCT_DETAIL.see_more')}
             </Button>
           )}
         </section>
       </div>
       <div>
         <section className="mt-10 mx-auto px-3 max-w-screen-xl md:px-0 mb-8  ">
-          <RelatedProduct>Bình luận về sản phẩm</RelatedProduct>
+          <RelatedProduct> {t('PRODUCT_DETAIL.product_comments')}</RelatedProduct>
           <CommentForm onSubmit={handleSubmit} />
           {dataComment?.length === 0 ? (
-            <p>Chưa có bình luận nào cho sản phẩm</p>
+            <p>{t('PRODUCT_DETAIL.no_comment')}</p>
           ) : (
             <List
               pagination={{
@@ -337,7 +346,7 @@ const ProductDetail = () => {
       </div>
 
       <section className="mt-10 mx-auto px-3 max-w-screen-xl md:px-0 mb-8  ">
-        <RelatedProduct>Sản phẩm liên quan</RelatedProduct>
+        <RelatedProduct>{t('PRODUCT_DETAIL.related_product')}</RelatedProduct>
         {relatedProducts.length === 0 ? (
           <div className="grid gap-5 py-4 px-2 md:px-1 grid-cols-2 md:grid-cols-4 lg:grid-cols-5">
             {Array.from(Array(5), (_, index) => (
