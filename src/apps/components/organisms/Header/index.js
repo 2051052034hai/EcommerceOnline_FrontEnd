@@ -314,7 +314,7 @@ export default function Header() {
         </div>
         <div className="flex ">
           <Link to={'/'} className="-m-1.5 p-1.5">
-            <img className="h-12 w-auto" src="/assets/image/logo.png" alt="" />
+            <img className="h-12 w-auto" src="https://i.ibb.co/42jSVG0/logo.png" alt="" />
           </Link>
         </div>
         {currentUser?.role === ROLE.USER && (
@@ -409,7 +409,7 @@ export default function Header() {
                 <span className="sr-only">Your Company</span>
                 <img
                   className="h-8 w-auto"
-                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                  src="https://i.ibb.co/42jSVG0/logo.png"
                   alt=""
                 />
               </Link>
