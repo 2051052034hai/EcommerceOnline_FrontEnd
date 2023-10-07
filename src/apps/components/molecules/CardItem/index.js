@@ -106,7 +106,7 @@ const CardItem = (props) => {
                   <img
                     className="w-24 md:w-36 m-auto"
                     alt="test"
-                    src={'/assets/image/sold_out.png'}
+                    src="https://img.upanh.tv/2023/10/07/sold_out.png"
                   />
                 </span>
               )}

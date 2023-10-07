@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import { Col, Row } from "antd";
+import { Link } from 'react-router-dom'
+import { Col, Row } from 'antd'
 
 const Footer = () => {
   return (
@@ -11,28 +11,23 @@ const Footer = () => {
               HT WEBSITE
             </h3>
             <p className="text-justify">
-              HT website là project demo 1 số chức năng của một website bán hàng
-              online (Quần áo, laptop & Gaming Gear,.vv..). Trong quá trình thực
-              hiện project có những lỗi phát sinh, mong nhận được ý kiến và đóng
-              góp của mọi người để project team mình có thể hoàn thiện hơn.
-              Thanks! <br />
-              <span className="font-bold">Lưu ý</span>: Vì đây là project chỉ
-              mang tính chất demo nên không có chức năng thay thế hoàn toàn các
-              website khác.
+              HT website là project demo 1 số chức năng của một website bán hàng online
+              (Quần áo, laptop & Gaming Gear,.vv..). <br />
             </p>
+            <img
+              className="h-12 w-auto mt-5"
+              src="https://i.ibb.co/42jSVG0/logo.png"
+              alt=""
+            />
           </Col>
           <Col lg={8} md={8} className="p-3">
             <h3 className="font-bold mb-3 text-center lg:text-left md:text-left ">
               THÔNG TIN TRANG WEB
             </h3>
             <label className="font-bold">Trụ sở đặt tại:</label>
-            <p className="mb-2">
-              Ấp 9, xã Tân Hiệp, huyện Tân Châu, tỉnh Tây Ninh
-            </p>
+            <p className="mb-2">Ấp 9, xã Tân Hiệp, huyện Tân Châu, tỉnh Tây Ninh</p>
             <label className="font-bold">Trụ sở văn phòng:</label>
-            <p className="mb-2">
-              Ấp 9, xã Tân Hiệp, huyện Tân Châu, tỉnh Tây Ninh
-            </p>
+            <p className="mb-2">Ấp 9, xã Tân Hiệp, huyện Tân Châu, tỉnh Tây Ninh</p>
             <label className="font-bold">Điện thoại:</label>
             <p className="ml-2 inline">0865028574</p>
             <br></br>
@@ -46,11 +41,11 @@ const Footer = () => {
                 <span>
                   <img
                     className="lg:w-8 sm:w-6 w-6"
-                    src="/assets/image/zalo_Pay.png"
+                    src="https://img.upanh.tv/2023/10/07/pay3.png"
                     alt="zalo"
                   />
                 </span>
-                <span className="ml-2">Zalo Pay </span>
+                <span className="ml-2">PayPal </span>
               </li>
               <li className="font-normal text-base flex">
                 <span>
@@ -62,14 +57,6 @@ const Footer = () => {
                 </span>
                 <span className="ml-2">Tiền mặt </span>
               </li>
-              <li className="font-bold text-sm my-2">ỦNG HỘ TÔI TẠI ĐÂY ^^</li>
-              <span>
-                <img
-                  className="lg:w-8 sm:w-6 w-6"
-                  src="/assets/image/momo.png"
-                  alt="momo"
-                />
-              </span>
             </ul>
           </Col>
           <Col lg={4} md={4} className="p-3">
@@ -77,12 +64,8 @@ const Footer = () => {
 
             <div>
               <div className="flex items-center gap-3 mt-3 sm:block">
-                <Link to={"/"}>
-                  <svg
-                    className="lg:w-28 w-14"
-                    fill="none"
-                    viewBox="0 0 338 100"
-                  >
+                <Link to={'/'}>
+                  <svg className="lg:w-28 w-14" fill="none" viewBox="0 0 338 100">
                     <path
                       fill="#000"
                       d="M324.477 99.751H13.532c-6.841 0-12.438-5.597-12.438-12.438V12.688C1.094 5.846 6.69.249 13.532.249h310.945c6.841 0 12.438 5.597 12.438 12.438v74.627c0 6.84-5.597 12.437-12.438 12.437z"
@@ -353,12 +336,8 @@ const Footer = () => {
                     </defs>
                   </svg>
                 </Link>
-                <Link to={"/"} className="mt-0 block sm:mt-3">
-                  <svg
-                    className="lg:w-28 w-14"
-                    fill="none"
-                    viewBox="0 0 300 100"
-                  >
+                <Link to={'/'} className="mt-0 block sm:mt-3">
+                  <svg className="lg:w-28 w-14" fill="none" viewBox="0 0 300 100">
                     <g clipPath="url(#clip0_3_178097)">
                       <path
                         fill="#A6A6A6"
@@ -392,11 +371,11 @@ const Footer = () => {
 
       <Row className="py-1 border-t border-gray-200 justify-center ">
         <p className="font-medium text-xs text-gray-500">
-          © 2023 Bản quyền thuộc về HT-TEAM{" "}
+          © 2023 Bản quyền thuộc về HT-TEAM{' '}
         </p>
       </Row>
     </footer>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer
