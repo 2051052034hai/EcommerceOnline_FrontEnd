@@ -18,6 +18,7 @@ import { selectCurrentUser } from 'store/userSlice/userSelector'
 // Queries
 import { useSaveCart } from 'apps/queries/cart/useSaveCart'
 import { useTranslation } from 'react-i18next'
+import { useCreatePaymentUrl } from 'apps/queries/vnpay/create-payment'
 
 const Cart = () => {
   const [valuePayment, setValuePayment] = useState(1)
@@ -31,7 +32,9 @@ const Cart = () => {
 
   const totalDiscount = useSelector((state) => state?.cart?.totalDiscount)
   const currentUser = useSelector(selectCurrentUser)
+
   const { mutation } = useSaveCart()
+  const { mutationUrl } = useCreatePaymentUrl()
 
   const handleOrder = async () => {
     setLoadingAdd(true)
@@ -42,6 +45,7 @@ const Cart = () => {
         product: item._id,
         qty: item.quantity,
         shop: item.shop._id,
+        providerPayment: 0,
       }
       saveNewCart.push(newItem)
     }
@@ -67,6 +71,29 @@ const Cart = () => {
       setSdkReady(true)
     }
     document.body.appendChild(script)
+  }
+
+  const handlePaymentVnPay = async () => {
+    setLoadingAdd(true)
+    const saveNewCart = []
+    for (var i = 0; i < listCart.length; i++) {
+      var item = listCart[i]
+      var newItem = {
+        product: item._id,
+        qty: item.quantity,
+        shop: item.shop._id,
+        providerPayment: 1,
+      }
+      saveNewCart.push(newItem)
+    }
+    const data_save = {
+      userId: currentUser?._id,
+      orderItems: saveNewCart,
+      total: totalAfterDiscount,
+    }
+    await mutationUrl.mutate(data_save)
+
+    setLoadingAdd(false)
   }
 
   useEffect(() => {
@@ -128,6 +155,7 @@ const Cart = () => {
                 <Radio.Group onChange={onChange} value={valuePayment}>
                   <Radio value={1}>{t('CART.payment_on_delivery')}</Radio>
                   <Radio value={2}>{t('CART.payment_by_paypal')}</Radio>
+                  <Radio value={3}>{t('CART.payment_by_vnpay')}</Radio>
                 </Radio.Group>
               </div>
             </styles.block__cart_item>
@@ -208,7 +236,16 @@ const Cart = () => {
                         }}
                       />
                     </div>
-                  ) : null
+                  ) : (
+                    <Button
+                      onClick={handlePaymentVnPay}
+                      style={{
+                        width: '300px',
+                      }}
+                    >
+                      {t('CART.payment_by_vnpay')}
+                    </Button>
+                  )
                 ) : (
                   <Link to="/login" className="w-full">
                     <Button className="w-full ">{t('HOME.login')}</Button>

@@ -72,4 +72,10 @@ export const ROUTER = {
     path: '/resetPassword',
     isPrivate: false,
   },
+  RESULTPAYMENT: {
+    key: 'result-payment',
+    name: 'result-payment',
+    path: '/result-payment',
+    isPrivate: false,
+  },
 }

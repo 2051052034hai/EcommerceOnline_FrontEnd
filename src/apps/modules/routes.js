@@ -13,6 +13,7 @@ import SearchPage from './Dashboard/SearchPage'
 import Register from './Auth/Register'
 import RegisterSeller from './Dashboard/Register_Seller'
 import ResetPassword from './Auth/ResetPassword'
+import ResultPayment from './Dashboard/ResultPayment'
 
 export const routes = [
   {
@@ -80,5 +81,11 @@ export const routes = [
     path: ROUTER.RESETPASSWORD.path,
     name: ROUTER.RESETPASSWORD.name,
     component: ResetPassword,
+  },
+  {
+    key: ROUTER.RESULTPAYMENT.key,
+    path: ROUTER.RESULTPAYMENT.path,
+    name: ROUTER.RESULTPAYMENT.name,
+    component: ResultPayment,
   },
 ]

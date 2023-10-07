@@ -22,6 +22,7 @@
       "remove_all":"Xoá tất cả",
       "payment_on_delivery":"Thanh toán khi nhận hàng",
       "payment_by_paypal":"Thanh toán bằng Paypal",
+      "payment_by_vnpay":"Thanh toán bằng VNPAY",
       "enter_discount_code":"Nhập mã giảm giá"
     },
     "SEARCHPRODUCT":{

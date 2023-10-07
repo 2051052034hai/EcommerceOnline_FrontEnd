@@ -13,15 +13,16 @@
     "CART":{
       "add_discount": "Add discount",
       "apply":"Apply",
-      "total_amount":"Total amount",
+      "total_amount":"Total",
       "discount":"Discount",
       "transport_fee":"Transport fee",
-      "total_amount_payable":"Total amount payable",
+      "total_amount_payable":"Total amount",
       "order":"Order",
       "back_home":"Back home ",
       "remove_all":"Remove all",
       "payment_on_delivery":"Payment on delivery",
       "payment_by_paypal":"Payment by Paypal",
+      "payment_by_vnpay":"Payment by VNPAY",
       "enter_discount_code":"Enter discount code"
 
     },

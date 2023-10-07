@@ -40,7 +40,7 @@ const Footer = () => {
           <Col lg={4} md={4} className="p-3">
             <h3 className="font-bold mb-3">THANH TOÁN </h3>
             <ul>
-              <li className="font-normal text-base flex">
+              <li className="font-normal text-base flex  mt-2">
                 <span>
                   <img
                     className="lg:w-8 sm:w-6 w-6"
@@ -48,17 +48,27 @@ const Footer = () => {
                     alt="zalo"
                   />
                 </span>
-                <span className="ml-2">PayPal </span>
+                <span className="ml-3">PayPal </span>
               </li>
-              <li className="font-normal text-base flex">
+              <li className="font-normal text-base flex mt-2">
                 <span>
                   <img
                     className="lg:w-8 sm:w-6 w-6"
-                    src="/assets/image/tien_mat.png"
-                    alt="notfound"
+                    src="https://i.ibb.co/s3ykx0y/zalo-Pay.png"
+                    alt="test"
                   />
                 </span>
-                <span className="ml-2">Tiền mặt </span>
+                <span className="ml-3">VNPAY </span>
+              </li>
+              <li className="font-normal text-base flex mt-2">
+                <span>
+                  <img
+                    className="lg:w-8 sm:w-6 w-6"
+                    src="https://i.ibb.co/BGgPgnw/tien-mat.png"
+                    alt="test"
+                  />
+                </span>
+                <span className="ml-3">Tiền mặt </span>
               </li>
             </ul>
           </Col>

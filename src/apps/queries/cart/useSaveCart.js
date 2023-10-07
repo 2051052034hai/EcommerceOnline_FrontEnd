@@ -24,5 +24,6 @@ export const useSaveCart = (order) => {
 
   return {
     mutation,
+    isLoading: mutation.isLoading,
   }
 }
