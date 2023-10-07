@@ -1,8 +1,8 @@
-import { Swiper, SwiperSlide } from "swiper/react";
-import CardItem from "../CardItem";
+import { Swiper, SwiperSlide } from 'swiper/react'
+import CardItem from '../CardItem'
 
 function SlideProduct(props) {
-  const { products } = props;
+  const { products } = props
 
   const swiperOptions = {
     slidesPerView: 5,
@@ -24,7 +24,7 @@ function SlideProduct(props) {
         slidesPerView: 3,
       },
       768: {
-        slidesPerView: 3,
+        slidesPerView: 4,
         spaceBetween: 10,
       },
       840: {
@@ -38,18 +38,18 @@ function SlideProduct(props) {
       },
       // Thêm các breakpoint khác nếu cần thiết
     },
-  };
+  }
 
   return (
     <>
       <Swiper {...swiperOptions}>
-        {products?.map((product , index) => (
+        {products?.map((product, index) => (
           <SwiperSlide key={index}>
             <CardItem key={product.id} product={product} />
           </SwiperSlide>
         ))}
       </Swiper>
     </>
-  );
+  )
 }
-export default SlideProduct;
+export default SlideProduct

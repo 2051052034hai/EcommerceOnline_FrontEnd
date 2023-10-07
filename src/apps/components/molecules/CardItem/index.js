@@ -44,8 +44,8 @@ const CardItem = (props) => {
             </div>
 
             <div className="pt-3 ml-2 mr-2 mb-3 ">
-              <h3 className=" text-gray-900 lg:h-10 h-8 md:text-sm lg:text-sm overflow-clip font-medium text-xs">
-                <span className="line-clamp-2 ">{product?.title}</span>
+              <h3 className=" text-gray-900 h-10 lg:text-sm sm:text-xs overflow-clip font-medium text-xs">
+                <span className="line-clamp-2">{product?.title}</span>
               </h3>
               <div className="w-full">
                 <Rating

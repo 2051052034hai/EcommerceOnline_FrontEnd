@@ -75,7 +75,7 @@ const Home = () => {
         >
           {t('HOME.all_products')}
         </Divider>
-        <div className="grid gap-5 py-4 px-2 md:px-1 grid-cols-2 md:grid-cols-4 lg:grid-cols-5">
+        <div className="grid gap-5 py-4 px-2 md:px-1 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           {products?.map((items, index) => (
             <CardItem key={index} product={items} />
           ))}
