@@ -1,12 +1,7 @@
 // Libraries
 import React, { useEffect, useState } from 'react'
 import * as styles from './styledCart'
-import {
-  faArrowLeft,
-  faChartBar,
-  faLock,
-  faTruckFast,
-} from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { PayPalButton } from 'react-paypal-button-v2'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button, Radio } from 'antd'
@@ -222,19 +217,19 @@ const Cart = () => {
               </styles.block__pay_checout>
               <styles.block__pay_credit>
                 <div>
-                  <img src="/assets/pay1.png" alt="pay1" />
+                  <img src="https://img.upanh.tv/2023/10/07/pay1.png" alt="pay1" />
                 </div>
                 <div>
-                  <img src="/assets/pay2.png" alt="pay2" />
+                  <img src="https://img.upanh.tv/2023/10/07/pay2.png" alt="pay2" />
                 </div>
                 <div>
-                  <img src="/assets/pay3.png" alt="pay3" />
+                  <img src="https://img.upanh.tv/2023/10/07/pay3.png" alt="pay3" />
                 </div>
                 <div>
-                  <img src="/assets/pay4.png" alt="pay4" />
+                  <img src="https://img.upanh.tv/2023/10/07/pay4.png" alt="pay4" />
                 </div>
                 <div>
-                  <img src="/assets/pay5.png" alt="pay5" />
+                  <img src="https://img.upanh.tv/2023/10/07/pay5.png" alt="pay5" />
                 </div>
               </styles.block__pay_credit>
             </styles.block__pay>
