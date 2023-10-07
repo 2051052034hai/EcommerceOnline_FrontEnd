@@ -43,11 +43,11 @@ const CardItem = (props) => {
               </div>
             </div>
 
-            <div className="pt-3 ml-2 mr-2 mb-3">
+            <div className="pt-3 ml-2 mr-2 mb-3 ">
               <h3 className=" text-gray-900 lg:h-10 h-8 md:text-sm lg:text-sm overflow-clip font-medium text-xs">
                 <span className="line-clamp-2 ">{product?.title}</span>
               </h3>
-              <div>
+              <div className="w-full">
                 <Rating
                   className="text-xs lg:text-sm"
                   initialRating={product?.rating}
@@ -59,7 +59,7 @@ const CardItem = (props) => {
                   }
                   readonly
                 />
-                <span className="text-xs md:text-sm text-zinc-400 pl-1">
+                <span className="text-xs md:text-sm  text-zinc-400 pl-1">
                   | Đã bán {product?.sold}
                 </span>
               </div>

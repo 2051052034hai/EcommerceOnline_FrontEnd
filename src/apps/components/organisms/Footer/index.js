@@ -11,14 +11,17 @@ const Footer = () => {
               HT WEBSITE
             </h3>
             <p className="text-justify">
-              HT website là project demo 1 số chức năng của một website bán hàng online
-              (Quần áo, laptop & Gaming Gear,.vv..). <br />
+              Mua sắm trực tuyến hàng triệu sản phẩm ở tất cả ngành hàng. Giá tốt & Miễn
+              phí vận chuyển. Mua và bán online trong 30 giây. Voucher Xtra | Freeship
+              Xtra . <br />
             </p>
-            <img
-              className="h-12 w-auto mt-5"
-              src="https://i.ibb.co/42jSVG0/logo.png"
-              alt=""
-            />
+            <div className="flex justify-center">
+              <img
+                className="h-12 w-auto mt-5"
+                src="https://i.ibb.co/42jSVG0/logo.png"
+                alt="avatar"
+              />
+            </div>
           </Col>
           <Col lg={8} md={8} className="p-3">
             <h3 className="font-bold mb-3 text-center lg:text-left md:text-left ">

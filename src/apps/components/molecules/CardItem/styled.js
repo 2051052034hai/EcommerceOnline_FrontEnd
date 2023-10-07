@@ -10,7 +10,7 @@ export const CartImageStyle = styled.img`
 `
 
 export const ProductItemStyle = styled.div`
-  padding: 5px;
+  padding: 4px;
 `
 
 export const ProductPriceDiscount = styled.span`
