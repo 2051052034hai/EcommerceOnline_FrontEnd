@@ -373,7 +373,7 @@ export default function Header() {
                 <Dropdown menu={{ items }} trigger={['click']} placement="bottom">
                   <Link onClick={(e) => e.preventDefault()}>
                     <Space>
-                      <div style={{ marginTop: '-10px' }}>
+                      <div style={{ marginTop: '-10px', paddingLeft: '10px' }}>
                         <UserOutlined />
                       </div>
                     </Space>
