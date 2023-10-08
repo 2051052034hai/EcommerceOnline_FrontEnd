@@ -72,7 +72,14 @@ const ProductDetail = () => {
   const subcategory = product?.subcategory
   const shop = product?.shop
 
-  const { data: relatedProductsData } = useGetProductBySubId(subcategory?._id)
+  const { data: relatedProductsData } = useGetProductBySubId(
+    subcategory?._id,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+  )
   const { mutationComment } = useCreateComment()
 
   useEffect(() => {
