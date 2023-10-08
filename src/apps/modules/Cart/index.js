@@ -19,11 +19,27 @@ import { selectCurrentUser } from 'store/userSlice/userSelector'
 import { useSaveCart } from 'apps/queries/cart/useSaveCart'
 import { useTranslation } from 'react-i18next'
 import { useCreatePaymentUrl } from 'apps/queries/vnpay/create-payment'
+import LocationForm from 'apps/components/molecules/LocationForm'
+import { toast } from 'react-toastify'
 
 const Cart = () => {
   const [valuePayment, setValuePayment] = useState(1)
   const [skdReady, setSdkReady] = useState(false)
   const [loadingAdd, setLoadingAdd] = useState(false)
+
+  //
+  const [provinceCode, setProvinceCode] = useState('')
+  const [districtCode, setDistrictCode] = useState('')
+  const [wardCode, setWardCode] = useState('')
+
+  const location = {
+    provinceCode,
+    districtCode,
+    wardCode,
+    setProvinceCode,
+    setWardCode,
+    setDistrictCode,
+  }
   const { t } = useTranslation()
 
   const listCart = useSelector((state) => state?.cart?.products)
@@ -37,25 +53,31 @@ const Cart = () => {
   const { mutationUrl } = useCreatePaymentUrl()
 
   const handleOrder = async () => {
-    setLoadingAdd(true)
-    const saveNewCart = []
-    for (var i = 0; i < listCart.length; i++) {
-      var item = listCart[i]
-      var newItem = {
-        product: item._id,
-        qty: item.quantity,
-        shop: item.shop._id,
-        providerPayment: 0,
+    if (provinceCode === '' || wardCode === '' || districtCode === '') {
+      // Display an error message or handle the empty values as needed
+      toast.error('Vui lòng điền đầy đủ thông tin giao hàng')
+      return
+    } else {
+      setLoadingAdd(true)
+      const saveNewCart = []
+      for (var i = 0; i < listCart.length; i++) {
+        var item = listCart[i]
+        var newItem = {
+          product: item._id,
+          qty: item.quantity,
+          shop: item.shop._id,
+          providerPayment: 0,
+        }
+        saveNewCart.push(newItem)
       }
-      saveNewCart.push(newItem)
+      const data_save = {
+        userId: currentUser?._id,
+        orderItems: saveNewCart,
+        total: totalAfterDiscount,
+      }
+      await mutation.mutateAsync(data_save)
+      setLoadingAdd(false)
     }
-    const data_save = {
-      userId: currentUser?._id,
-      orderItems: saveNewCart,
-      total: totalAfterDiscount,
-    }
-    await mutation.mutateAsync(data_save)
-    setLoadingAdd(false)
   }
 
   const onChange = (e) => {
@@ -74,26 +96,32 @@ const Cart = () => {
   }
 
   const handlePaymentVnPay = async () => {
-    setLoadingAdd(true)
-    const saveNewCart = []
-    for (var i = 0; i < listCart.length; i++) {
-      var item = listCart[i]
-      var newItem = {
-        product: item._id,
-        qty: item.quantity,
-        shop: item.shop._id,
-        providerPayment: 1,
+    if (provinceCode === '' || wardCode === '' || districtCode === '') {
+      // Display an error message or handle the empty values as needed
+      toast.error('Vui lòng điền đầy đủ thông tin giao hàng')
+      return
+    } else {
+      setLoadingAdd(true)
+      const saveNewCart = []
+      for (var i = 0; i < listCart.length; i++) {
+        var item = listCart[i]
+        var newItem = {
+          product: item._id,
+          qty: item.quantity,
+          shop: item.shop._id,
+          providerPayment: 1,
+        }
+        saveNewCart.push(newItem)
       }
-      saveNewCart.push(newItem)
-    }
-    const data_save = {
-      userId: currentUser?._id,
-      orderItems: saveNewCart,
-      total: totalAfterDiscount,
-    }
-    await mutationUrl.mutate(data_save)
+      const data_save = {
+        userId: currentUser?._id,
+        orderItems: saveNewCart,
+        total: totalAfterDiscount,
+      }
+      await mutationUrl.mutate(data_save)
 
-    setLoadingAdd(false)
+      setLoadingAdd(false)
+    }
   }
 
   useEffect(() => {
@@ -160,29 +188,9 @@ const Cart = () => {
               </div>
             </styles.block__cart_item>
           </div>
-          <div className="lg:col-span-3 md:col-span-5 items-end  p-4  ">
-            <styles.block__coupons>
-              <h3>{t('CART.add_discount')}?</h3>
-              <div>
-                <styles.InputCoupon
-                  style={{ border: '1px solid #DEE2E7', fontSize: '13px' }}
-                  placeholder={t('CART.enter_discount_code')}
-                  aria-label="Recipient's username"
-                  aria-describedby="basic-addon2"
-                />
-                <button
-                  variant="outline-secondary"
-                  style={{
-                    padding: '10px 20px',
-                    color: '#0D6EFD',
-                    border: '1px solid #DEE2E7',
-                    fontSize: '13px',
-                  }}
-                >
-                  {t('CART.apply')}
-                </button>
-              </div>
-            </styles.block__coupons>
+          <div className="lg:col-span-3 md:col-span-5 items-end p-4  ">
+            <h3 className="text-center mb-2 font-bold">ĐỊA CHỈ GIAO HÀNG</h3>
+            <LocationForm data={location} />
 
             <styles.block__pay>
               <styles.block__pay_caculator>
@@ -227,14 +235,20 @@ const Cart = () => {
                     </Button>
                   ) : valuePayment === 2 ? (
                     <div style={{ width: '300px' }}>
-                      <PayPalButton
-                        amount={Math.ceil(totalAfterDiscount / 30000)}
-                        // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
-                        onSuccess={onSuccessPayment}
-                        onError={() => {
-                          alert('Error')
-                        }}
-                      />
+                      {provinceCode === '' || wardCode === '' || districtCode === '' ? (
+                        <p className="text-center">
+                          Vui lòng nhập đầy đủ thông tin nhận hàng
+                        </p>
+                      ) : (
+                        <PayPalButton
+                          amount={Math.ceil(totalAfterDiscount / 30000)}
+                          // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
+                          onSuccess={onSuccessPayment}
+                          onError={() => {
+                            alert('Error')
+                          }}
+                        />
+                      )}
                     </div>
                   ) : (
                     <Button
