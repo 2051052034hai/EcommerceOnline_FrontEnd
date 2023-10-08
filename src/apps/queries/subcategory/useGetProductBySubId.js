@@ -7,10 +7,10 @@ import { getProductBySubId } from 'apps/services/apis/sub.api'
 
 // Services
 
-export const useGetProductBySubId = (id) => {
+export const useGetProductBySubId = (id, minPrice, maxPrice, sort, page, pageSize) => {
   const { data, isLoading } = useQuery({
-    queryKey: [QUERIES_KEYS.SUBCATEGORY, id],
-    queryFn: () => getProductBySubId(id),
+    queryKey: [QUERIES_KEYS.SUBCATEGORY, id, minPrice, maxPrice, sort, page, pageSize],
+    queryFn: () => getProductBySubId(id, minPrice, maxPrice, sort, page, pageSize),
     keepPreviousData: true,
     staleTime: 10 * 1000,
   })
