@@ -21,6 +21,8 @@ import { useTranslation } from 'react-i18next'
 import { useCreatePaymentUrl } from 'apps/queries/vnpay/create-payment'
 import LocationForm from 'apps/components/molecules/LocationForm'
 import { toast } from 'react-toastify'
+import { getArea } from 'apps/services/utils/area'
+import axios from 'axios'
 
 const Cart = () => {
   const [valuePayment, setValuePayment] = useState(1)
@@ -31,6 +33,7 @@ const Cart = () => {
   const [provinceCode, setProvinceCode] = useState('')
   const [districtCode, setDistrictCode] = useState('')
   const [wardCode, setWardCode] = useState('')
+  const [moneyShip, setMoneyShip] = useState(0)
 
   const location = {
     provinceCode,
@@ -132,6 +135,40 @@ const Cart = () => {
     }
   }, [])
 
+  if (provinceCode !== '' && districtCode !== '' && wardCode !== '') {
+    const areaFrom = getArea(1, 1)
+    const areaTo = getArea(provinceCode, districtCode)
+    axios
+      .post(
+        'https://services.giaohangtietkiem.vn/services/shipment/fee?',
+        {
+          pick_province: 'TP. Hồ Chí Minh',
+          pick_district: 'Quận 3',
+          province: areaTo.provinceName,
+          district: areaTo.districtName,
+          address: 'P.503 tòa nhà Auu Việt, số 1 Lê Đức Thọ',
+          weight: 1000,
+          value: 300000,
+          transport: 'road',
+          deliver_option: 'none',
+          tags: [],
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Token: '902db44af15b2551ae9212e426981dade3b86e19',
+          },
+        },
+      )
+      .then((response) => {
+        console.log(response.data)
+        setMoneyShip(response.data.fee.fee)
+      })
+      .catch((error) => {
+        console.error('Lỗi khi gửi yêu cầu:', error)
+      })
+  }
+
   const onSuccessPayment = (details, data) => {
     const saveNewCart = []
     for (var i = 0; i < listCart.length; i++) {
@@ -209,7 +246,7 @@ const Cart = () => {
                 </styles.discount>
                 <styles.tax>
                   <styles.key>{t('CART.transport_fee')}:</styles.key>
-                  <styles.value>+ $0</styles.value>
+                  <styles.value>{moneyShip}</styles.value>
                 </styles.tax>
                 <hr className="my-3" />
               </styles.block__pay_caculator>

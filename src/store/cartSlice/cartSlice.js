@@ -83,7 +83,7 @@ export const cartSlice = createSlice({
           (removedProduct.price * removedProduct.discountPercentage) / 100
         state.totalBeforeDiscount -= removedProduct.price
         state.totalAfterDiscount -= moneyAfterDiscount * removedProduct.quantity
-        state.totalDiscount +=
+        state.totalDiscount -=
           removedProduct.price - moneyAfterDiscount * removedProduct.quantity
       }
     },
