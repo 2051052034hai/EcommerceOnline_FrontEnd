@@ -139,6 +139,7 @@ const Cart = () => {
     const areaFrom = getArea(1, 1)
     const areaTo = getArea(provinceCode, districtCode)
     fetch('https://services.giaohangtietkiem.vn/services/shipment/fee?', {
+      mode: 'no-cors',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -158,9 +159,6 @@ const Cart = () => {
       }),
     })
       .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok')
-        }
         return response.json()
       })
       .then((data) => {
