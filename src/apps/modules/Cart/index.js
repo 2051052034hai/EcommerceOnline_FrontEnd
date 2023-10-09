@@ -138,31 +138,34 @@ const Cart = () => {
   if (provinceCode !== '' && districtCode !== '' && wardCode !== '') {
     const areaFrom = getArea(1, 1)
     const areaTo = getArea(provinceCode, districtCode)
-    axios
-      .post(
-        'https://services.giaohangtietkiem.vn/services/shipment/fee?',
-        {
-          pick_province: 'TP. Hồ Chí Minh',
-          pick_district: 'Quận 3',
-          province: areaTo.provinceName,
-          district: areaTo.districtName,
-          address: 'P.503 tòa nhà Auu Việt, số 1 Lê Đức Thọ',
-          weight: 1000,
-          value: 300000,
-          transport: 'road',
-          deliver_option: 'none',
-          tags: [],
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Token: '902db44af15b2551ae9212e426981dade3b86e19',
-          },
-        },
-      )
+    fetch('https://services.giaohangtietkiem.vn/services/shipment/fee?', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Token: '902db44af15b2551ae9212e426981dade3b86e19',
+      },
+      body: JSON.stringify({
+        pick_province: 'TP. Hồ Chí Minh',
+        pick_district: 'Quận 3',
+        province: areaTo.provinceName,
+        district: areaTo.districtName,
+        address: 'P.503 tòa nhà Auu Việt, số 1 Lê Đức Thọ',
+        weight: 1000,
+        value: 300000,
+        transport: 'road',
+        deliver_option: 'none',
+        tags: [],
+      }),
+    })
       .then((response) => {
-        console.log(response.data)
-        setMoneyShip(response.data.fee.fee)
+        if (!response.ok) {
+          throw new Error('Network response was not ok')
+        }
+        return response.json()
+      })
+      .then((data) => {
+        console.log(data)
+        setMoneyShip(data.fee.fee)
       })
       .catch((error) => {
         console.error('Lỗi khi gửi yêu cầu:', error)
