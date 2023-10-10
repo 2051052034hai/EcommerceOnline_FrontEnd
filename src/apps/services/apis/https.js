@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const axiosInstance = axios.create({
-  baseURL: 'https://ecommerce-backend-ht.vercel.app/v1/api',
+  baseURL: 'https://ecommerce-backend-jt3v1z3pu-vothanhtinh.vercel.app/v1/api',
   // baseURL: '//localhost:8000/v1/api/',
   headers: {
     'Content-Type': 'application/json',
