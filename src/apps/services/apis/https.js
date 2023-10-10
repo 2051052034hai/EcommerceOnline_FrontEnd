@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const axiosInstance = axios.create({
-  baseURL: 'https://ht-ecommerce.onrender.com',
+  baseURL: 'https://ecommerceht.onrender.com/v1/api',
   // baseURL: '//localhost:8000/v1/api/',
   headers: {
     'Content-Type': 'application/json',
