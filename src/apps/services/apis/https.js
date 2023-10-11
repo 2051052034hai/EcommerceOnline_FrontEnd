@@ -4,7 +4,9 @@ const axiosInstance = axios.create({
   baseURL: 'https://ecommerce-backend-ht.vercel.app/v1/api/',
   // baseURL: '//localhost:8000/v1/api/',
   headers: {
-    'Content-Type': 'application/json',
+   'Access-Control-Allow-Origin': '*',
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
   },
 })
 
