@@ -140,7 +140,7 @@ const Cart = () => {
     const areaTo = getArea(provinceCode, districtCode)
     fetch('https://services.giaohangtietkiem.vn/services/shipment/fee?', {
       mode: 'no-cors',
-      method: 'GET',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Token: '902db44af15b2551ae9212e426981dade3b86e19',
