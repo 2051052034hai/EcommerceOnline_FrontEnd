@@ -5,7 +5,6 @@ const axiosInstance = axios.create({
   // baseURL: '//localhost:8000/v1/api/',
   headers: {
    'Access-Control-Allow-Origin': '*',
-    'Accept': 'application/json',
     'Content-Type': 'application/json'
   },
 })
