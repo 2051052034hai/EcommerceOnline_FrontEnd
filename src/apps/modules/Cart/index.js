@@ -85,7 +85,7 @@ const Cart = () => {
       const data_save = {
         userId: currentUser?._id,
         orderItems: saveNewCart,
-        total: totalAfterDiscount - moneyShip,
+        total: totalAfterDiscount + moneyShip,
       }
       await mutation.mutateAsync(data_save)
       setLoadingAdd(false)
@@ -140,7 +140,7 @@ const Cart = () => {
       const data_save = {
         userId: currentUser?._id,
         orderItems: saveNewCart,
-        total: totalAfterDiscount,
+        total: totalAfterDiscount + moneyShip,
       }
       await mutationUrl.mutate(data_save)
 
@@ -204,7 +204,6 @@ const Cart = () => {
       for (const shopId in groupedCartItems) {
         if (groupedCartItems.hasOwnProperty(shopId)) {
           const shop = groupedCartItems[shopId]
-          console.log(shop)
 
           // Thực hiện gọi API tính tiền ship cho cửa hàng này và cộng vào tổng
           axios
@@ -212,7 +211,7 @@ const Cart = () => {
               'https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee',
               {
                 service_type_id: 2,
-                insurance_value: totalAfterDiscount,
+                insurance_value: totalAfterDiscount + moneyShip,
                 coupon: null,
                 from_district_id: parseInt(shop.shopDistrictCode),
                 from_ward_code: shop.shopWardCode,
@@ -258,7 +257,7 @@ const Cart = () => {
     const data_save = {
       userId: currentUser?._id,
       orderItems: saveNewCart,
-      total: totalAfterDiscount,
+      total: totalAfterDiscount + moneyShip,
       updatedAt: details.update_time,
     }
     mutation.mutate(data_save)
@@ -386,7 +385,7 @@ const Cart = () => {
                         </p>
                       ) : (
                         <PayPalButton
-                          amount={Math.ceil(totalAfterDiscount / 30000)}
+                          amount={Math.ceil((totalAfterDiscount + moneyShip) / 30000)}
                           onSuccess={onSuccessPayment}
                           onError={() => {
                             alert('Error')
