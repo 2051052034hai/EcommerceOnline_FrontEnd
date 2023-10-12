@@ -19,17 +19,36 @@ function LocationForm({ data }) {
 
   useEffect(() => {
     // Load danh sách tỉnh khi component được mount
-    axios.get('https://provinces.open-api.vn/api/?depth=3').then((response) => {
-      setProvinces(response?.data)
-    })
+    axios
+      .get('https://online-gateway.ghn.vn/shiip/public-api/master-data/province', {
+        headers: {
+          token: 'eae718cc-68d4-11ee-b394-8ac29577e80e',
+        },
+      })
+      .then((response) => {
+        setProvinces(response?.data?.data)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   }, [])
 
   useEffect(() => {
     if (provinceCode !== '') {
       axios
-        .get(`https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`)
+        .post(
+          'https://online-gateway.ghn.vn/shiip/public-api/master-data/district',
+          {
+            province_id: provinceCode,
+          },
+          {
+            headers: {
+              token: 'eae718cc-68d4-11ee-b394-8ac29577e80e',
+            },
+          },
+        )
         .then((response) => {
-          setDistricts(response.data.districts)
+          setDistricts(response.data.data)
         })
     } else {
       setDistricts([])
@@ -40,9 +59,16 @@ function LocationForm({ data }) {
     // Load danh sách xã khi quận được chọn
     if (districtCode !== '') {
       axios
-        .get(`https://provinces.open-api.vn/api/d/${districtCode}?depth=2`)
+        .get(
+          `https://online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=${districtCode}`,
+          {
+            headers: {
+              token: 'eae718cc-68d4-11ee-b394-8ac29577e80e',
+            },
+          },
+        )
         .then((response) => {
-          setWards(response.data.wards)
+          setWards(response?.data?.data)
         })
     } else {
       // Nếu không có quận nào được chọn, đặt danh sách xã thành rỗng
@@ -51,11 +77,11 @@ function LocationForm({ data }) {
   }, [districtCode])
 
   return (
-    <div className="w-full mb-5">
-      <Space direction="vertical" size={16} className="w-full">
-        <div className="w-full flex">
-          <div className="w-24">
-            <label htmlFor="province">Tỉnh:</label>
+    <div className="w-full mb-5 flex">
+      <Space size={16} className="w-full">
+        <div className="w-full flex items-center">
+          <div className="pr-2">
+            <label htmlFor="province">Tỉnh / Thành phố:</label>
           </div>
           <Select
             id="province"
@@ -67,18 +93,18 @@ function LocationForm({ data }) {
             }}
             style={{ width: 200 }}
           >
-            <Option value="">Chọn tỉnh</Option>
-            {provinces.map((province) => (
-              <Option key={province.code} value={province.code}>
-                {province.name}
+            <Option value="">Chọn tỉnh / thành phố</Option>
+            {provinces?.map((province) => (
+              <Option key={province?.ProvinceID} value={province?.ProvinceID}>
+                {province?.ProvinceName}
               </Option>
             ))}
           </Select>
         </div>
 
         <div className="flex w-full">
-          <div className="w-24">
-            <label htmlFor="district">Quận:</label>
+          <div className="pr-2">
+            <label htmlFor="district">Quận / Huyện:</label>
           </div>
           <Select
             id="district"
@@ -86,17 +112,17 @@ function LocationForm({ data }) {
             onChange={(value) => setDistrictCode(value)}
             style={{ width: 200 }}
           >
-            <Option value="">Chọn quận</Option>
-            {districts.map((district) => (
-              <Option key={district.code} value={district.code}>
-                {district.name}
+            <Option value="">Chọn quận / huyện</Option>
+            {districts?.map((district) => (
+              <Option key={district?.DistrictID} value={district?.DistrictID}>
+                {district?.DistrictName}
               </Option>
             ))}
           </Select>
         </div>
         <div className="flex w-full">
-          <div className="w-24">
-            <label htmlFor="ward">Xã:</label>
+          <div className="pr-2">
+            <label htmlFor="ward">Xã / Phường:</label>
           </div>
           <Select
             id="ward"
@@ -104,10 +130,10 @@ function LocationForm({ data }) {
             onChange={(value) => setWardCode(value)} // Sửa ở đây
             style={{ width: 200 }}
           >
-            <Option value="">Chọn xã</Option>
-            {wards.map((ward) => (
-              <Option key={ward.code} value={ward.code}>
-                {ward.name}
+            <Option value="">Chọn xã / phường</Option>
+            {wards?.map((ward) => (
+              <Option key={ward?.WardCode} value={ward?.WardCode}>
+                {ward?.WardName}
               </Option>
             ))}
           </Select>

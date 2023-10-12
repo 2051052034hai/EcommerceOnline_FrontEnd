@@ -35,7 +35,8 @@ export default function Header() {
   const navigate = useNavigate()
   //Redux
   const dispatch = useDispatch()
-  const countCart = useSelector((state) => state.cart.count)
+  const listCart = useSelector((state) => state?.cart?.products)
+
   const currentUser = useSelector(selectCurrentUser)
   const { data: shop } = useGetShopbyUserId(currentUser?._id)
 
@@ -54,19 +55,6 @@ export default function Header() {
     setIsMobileMenuOpen(false)
   }
 
-  // const transformedData = data?.map((category) => {
-  //   const subcategories = category.subcategories.map((subcategory) => ({
-  //     label: subcategory.name,
-  //     key: subcategory._id,
-  //     link: subcategory._id,
-  //   }))
-
-  //   return {
-  //     label: category.name,
-  //     key: category._id,
-  //     children: subcategories,
-  //   }
-  // })
   const transformedData = [
     {
       label: t('HOME.men_fashion'),
@@ -357,7 +345,7 @@ export default function Header() {
             >
               <FontAwesomeIcon icon={faCartShopping} bounce />
               <p className="absolute -top-3 left-7 text-xs border border-black rounded-full px-1">
-                {countCart}
+                {listCart?.length}
               </p>
             </Link>
           </div>

@@ -6,12 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Rating from 'react-rating'
 import { Avatar, Button, Col, List, Skeleton, Typography } from 'antd'
 
-import {
-  faBasketShopping,
-  faShieldHalved,
-  faGlobe,
-  faHeart,
-} from '@fortawesome/free-solid-svg-icons'
+import { faBasketShopping, faHeart } from '@fortawesome/free-solid-svg-icons'
 
 import { useParams } from 'react-router-dom'
 

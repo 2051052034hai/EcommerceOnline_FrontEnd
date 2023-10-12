@@ -4,7 +4,7 @@ import * as styles from './styledCart'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { PayPalButton } from 'react-paypal-button-v2'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Button, Radio } from 'antd'
+import { Button, Divider, Input, Radio } from 'antd'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { Helmet } from 'react-helmet'
@@ -21,7 +21,6 @@ import { useTranslation } from 'react-i18next'
 import { useCreatePaymentUrl } from 'apps/queries/vnpay/create-payment'
 import LocationForm from 'apps/components/molecules/LocationForm'
 import { toast } from 'react-toastify'
-import { getArea } from 'apps/services/utils/area'
 import axios from 'axios'
 
 const Cart = () => {
@@ -34,6 +33,9 @@ const Cart = () => {
   const [districtCode, setDistrictCode] = useState('')
   const [wardCode, setWardCode] = useState('')
   const [moneyShip, setMoneyShip] = useState(0)
+  const [servicesShips, setServiceShip] = useState([])
+  const [servicesCode, setServiceCode] = useState('')
+  const [address, setAddress] = useState('')
 
   const location = {
     provinceCode,
@@ -43,6 +45,7 @@ const Cart = () => {
     setWardCode,
     setDistrictCode,
   }
+
   const { t } = useTranslation()
 
   const listCart = useSelector((state) => state?.cart?.products)
@@ -56,7 +59,13 @@ const Cart = () => {
   const { mutationUrl } = useCreatePaymentUrl()
 
   const handleOrder = async () => {
-    if (provinceCode === '' || wardCode === '' || districtCode === '') {
+    if (
+      provinceCode === '' ||
+      wardCode === '' ||
+      districtCode === '' ||
+      servicesCode === '' ||
+      address === ''
+    ) {
       // Display an error message or handle the empty values as needed
       toast.error('Vui lòng điền đầy đủ thông tin giao hàng')
       return
@@ -76,7 +85,7 @@ const Cart = () => {
       const data_save = {
         userId: currentUser?._id,
         orderItems: saveNewCart,
-        total: totalAfterDiscount,
+        total: totalAfterDiscount - moneyShip,
       }
       await mutation.mutateAsync(data_save)
       setLoadingAdd(false)
@@ -87,6 +96,13 @@ const Cart = () => {
     setValuePayment(e.target.value)
   }
 
+  const onChangeChooseService = (e) => {
+    setServiceCode(e.target.value)
+  }
+
+  const onChangeAddress = (e) => {
+    setAddress(e.target.value)
+  }
   const addPayPalScript = async () => {
     const script = document.createElement('script')
     script.type = 'text/javascript'
@@ -99,8 +115,13 @@ const Cart = () => {
   }
 
   const handlePaymentVnPay = async () => {
-    if (provinceCode === '' || wardCode === '' || districtCode === '') {
-      // Display an error message or handle the empty values as needed
+    if (
+      provinceCode === '' ||
+      wardCode === '' ||
+      districtCode === '' ||
+      servicesCode === '' ||
+      address === ''
+    ) {
       toast.error('Vui lòng điền đầy đủ thông tin giao hàng')
       return
     } else {
@@ -135,40 +156,92 @@ const Cart = () => {
     }
   }, [])
 
-  if (provinceCode !== '' && districtCode !== '' && wardCode !== '') {
-    const areaFrom = getArea(1, 1)
-    const areaTo = getArea(provinceCode, districtCode)
-    fetch('https://services.giaohangtietkiem.vn/services/shipment/fee?', {
-      mode: 'no-cors',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Token: '902db44af15b2551ae9212e426981dade3b86e19',
-      },
-      body: JSON.stringify({
-        pick_province: 'TP. Hồ Chí Minh',
-        pick_district: 'Quận 3',
-        province: areaTo.provinceName,
-        district: areaTo.districtName,
-        address: 'P.503 tòa nhà Auu Việt, số 1 Lê Đức Thọ',
-        weight: 1000,
-        value: 300000,
-        transport: 'road',
-        deliver_option: 'none',
-        tags: [],
-      }),
-    })
-      .then((response) => {
-        return response.json()
-      })
-      .then((data) => {
-        console.log(data)
-        setMoneyShip(data.fee.fee)
-      })
-      .catch((error) => {
-        console.error('Lỗi khi gửi yêu cầu:', error)
-      })
-  }
+  useEffect(() => {
+    if (districtCode !== '') {
+      axios
+        .post(
+          'https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/available-services',
+          {
+            shop_id: 4623102,
+            from_district: 1461,
+            to_district: districtCode,
+          },
+          {
+            headers: {
+              Token: 'eae718cc-68d4-11ee-b394-8ac29577e80e',
+            },
+          },
+        )
+        .then((response) => {
+          setServiceShip(response.data.data)
+        })
+    }
+  }, [districtCode])
+
+  useEffect(() => {
+    setServiceCode(servicesCode)
+  }, [servicesCode])
+
+  // Gom nhóm sản phẩm theo shop
+  const groupedCartItems = listCart.reduce((grouped, cart) => {
+    const shopId = cart.shop._id
+    if (!grouped[shopId]) {
+      grouped[shopId] = {
+        shopName: cart.shop.name,
+        products: [],
+        totalWeight: 0,
+        shopDistrictCode: cart.shop.districtCode,
+        shopWardCode: cart.shop.wardCode,
+      }
+    }
+    grouped[shopId].products.push(cart)
+    grouped[shopId].totalWeight += cart.weight
+    return grouped
+  }, {})
+
+  useEffect(() => {
+    if (provinceCode !== '' && wardCode !== '' && districtCode !== '') {
+      for (const shopId in groupedCartItems) {
+        if (groupedCartItems.hasOwnProperty(shopId)) {
+          const shop = groupedCartItems[shopId]
+          console.log(shop)
+
+          // Thực hiện gọi API tính tiền ship cho cửa hàng này và cộng vào tổng
+          axios
+            .post(
+              'https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee',
+              {
+                service_type_id: 2,
+                insurance_value: totalAfterDiscount,
+                coupon: null,
+                from_district_id: parseInt(shop.shopDistrictCode),
+                from_ward_code: shop.shopWardCode,
+                to_district_id: districtCode,
+                to_ward_code: wardCode,
+                height: 15,
+                length: 15,
+                weight: shop.totalWeight,
+                width: 15,
+              },
+              {
+                headers: {
+                  token: 'eae718cc-68d4-11ee-b394-8ac29577e80e',
+                  shop_id: '4623102',
+                },
+              },
+            )
+            .then((response) => {
+              setMoneyShip((money) => {
+                return money + response.data.data.total
+              })
+            })
+            .catch((error) => {
+              console.error(error)
+            })
+        }
+      }
+    }
+  }, [provinceCode, districtCode, wardCode])
 
   const onSuccessPayment = (details, data) => {
     const saveNewCart = []
@@ -191,6 +264,16 @@ const Cart = () => {
     mutation.mutate(data_save)
   }
 
+  // Render the grouped cart items
+  const renderedCartItems = Object.values(groupedCartItems).map((group) => (
+    <div key={group.shopName}>
+      <h2>{group.shopName}</h2>
+      {group.products.map((cart) => (
+        <CartItem cart={cart} key={cart._id} />
+      ))}
+    </div>
+  ))
+
   return (
     <>
       <Helmet>
@@ -200,9 +283,7 @@ const Cart = () => {
         <div className="grid md:grid-cols-12 lg:grid-cols-12 gap-4 mt-5 lg:px-8 ">
           <div className="lg:col-span-9 md:col-span-7 p-1 rounded-md mb-5">
             <styles.block__cart_item>
-              {listCart?.map((cart) => (
-                <CartItem cart={cart} key={cart?._id} />
-              ))}
+              {renderedCartItems}
 
               <styles.button__navigation>
                 <styles.button__navigation_back>
@@ -225,10 +306,30 @@ const Cart = () => {
                 </Radio.Group>
               </div>
             </styles.block__cart_item>
+            <div className="p-4">
+              <Divider
+                style={{
+                  fontSize: '24px',
+                  color: '#31a9e0',
+                  textTransform: 'uppercase',
+                }}
+              >
+                THÔNG TIN ĐẶT HÀNG
+              </Divider>
+              <LocationForm data={location} />
+              <h4 className="font-bold pb-2">Chọn phương thức giao hàng</h4>
+              <Radio.Group onChange={onChangeChooseService}>
+                {servicesShips?.map((service) => (
+                  <Radio value={service?.service_type_id}>{service?.short_name}</Radio>
+                ))}
+              </Radio.Group>
+              <div className="mt-5">
+                <Input placeholder="Nhập địa chỉ giao hàng" onChange={onChangeAddress} />
+              </div>
+            </div>
           </div>
           <div className="lg:col-span-3 md:col-span-5 items-end p-4  ">
             <h3 className="text-center mb-2 font-bold">ĐỊA CHỈ GIAO HÀNG</h3>
-            <LocationForm data={location} />
 
             <styles.block__pay>
               <styles.block__pay_caculator>
@@ -247,7 +348,9 @@ const Cart = () => {
                 </styles.discount>
                 <styles.tax>
                   <styles.key>{t('CART.transport_fee')}:</styles.key>
-                  <styles.value>{moneyShip}</styles.value>
+                  <styles.value>
+                    {Math.ceil(moneyShip).toLocaleString('vi-VN')} VND
+                  </styles.value>
                 </styles.tax>
                 <hr className="my-3" />
               </styles.block__pay_caculator>
@@ -255,7 +358,7 @@ const Cart = () => {
               <styles.block__pay_total>
                 <div style={{ fontSize: '16px' }}>{t('CART.total_amount_payable')}:</div>
                 <div style={{ fontSize: '16px' }}>
-                  {Math.ceil(totalAfterDiscount).toLocaleString('vi-VN')} VND
+                  {Math.ceil(totalAfterDiscount + moneyShip).toLocaleString('vi-VN')} VND
                 </div>
               </styles.block__pay_total>
 
@@ -273,14 +376,17 @@ const Cart = () => {
                     </Button>
                   ) : valuePayment === 2 ? (
                     <div style={{ width: '300px' }}>
-                      {provinceCode === '' || wardCode === '' || districtCode === '' ? (
+                      {provinceCode === '' ||
+                      wardCode === '' ||
+                      districtCode === '' ||
+                      servicesCode === '' ||
+                      address === '' ? (
                         <p className="text-center">
                           Vui lòng nhập đầy đủ thông tin nhận hàng
                         </p>
                       ) : (
                         <PayPalButton
                           amount={Math.ceil(totalAfterDiscount / 30000)}
-                          // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
                           onSuccess={onSuccessPayment}
                           onError={() => {
                             alert('Error')
