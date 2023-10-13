@@ -85,8 +85,8 @@ const Login = () => {
       <Helmet>
         <title>Đăng nhập</title>
       </Helmet>
-      <main className="w-full h-screen min-h-screen flex flex-col items-center justify-center px-4">
-        <div className="max-w-sm w-full text-gray-600 space-y-8">
+      <main className="w-full h-auto min-h-screen flex flex-col items-center justify-center px-4">
+        <div className="max-w-sm w-full text-gray-600 space-y-8 mb-5">
           <div className="text-center">
             <div className="mt-5 space-y-2">
               <h3 className="text-gray-800 text-2xl font-bold sm:text-3xl">
@@ -204,6 +204,14 @@ const Login = () => {
               </svg>
               Continue with Facebook
             </button>
+          </div>
+          <div className="text-center">
+            <Link
+              to={'/reset-password'}
+              className="text-indigo-600 hover:text-indigo-500  "
+            >
+              Bạn quên mật khẩu?
+            </Link>
           </div>
         </div>
       </main>

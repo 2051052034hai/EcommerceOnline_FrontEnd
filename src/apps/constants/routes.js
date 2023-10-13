@@ -69,7 +69,7 @@ export const ROUTER = {
   RESETPASSWORD: {
     key: 'resetPassword',
     name: 'resetPassword',
-    path: '/resetPassword',
+    path: '/reset-password',
     isPrivate: false,
   },
   RESULTPAYMENT: {

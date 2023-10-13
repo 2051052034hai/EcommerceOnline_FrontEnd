@@ -73,7 +73,6 @@ export const cartSlice = createSlice({
     remove_product: (state, action) => {
       const { _id } = action.payload
       const removedProduct = state.products.find((product) => product._id === _id)
-
       if (removedProduct) {
         state.products = state.products.filter((product) => product._id !== _id)
         state.count -= removedProduct.quantity
@@ -81,10 +80,11 @@ export const cartSlice = createSlice({
         const moneyAfterDiscount =
           removedProduct.price -
           (removedProduct.price * removedProduct.discountPercentage) / 100
-        state.totalBeforeDiscount -= removedProduct.price
+        state.totalBeforeDiscount -= removedProduct.price * removedProduct.quantity
         state.totalAfterDiscount -= moneyAfterDiscount * removedProduct.quantity
         state.totalDiscount -=
-          removedProduct.price - moneyAfterDiscount * removedProduct.quantity
+          ((removedProduct.price * removedProduct.discountPercentage) / 100) *
+          removedProduct.quantity
       }
     },
     clear_cart: (state) => {
