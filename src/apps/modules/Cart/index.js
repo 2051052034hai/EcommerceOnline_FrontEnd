@@ -200,6 +200,7 @@ const Cart = () => {
   }, {})
 
   useEffect(() => {
+    setMoneyShip(0)
     if (provinceCode !== '' && wardCode !== '' && districtCode !== '') {
       for (const shopId in groupedCartItems) {
         if (groupedCartItems.hasOwnProperty(shopId)) {
@@ -328,7 +329,28 @@ const Cart = () => {
             </div>
           </div>
           <div className="lg:col-span-3 md:col-span-5 items-end p-4  ">
-            <h3 className="text-center mb-2 font-bold">ĐỊA CHỈ GIAO HÀNG</h3>
+            <styles.block__coupons>
+              <h3>Thêm mã giảm giá?</h3>
+              <div>
+                <styles.InputCoupon
+                  style={{ border: '1px solid #DEE2E7', fontSize: '13px' }}
+                  placeholder="Nhập mã giảm giá"
+                  aria-label="Recipient's username"
+                  aria-describedby="basic-addon2"
+                />
+                <button
+                  variant="outline-secondary"
+                  style={{
+                    padding: '10px 20px',
+                    color: '#0D6EFD',
+                    border: '1px solid #DEE2E7',
+                    fontSize: '13px',
+                  }}
+                >
+                  Áp dụng
+                </button>
+              </div>
+            </styles.block__coupons>
 
             <styles.block__pay>
               <styles.block__pay_caculator>
