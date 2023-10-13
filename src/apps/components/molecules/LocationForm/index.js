@@ -4,7 +4,7 @@ import { Select, Space } from 'antd'
 
 const { Option } = Select
 
-function LocationForm({ data }) {
+function LocationForm({ data, direction }) {
   const {
     provinceCode,
     districtCode,
@@ -78,7 +78,7 @@ function LocationForm({ data }) {
 
   return (
     <div className="w-full mb-5 flex">
-      <Space size={16} className="w-full">
+      <Space direction={direction ? direction : ''} size={16} className="w-full">
         <div className="w-full flex items-center">
           <div className="pr-2">
             <label htmlFor="province">Tỉnh / Thành phố:</label>

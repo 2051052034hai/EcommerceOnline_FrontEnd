@@ -11,8 +11,22 @@ import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 
 //Molecules
+import LocationForm from 'apps/components/molecules/LocationForm'
+import { toast } from 'react-toastify'
 
 const RegisterSeller = () => {
+  const [provinceCode, setProvinceCode] = useState('')
+  const [districtCode, setDistrictCode] = useState('')
+  const [wardCode, setWardCode] = useState('')
+  const location = {
+    provinceCode,
+    districtCode,
+    wardCode,
+    setProvinceCode,
+    setWardCode,
+    setDistrictCode,
+  }
+
   const { t } = useTranslation()
   const currentUser = useSelector(selectCurrentUser)
   const { mutation, isLoading } = useCreateShop()
@@ -34,12 +48,20 @@ const RegisterSeller = () => {
   }
 
   const onSubmit = (data) => {
-    const shop = {
-      name: data.name,
-      address: data.address,
-      userId: currentUser?._id,
+    if (provinceCode === '' || wardCode === '' || districtCode === '') {
+      toast.error('Vui lòng điền đầy đủ thông tin cửa hàng')
+    } else {
+      const shop = {
+        name: data.name,
+        address: data.address,
+        userId: currentUser?._id,
+        provinceCode,
+        districtCode,
+        wardCode,
+      }
+
+      mutation.mutate(shop)
     }
-    mutation.mutate(shop)
   }
 
   return (
@@ -47,7 +69,7 @@ const RegisterSeller = () => {
       <Helmet>
         <title> {t('SELLER_REGISTER.title')}</title>
       </Helmet>
-      <main className="w-full h-screen flex flex-col items-center justify-center px-4">
+      <div className="w-full  min-h-screen flex flex-col items-center justify-center px-4">
         <div className="max-w-sm w-full text-gray-600 space-y-8">
           <div className="text-center">
             <div className="mt-5 space-y-2">
@@ -90,6 +112,9 @@ const RegisterSeller = () => {
                 <p style={{ color: 'red', fontSize: 13 }}>{errors.address.message}</p>
               )}
             </div>
+            <div className="mt-5">
+              <LocationForm data={location} direction={'vertical'} />
+            </div>
             <button
               type="submit"
               // disabled={isLoading}
@@ -99,7 +124,7 @@ const RegisterSeller = () => {
             </button>
           </form>
         </div>
-      </main>
+      </div>
     </>
   )
 }
