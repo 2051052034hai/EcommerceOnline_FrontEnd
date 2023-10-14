@@ -1,4 +1,5 @@
 import { Input, Tooltip } from 'antd'
+import ExcelJS from 'exceljs'
 
 //SellersPage
 import AddProduct from 'apps/modules/Dashboard/SellersPage/AddProduct'
@@ -117,6 +118,20 @@ export const handleChangeTime = (timer) => {
   return formattedDateTime
 }
 
+export const handlegetDayAt = (timer) => {
+  const originalDate = new Date(timer)
+
+  const day = originalDate.getDate()
+  const month = originalDate.getMonth() + 1
+  const year = originalDate.getFullYear()
+
+  const dateString = `${day}/${month}/${year}`
+
+  const formattedDateTime = `${dateString}`
+
+  return formattedDateTime
+}
+
 export const handleArrDataTable = (data) => {
   const dataTable = data?.reduce((result, items, orderIndex) => {
     let new_Time = handleChangeTime(items?.createdAt)
@@ -189,4 +204,105 @@ export const handleArrProductByOrderId = (data, orderId) => {
     return result.concat(dataList)
   }, [])
   return dataTable
+}
+
+export const filterExcelReport = (data, check) => {
+  const { fromDate, toDate, email } = check
+  let shouldFilterByEmail = true; 
+
+  if (email.length === 0) {
+    shouldFilterByEmail = false; 
+  }
+  const filteredData = data?.data.filter((item) => {
+    let newcreatedAt = handlegetDayAt(item.createdAt)
+    const parts = newcreatedAt.split('/')
+    const newCreatedAtFormatted = `${parts[1]}/${parts[0]}/${parts[2]}`
+    let emailMatch = true; 
+
+    if (shouldFilterByEmail) {
+      emailMatch = email.includes(item.userId.email);
+    }
+
+    return (
+      new Date(newCreatedAtFormatted) >= new Date(fromDate) &&
+      new Date(newCreatedAtFormatted) <= new Date(toDate) &&
+      emailMatch
+    )
+  })
+
+  return filteredData
+}
+
+export const generateExcelReport = (reportData, arrCheck) => {
+  const workbook = new ExcelJS.Workbook()
+  const worksheet = workbook.addWorksheet('Report')
+
+  // Đặt tiêu đề cho các cột
+  worksheet.columns = [
+    { header: 'Tình trạng đơn hàng', key: 'status', width: 20 },
+    { header: 'Ngày đặt hàng', key: 'dateOrder', width: 20 },
+    { header: 'Tên khách hàng', key: 'userId', width: 20 },
+    { header: 'Tên sản phẩm', key: 'name', width: 100, height: 500 },
+    { header: 'Giá bán', key: 'unitPrice', width: 15 },
+    { header: 'Số Lượng', key: 'quantity', width: 10 },
+  ]
+
+  const resultFilterData = filterExcelReport(reportData, arrCheck)
+  
+  resultFilterData.forEach((item) => {
+    let newcreatedAt = handlegetDayAt(item.createdAt)
+    let status = item.data[0].statusPayment ? 'đã thanh toán' : 'chưa thanh toán'
+
+    const row = {
+      status: status,
+      dateOrder: newcreatedAt,
+      userId: item.userId.username,
+    }
+
+    row.name = item.data[0].product?.title
+    row.unitPrice = item.data[0].product?.price
+    row.quantity = item.data[0].qty
+
+    for (let i = 1; i < item.data.length; i++) {
+      if (item.data[i].product) {
+        row.name += `\r\n${item.data[i].product?.title}`
+        row.unitPrice += `\r\n${item.data[i].product?.price}`
+        row.quantity += `\r\n${item.data[i].qty}`
+      }
+    }
+
+    worksheet.addRow(row)
+  })
+
+  // Tải excel
+  workbook.xlsx.writeBuffer().then((buffer) => {
+    const blob = new Blob([buffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'BaoCaoThongKeDonHang.xlsx'
+    a.click()
+    URL.revokeObjectURL(url)
+  })
+}
+
+export const handleGetFullEmail = (data) => {
+  let arr = []
+  let uniqueEmails = {}
+  data?.data.forEach((item) => {
+    const email = item.userId.email
+
+    if (!uniqueEmails[email]) {
+      arr.push({
+        label: email,
+        value: email,
+      })
+
+      uniqueEmails[email] = true
+    }
+  })
+
+  return arr
 }

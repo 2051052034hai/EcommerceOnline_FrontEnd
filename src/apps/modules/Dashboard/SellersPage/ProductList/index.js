@@ -12,6 +12,7 @@ import {
   Upload,
   Modal,
   Divider,
+  Popconfirm,
 } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import ImgCrop from 'antd-img-crop'
@@ -193,13 +194,18 @@ const ProductList = () => {
               <title>Bán hàng | Quản lý sản phẩm</title>
             </Helmet>
             <Space size="middle">
-              <span>
-                <FontAwesomeIcon
-                  onClick={() => handleDeleteProduct(record.id)}
-                  icon={faTrash}
-                  style={{ color: '#e74023', cursor: 'pointer' }}
-                />
-              </span>
+              <Popconfirm
+                title="Bạn có chắc muốn xoá sản phẩm này?"
+                onConfirm={() => handleDeleteProduct(record.id)}
+              >
+                <span>
+                  <FontAwesomeIcon
+                    icon={faTrash}
+                    style={{ color: '#e74023', cursor: 'pointer' }}
+                  />
+                </span>
+              </Popconfirm>
+
               <span>
                 <FontAwesomeIcon
                   onClick={showDrawer(record_Data)}
