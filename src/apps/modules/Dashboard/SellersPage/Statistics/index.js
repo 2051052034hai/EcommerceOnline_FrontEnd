@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Col, Divider, Row, Select, Statistic, Card } from 'antd'
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons'
 
+
 //Store
 import { selectCurrentUser } from 'store/userSlice/userSelector'
 
@@ -18,6 +19,7 @@ import PieChartWith from 'apps/components/molecules/Chart/pieChart'
 import CustomContentOfTooltip from 'apps/components/molecules/Chart/CustomContentOfTooltip'
 
 //services/utils
+
 import {
   handleRevenueByMonth,
   handleRevenueByDay,
@@ -112,7 +114,8 @@ const StatisticsPage = () => {
     var top3BuyersPrecious = findTop3BuyersPrecious(dataTable, Math.ceil(monthAt / 3))
   }
 
-  console.log("revenueByMonth:", revenueByMonth)
+ 
+
   return (
     <>
       <Helmet>
@@ -291,6 +294,7 @@ const StatisticsPage = () => {
           </Col>
         </Row>
       </div>
+     
     </>
   )
 }
