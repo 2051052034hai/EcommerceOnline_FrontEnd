@@ -24,7 +24,7 @@ const ProductCategory = () => {
   const [minPrice, setMinPrice] = useState()
   const [sort, setSort] = useState()
   const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(4)
+  const [pageSize, setPageSize] = useState(8)
   const [total, setTotal] = useState(0)
   const [productsSub, setProductsSub] = useState([])
 
