@@ -34,6 +34,7 @@ const AddProduct = () => {
   const [productName, setProductName] = useState('')
   const [productSub, setProductSub] = useState('')
   const [productStock, setProductStock] = useState('')
+  const [productWeight, setProductWeight] = useState(0)
   const [productPrice, setProductPrice] = useState(0)
   const [productDescription, setProductDescription] = useState('')
   const [productImage, setProductImage] = useState({})
@@ -176,6 +177,7 @@ const AddProduct = () => {
       title: productName,
       price: productPrice,
       stock: productStock,
+      weight: productWeight,
       discountPercentage: productDiscount,
       subcategory: productSub,
       description: productDescription,
@@ -343,6 +345,21 @@ const AddProduct = () => {
                 className="p-2 w-full"
                 onChange={setProductDiscount}
                 text="Nhập giảm giá..."
+              />
+            </Col>
+          </Row>
+          <Row className="mt-5">
+            <Col lg={4} md={4}>
+              <h3 className="text-base mb-5 pt-3 w-32">
+                <span style={{ fontWeight: 'bold' }}>* </span>Nhập cân nặng sản phẩm (g)
+              </h3>
+            </Col>
+            <Col lg={20} md={14}>
+              <NumericInput
+                value={productWeight}
+                className="p-2 w-full"
+                onChange={setProductWeight}
+                text="Nhập cân nặng sản phẩm..."
               />
             </Col>
           </Row>

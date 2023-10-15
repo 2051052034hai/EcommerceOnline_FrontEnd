@@ -57,6 +57,7 @@ const ProductList = () => {
   const [productName, setProductName] = useState('')
   const [productSubId, setProductSubId] = useState('')
   const [productStock, setProductStock] = useState('')
+  const [productWeight, setProductWeight] = useState('')
   const [productPrice, setProductPrice] = useState('')
   const [productDescription, setProductDescription] = useState('')
   const [productImage, setProductImage] = useState('')
@@ -180,6 +181,7 @@ const ProductList = () => {
           id: record.id,
           name: record.name,
           subCategory: record.subCategoryName,
+          weight: record.weight,
           thumbnail: record.thumbnail,
           stock: record.stock,
           price: record.price,
@@ -232,6 +234,7 @@ const ProductList = () => {
       subCategoryName: item.subcategory?.name,
       description: item.description,
       images: item.images,
+      weight: item.weight,
       user: currentUser?._id,
       subcategoryId: item.subcategory?._id,
     }
@@ -282,6 +285,7 @@ const ProductList = () => {
       setProductImage(data.thumbnail)
       setProductImages(data.images)
       setProductSubId(data.subcategoryId)
+      setProductWeight(data.weight)
       setOpen(true)
     }
   }
@@ -422,6 +426,7 @@ const ProductList = () => {
       stock: productStock,
       subcategory: productSubId,
       description: productDescription,
+      weight: productWeight,
       shop: shop_data?._id,
       thumbnail: '',
       images: [],
@@ -556,7 +561,7 @@ const ProductList = () => {
             </Col>
           </Row>
           <Row gutter={16}>
-            <Col span={12}>
+            <Col span={8}>
               <label>Giá sản phẩm</label>
               <NumericInput
                 className="mt-2"
@@ -565,12 +570,21 @@ const ProductList = () => {
                 text="Nhập giá sản phẩm"
               />
             </Col>
-            <Col span={12}>
+            <Col span={8}>
               <label>SL tồn kho</label>
               <NumericInput
                 className="mt-2"
                 value={productStock}
                 onChange={setProductStock}
+                text="Nhập số lượng tồn kho"
+              />
+            </Col>
+            <Col span={8}>
+              <label>Cân nặng</label>
+              <NumericInput
+                className="mt-2"
+                value={productWeight}
+                onChange={setProductWeight}
                 text="Nhập số lượng tồn kho"
               />
             </Col>
