@@ -10,7 +10,7 @@ export const getProductsPage = async (page, pageSize, keyWord, subcategory, shop
   }
 
   if (keyWord !== undefined) {
-    url += `title=/${keyWord}/&`
+    url += `title=${keyWord}&`
   }
 
   if (subcategory !== undefined) {

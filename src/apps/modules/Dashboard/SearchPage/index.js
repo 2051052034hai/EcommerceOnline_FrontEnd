@@ -96,7 +96,6 @@ const SearchPage = () => {
   const handleClickSearch = () => {
     setProductLoading(true)
     setKeyWord(valueSeach)
-    setValueSeach('')
   }
 
   const handleValueChange = (e) => {
