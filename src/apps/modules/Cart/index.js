@@ -85,7 +85,8 @@ const Cart = () => {
       const data_save = {
         userId: currentUser?._id,
         orderItems: saveNewCart,
-        total: totalAfterDiscount + moneyShip,
+        total: totalAfterDiscount,
+        totalShip: moneyShip,
       }
       await mutation.mutateAsync(data_save)
       setLoadingAdd(false)
@@ -140,7 +141,8 @@ const Cart = () => {
       const data_save = {
         userId: currentUser?._id,
         orderItems: saveNewCart,
-        total: totalAfterDiscount + moneyShip,
+        total: totalAfterDiscount,
+        totalShip: moneyShip,
       }
       await mutationUrl.mutate(data_save)
 
@@ -258,7 +260,8 @@ const Cart = () => {
     const data_save = {
       userId: currentUser?._id,
       orderItems: saveNewCart,
-      total: totalAfterDiscount + moneyShip,
+      total: totalAfterDiscount,
+      totalShip: moneyShip,
       updatedAt: details.update_time,
     }
     mutation.mutate(data_save)
