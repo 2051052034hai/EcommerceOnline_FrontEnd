@@ -208,19 +208,19 @@ export const handleArrProductByOrderId = (data, orderId) => {
 
 export const filterExcelReport = (data, check) => {
   const { fromDate, toDate, email } = check
-  let shouldFilterByEmail = true; 
+  let shouldFilterByEmail = true
 
   if (email.length === 0) {
-    shouldFilterByEmail = false; 
+    shouldFilterByEmail = false
   }
   const filteredData = data?.data.filter((item) => {
     let newcreatedAt = handlegetDayAt(item.createdAt)
     const parts = newcreatedAt.split('/')
     const newCreatedAtFormatted = `${parts[1]}/${parts[0]}/${parts[2]}`
-    let emailMatch = true; 
+    let emailMatch = true
 
     if (shouldFilterByEmail) {
-      emailMatch = email.includes(item.userId.email);
+      emailMatch = email.includes(item.userId.email)
     }
 
     return (
@@ -233,12 +233,19 @@ export const filterExcelReport = (data, check) => {
   return filteredData
 }
 
+
 export const generateExcelReport = (reportData, arrCheck) => {
   const workbook = new ExcelJS.Workbook()
   const worksheet = workbook.addWorksheet('Report')
 
-  // Đặt tiêu đề cho các cột
+  const centerAlignment = {
+    vertical: 'middle',
+    horizontal: 'center',
+  }
+
   worksheet.columns = [
+    { header: 'STT', key: 'stt', width: 5, alignment: centerAlignment },
+    { header: 'Mã đơn hàng', key: 'orderID', width: 15},
     { header: 'Tình trạng đơn hàng', key: 'status', width: 20 },
     { header: 'Ngày đặt hàng', key: 'dateOrder', width: 20 },
     { header: 'Tên khách hàng', key: 'userId', width: 20 },
@@ -247,31 +254,59 @@ export const generateExcelReport = (reportData, arrCheck) => {
     { header: 'Số Lượng', key: 'quantity', width: 10 },
   ]
 
+  // Thêm địa chỉ và email ở dòng 1-2
+  worksheet.getCell('A1').value =
+    'Địa chỉ: 14/9 Đào Duy Anh, Phường 9, Quận Phú Nhuận, Thành Phố HCM'
+  worksheet.getCell('A2').value = 'Email: HTShop@gmail.com'
+  worksheet.getCell('A1').font = { bold: true, size: 12 }
+  worksheet.getCell('A2').font = { bold: true, size: 12 }
+  worksheet.mergeCells('A1:H1')
+  worksheet.mergeCells('A2:H2')
+
+  //Thêm tiêu đề
+  worksheet.getCell('A6').value = 'Báo Cáo Thống Kê Đơn Hàng'
+  worksheet.getCell('A6').alignment = { horizontal: 'center' }
+  worksheet.getCell('A6').font = { bold: true, size: 28 }
+  worksheet.mergeCells('A6:H6')
+
   const resultFilterData = filterExcelReport(reportData, arrCheck)
-  
-  resultFilterData.forEach((item) => {
+
+  worksheet.columns.forEach((header, index) => {
+    const cell = worksheet.getCell(7, index + 1)
+    cell.value = header.header
+    cell.font = { bold: true, size: 12 }
+    cell.alignment = { wrapText: true }
+    worksheet.getRow(7).height = 50
+  })
+
+  resultFilterData.forEach((item, index) => {
     let newcreatedAt = handlegetDayAt(item.createdAt)
-    let status = item.data[0].statusPayment ? 'đã thanh toán' : 'chưa thanh toán'
+    let status = item.data[0].statusPayment ? 'Đã thanh toán' : 'Chưa thanh toán'
 
-    const row = {
-      status: status,
-      dateOrder: newcreatedAt,
-      userId: item.userId.username,
-    }
+    for (let i = 0; i < item.data.length; i++) {
+      if (item.data[i].product?.title !== undefined) {
+        var row = {
+          status: status,
+          dateOrder: newcreatedAt,
+          userId: item.userId.username,
+        }
+        row.stt = index+1
+        row.orderID = `DH${(index+1).toString().padStart(3, '0')}`
+        row.name = item.data[0].product?.title
+        row.unitPrice = item.data[0].product?.price
+        row.quantity = item.data[0].qty
 
-    row.name = item.data[0].product?.title
-    row.unitPrice = item.data[0].product?.price
-    row.quantity = item.data[0].qty
-
-    for (let i = 1; i < item.data.length; i++) {
-      if (item.data[i].product) {
         row.name += `\r\n${item.data[i].product?.title}`
         row.unitPrice += `\r\n${item.data[i].product?.price}`
         row.quantity += `\r\n${item.data[i].qty}`
       }
     }
 
-    worksheet.addRow(row)
+    const rowIndex = 8
+    worksheet.addRow(row).eachCell({ includeEmpty: true }, (cell) => {
+      cell.alignment = { wrapText: true }
+    })
+    worksheet.getRow(rowIndex).height = 50
   })
 
   // Tải excel

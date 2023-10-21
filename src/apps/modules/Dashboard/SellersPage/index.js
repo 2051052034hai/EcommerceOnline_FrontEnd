@@ -57,7 +57,7 @@ const SellersPage = (key) => {
     ]),
   ]
 
-  const handleOk = () => {
+  const handleExcel = () => {
     let arrCheck = {
       email,
       fromDate,
@@ -103,7 +103,7 @@ const SellersPage = (key) => {
         <Col lg={19}>{renderPage(selectedKeys)}</Col>
       </Row>
 
-      <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+      <Modal open={isModalOpen} onOk={handleExcel} onCancel={handleCancel}>
         <Divider
           style={{
             fontSize: '20px',
