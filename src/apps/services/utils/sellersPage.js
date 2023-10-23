@@ -150,6 +150,7 @@ export const handleArrDataTable = (data) => {
           createdAt: new_Time,
           status: p.statusPayment,
           orderId: items.orderId,
+          provider: p.providerPayment,
         })
       }
     })
@@ -171,6 +172,7 @@ export const handleArrDataOrder = (data, index) => {
         username: items?.userId.email,
         createdAt: new_Time,
         status: items?.data[0].statusPayment,
+        providerPayment: items?.data[0].providerPayment,
       })
     }
 
@@ -233,7 +235,6 @@ export const filterExcelReport = (data, check) => {
   return filteredData
 }
 
-
 export const generateExcelReport = (reportData, arrCheck) => {
   const workbook = new ExcelJS.Workbook()
   const worksheet = workbook.addWorksheet('Report')
@@ -245,7 +246,7 @@ export const generateExcelReport = (reportData, arrCheck) => {
 
   worksheet.columns = [
     { header: 'STT', key: 'stt', width: 5, alignment: centerAlignment },
-    { header: 'Mã đơn hàng', key: 'orderID', width: 15},
+    { header: 'Mã đơn hàng', key: 'orderID', width: 15 },
     { header: 'Tình trạng đơn hàng', key: 'status', width: 20 },
     { header: 'Ngày đặt hàng', key: 'dateOrder', width: 20 },
     { header: 'Tên khách hàng', key: 'userId', width: 20 },
@@ -290,8 +291,8 @@ export const generateExcelReport = (reportData, arrCheck) => {
           dateOrder: newcreatedAt,
           userId: item.userId.username,
         }
-        row.stt = index+1
-        row.orderID = `DH${(index+1).toString().padStart(3, '0')}`
+        row.stt = index + 1
+        row.orderID = `DH${(index + 1).toString().padStart(3, '0')}`
         row.name = item.data[0].product?.title
         row.unitPrice = item.data[0].product?.price
         row.quantity = item.data[0].qty
@@ -317,7 +318,7 @@ export const generateExcelReport = (reportData, arrCheck) => {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = 'BaoCaoThongKeDonHang.xlsx'
+    a.download = 'BaoCaoQuanLyDonHang.xlsx'
     a.click()
     URL.revokeObjectURL(url)
   })

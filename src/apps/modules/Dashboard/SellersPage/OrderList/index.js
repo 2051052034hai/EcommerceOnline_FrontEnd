@@ -1,10 +1,11 @@
 //libaries
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen, faEye } from '@fortawesome/free-solid-svg-icons'
-import { Divider, Popconfirm, Table, Tag } from 'antd'
+import { Divider, Popconfirm, Tag } from 'antd'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
 
 //Molecules
 import ViewInfoOrder from 'apps/components/molecules/ViewInfoOrder'
@@ -18,11 +19,11 @@ import {
   handleArrDataOrder,
   handleArrProductByOrderId,
 } from 'apps/services/utils/sellersPage'
+import { getTitleForProvider } from 'apps/services/utils/chart'
 
 //Store
 import { selectCurrentUser } from 'store/userSlice/userSelector'
 import TableFilterAll from 'apps/components/molecules/TableFilterAll'
-import { Helmet } from 'react-helmet'
 
 const OrderList = () => {
   const currentUser = useSelector(selectCurrentUser)
@@ -49,6 +50,7 @@ const OrderList = () => {
     setStatus(true)
   }
 
+
   //Load data
   const columns = [
     {
@@ -72,6 +74,36 @@ const OrderList = () => {
       key: 'createdAt',
       width: 250,
       render: (_, record) => <h3 className="font-medium ">{record?.createdAt}</h3>,
+    },
+    {
+      title: 'Phương Thức Thanh Toán',
+      dataIndex: 'providerPayment',
+      key: 'providerPayment',
+      width: 220,
+      render: (_, record) => {
+        let titleProvider = getTitleForProvider(record?.providerPayment)
+        return(
+          <>
+          <h3 className="font-medium text-center">{titleProvider}</h3>,
+          </>
+        )
+
+      },
+      filters: [
+        {
+          text: 'Tại nhà',
+          value: 0,
+        },
+        {
+          text: 'PayPal',
+          value: 1,
+        },
+        {
+          text: 'VNPAY',
+          value: 2,
+        },
+      ],
+      onFilter: (value, record) => record?.providerPayment === value,
     },
     {
       title: 'Trạng thái',
@@ -123,6 +155,7 @@ const OrderList = () => {
       ],
       onFilter: (value, record) => record?.status === value,
     },
+
     {
       title: 'Danh sách sản phẩm',
       dataIndex: 'view',

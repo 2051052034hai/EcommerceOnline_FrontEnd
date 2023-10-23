@@ -318,3 +318,121 @@ export const handleCountDataOrder = (data, dayAt) => {
   })
   return sum
 }
+
+export const getTitleForProvider = (providerValue) => {
+  switch (providerValue) {
+    case 0:
+      return 'Tại nhà'
+    case 1:
+      return 'PayPal'
+    case 2:
+      return 'VNPAY'
+    default:
+      return 'Unknown Provider'
+  }
+}
+
+export const handleRevenueByProviderYear = (data, year) => {
+  let revenueByPrecious = {
+    name: [],
+  }
+
+  data?.forEach((product) => {
+    if (product.status) {
+      let newCreateAt = changeTimeChart(product.createdAt)
+      let getYear = handelGetYear(newCreateAt)
+      if (getYear === year) {
+      let providerTitle = product.provider
+      if (!revenueByPrecious[providerTitle]) {
+        revenueByPrecious.name.push(getTitleForProvider(providerTitle))
+        revenueByPrecious[providerTitle] = 0
+      }
+      revenueByPrecious[providerTitle] += product.price * product.quantity
+    }
+  }
+  })
+
+  let dataPiechart = {}
+  if (Object.keys(revenueByPrecious).length !== 0) {
+    dataPiechart = Array.from({ length: 3 }, (_, index) => {
+      return {
+        name: revenueByPrecious.name[index],
+        Total: revenueByPrecious[index],
+        key: index + 1,
+      }
+    })
+  } else {
+    dataPiechart = []
+  }
+  return dataPiechart
+}
+
+export const handleRevenueByProviderPrecious = (data, precious) => {
+  let revenueByPrecious = {
+    name: [],
+  }
+
+  data?.forEach((product) => {
+    if (product.status) {
+      let newCreateAt = changeTimeChart(product.createdAt)
+      let getMonth = handelGetMonth(newCreateAt)
+      if (Math.ceil(getMonth / 3) === precious) {
+      let providerTitle = product.provider
+      if (!revenueByPrecious[providerTitle]) {
+        revenueByPrecious.name.push(getTitleForProvider(providerTitle))
+        revenueByPrecious[providerTitle] = 0
+      }
+      revenueByPrecious[providerTitle] += product.price * product.quantity
+    }
+  }
+  })
+
+  let dataPiechart = {}
+  if (Object.keys(revenueByPrecious).length !== 0) {
+    dataPiechart = Array.from({ length: 3 }, (_, index) => {
+      return {
+        name: revenueByPrecious.name[index],
+        Total: revenueByPrecious[index],
+        key: index + 1,
+      }
+    })
+  } else {
+    dataPiechart = []
+  }
+  return dataPiechart
+}
+
+export const handleRevenueByProviderMonth = (data, month) => {
+  let revenueByPrecious = {
+    name: [],
+  }
+
+  data?.forEach((product) => {
+    if (product.status) {
+      let newCreateAt = changeTimeChart(product.createdAt)
+      let getMonth = handelGetMonth(newCreateAt)
+      if (getMonth === month) {
+      let providerTitle = product.provider
+      if (!revenueByPrecious[providerTitle]) {
+        revenueByPrecious.name.push(getTitleForProvider(providerTitle))
+        revenueByPrecious[providerTitle] = 0
+      }
+      revenueByPrecious[providerTitle] += product.price * product.quantity
+    }
+  }
+  })
+
+  let dataPiechart = {}
+  if (Object.keys(revenueByPrecious).length !== 0) {
+    dataPiechart = Array.from({ length: 3 }, (_, index) => {
+      return {
+        name: revenueByPrecious.name[index],
+        Total: revenueByPrecious[index],
+        key: index + 1,
+      }
+    })
+  } else {
+    dataPiechart = []
+  }
+  return dataPiechart
+}

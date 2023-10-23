@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { Col, Divider, Row, Select, Statistic, Card } from 'antd'
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons'
 
-
 //Store
 import { selectCurrentUser } from 'store/userSlice/userSelector'
 
@@ -19,7 +18,6 @@ import PieChartWith from 'apps/components/molecules/Chart/pieChart'
 import CustomContentOfTooltip from 'apps/components/molecules/Chart/CustomContentOfTooltip'
 
 //services/utils
-
 import {
   handleRevenueByMonth,
   handleRevenueByDay,
@@ -30,6 +28,9 @@ import {
   findTop3BuyersYear,
   findTop3BuyersPrecious,
   handleCountDataOrder,
+  handleRevenueByProviderYear,
+  handleRevenueByProviderMonth,
+  handleRevenueByProviderPrecious,
 } from 'apps/services/utils/chart'
 import { handleArrDataTable } from 'apps/services/utils/sellersPage'
 import { Helmet } from 'react-helmet'
@@ -50,6 +51,7 @@ const StatisticsPage = () => {
   const [yearPre, setYearPre] = useState(currentYear)
   const [titleUser, setTitleUser] = useState('Theo Tháng')
   const [dataOptionsUserTop, setDataOptionsUserTop] = useState([])
+  const [dataOptionsProvider, setDataOptionsProvider] = useState([])
 
   const optionsMonth = optionInputSelectChart('Tháng', 12, 1)
   const optionsYear = optionInputSelectChart('Năm', 2025, 2020)
@@ -102,6 +104,23 @@ const StatisticsPage = () => {
         return 'not found case'
     }
   }
+  const handleChangeTitleProvider = (value, data) => {
+    setTitleUser(value)
+
+    switch (data.key) {
+      case 1:
+        setDataOptionsProvider(revenueByProviderMonth)
+        break
+      case 2:
+        setDataOptionsProvider(revenueByProviderPrecious)
+        break
+      case 3:
+        setDataOptionsProvider(revenueByProviderYear)
+        break
+      default:
+        return 'not found case'
+    }
+  }
 
   if (dataTable) {
     var countDataOrder = handleCountDataOrder(dataTable, currentDay)
@@ -112,9 +131,13 @@ const StatisticsPage = () => {
     var topBuyersMonth = findTop3BuyersMonth(dataTable, monthAt)
     var topBuyersYear = findTop3BuyersYear(dataTable, yearAt)
     var top3BuyersPrecious = findTop3BuyersPrecious(dataTable, Math.ceil(monthAt / 3))
+    var revenueByProviderYear = handleRevenueByProviderYear(dataTable, yearAt)
+    var revenueByProviderMonth = handleRevenueByProviderMonth(dataTable, monthAt)
+    var revenueByProviderPrecious = handleRevenueByProviderPrecious(
+      dataTable,
+      Math.ceil(monthAt / 3),
+    )
   }
-
- 
 
   return (
     <>
@@ -293,8 +316,37 @@ const StatisticsPage = () => {
             )}
           </Col>
         </Row>
+        <Row>
+          <Col lg={12} xs={24}>
+            <Divider
+              orientation="center"
+              style={{
+                fontSize: '15px',
+                color: 'black',
+                textTransform: 'uppercase',
+              }}
+            >
+              Doanh thu theo phương thức thanh toán
+            </Divider>
+
+            <Row className="my-3 ml-16 w-full">
+              <Col lg={10} xs={24}>
+                <Select
+                  onChange={handleChangeTitleProvider}
+                  value={titleUser}
+                  className="w-11/12 w-2/3"
+                  options={titleTopUser}
+                />
+              </Col>
+            </Row>
+            {dataOptionsProvider.length > 0 ? (
+              <PieChartWith data={dataOptionsProvider} loading={isLoading} />
+            ) : (
+              <PieChartWith data={revenueByProviderMonth} loading={isLoading} />
+            )}
+          </Col>
+        </Row>
       </div>
-     
     </>
   )
 }

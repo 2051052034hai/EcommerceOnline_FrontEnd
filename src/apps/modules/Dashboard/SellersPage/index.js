@@ -1,14 +1,12 @@
 //libaries
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import {
   AppstoreOutlined,
   AreaChartOutlined,
   BorderInnerOutlined,
 } from '@ant-design/icons'
-import { Col, Modal, Row, Space, DatePicker, Input, Select, Divider } from 'antd'
+import { Col, Modal, Row, Space, DatePicker, Select, Divider } from 'antd'
 import { useSelector } from 'react-redux'
-import dayjs from 'dayjs'
-import customParseFormat from 'dayjs/plugin/customParseFormat'
 import { Helmet } from 'react-helmet'
 
 //Store
@@ -71,7 +69,7 @@ const SellersPage = (key) => {
   }
 
   const handleOnclick = ({ key }) => {
-    if (key == '9') {
+    if (key === '9') {
       setIsModalOpen(true)
     } else {
       setSelectedKeys(key)
@@ -81,7 +79,7 @@ const SellersPage = (key) => {
   const allFullEmail = handleGetFullEmail(new_data)
 
   const handleChange = (value) => {
-   setEmail(value)
+    setEmail(value)
   }
   const onOpenChange = (_, value) => {
     setFromDate(value[0])
