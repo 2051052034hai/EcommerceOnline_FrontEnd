@@ -1,4 +1,4 @@
-import { get, update } from './https'
+import { create, get, update } from './https'
 
 const pathUrl = '/order'
 
@@ -15,7 +15,11 @@ export const handleUpdateStatusPayment = async (data) => {
 }
 
 export const getOrderById = async (id) => {
-  console.log('id_get:', id)
   const result = await get(`${pathUrl}/${id}`)
+  return result.data.data
+}
+
+export const cancelOrder = async (id) => {
+  const result = await create(`${pathUrl}/${id}`)
   return result.data.data
 }

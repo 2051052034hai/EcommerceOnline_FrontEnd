@@ -1,5 +1,6 @@
-import { Divider } from 'antd'
+import { Button, Divider, Popconfirm, message } from 'antd'
 import { useGetCartByUserId } from 'apps/queries/cart/useGetCartByUserId'
+import { useCancelOrder } from 'apps/queries/order/useCancelOrder'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
@@ -10,6 +11,15 @@ export const Purchase_History = () => {
   const { t } = useTranslation()
   const currentUser = useSelector(selectCurrentUser)
   const { data } = useGetCartByUserId(currentUser?._id)
+  const { mutation, isLoading } = useCancelOrder()
+
+  const confirm = (id) => {
+    mutation.mutate(id)
+  }
+  const cancel = (e) => {
+    console.log(e)
+    message.error('Click on No')
+  }
 
   return (
     <>
@@ -47,39 +57,55 @@ export const Purchase_History = () => {
                       key={idx}
                       className="px-4 py-5 duration-150 hover:border-white hover:rounded-xl hover:bg-gray-50"
                     >
-                      <Link to={`/product/${item?.product?._id}`} className="space-y-3">
-                        <div className="flex  gap-x-3">
-                          <div className=" w-20 h-20 border rounded-full flex items-center justify-center">
-                            <img src={item?.product?.thumbnail} alt="tet" />
-                          </div>
-                          <div className="w-2/3">
-                            <h3 className="text-base text-gray-800 font-semibold mt-1">
-                              {item?.product?.title}
-                            </h3>
-                            <p>
-                              {t('PURCHARE_HISTORRY.quantity')}: {item?.qty}
-                            </p>
-                          </div>
-                          <div>
-                            {orderItem?.statusPayment ? (
-                              <p>{t('PURCHARE_HISTORRY.paid')}</p>
-                            ) : (
-                              <p className="text-red-800">
-                                {t('PURCHARE_HISTORRY.unpaid')}
-                              </p>
-                            )}
-                          </div>
+                      <div className="flex  gap-x-3">
+                        <div className=" w-20 h-20 border rounded-full flex items-center justify-center">
+                          <img src={item?.product?.thumbnail} alt="tet" />
                         </div>
-                      </Link>
+                        <div className="w-2/3">
+                          <h3 className="text-base text-gray-800 font-semibold mt-1">
+                            {item?.product?.title}
+                          </h3>
+                          <p>
+                            {t('PURCHARE_HISTORRY.quantity')}: {item?.qty}
+                          </p>
+                        </div>
+                        <div>
+                          {orderItem?.statusPayment ? (
+                            <p>{t('PURCHARE_HISTORRY.paid')}</p>
+                          ) : (
+                            <p className="text-red-800">
+                              {t('PURCHARE_HISTORRY.unpaid')}
+                            </p>
+                          )}
+                        </div>
+                      </div>
                     </li>
                   )
                 })}
-                <p className="flex justify-end py-3 font-medium">
+
+                <div className="flex justify-end py-3 gap-2 font-medium">
                   {t('PURCHARE_HISTORRY.total_amount')} :
                   <span className="ml-4 text-md  text-red-600">
                     {Math.ceil(orderItem?.total).toLocaleString('vi-VN')} VND
                   </span>
-                </p>
+                  <div>
+                    {orderItem.isDelivery ? (
+                      <p>Đã giao hàng</p>
+                    ) : (
+                      <Popconfirm
+                        title="Huỷ đơn hàng"
+                        onConfirm={() => confirm(orderItem._id)}
+                        onCancel={cancel}
+                        okText="Yes"
+                        cancelText="No"
+                      >
+                        <Button danger loading={isLoading}>
+                          Huỷ đơn hàng
+                        </Button>
+                      </Popconfirm>
+                    )}
+                  </div>
+                </div>
               </ul>
             </div>
           </section>
