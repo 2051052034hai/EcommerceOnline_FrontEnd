@@ -6,6 +6,7 @@ import AddProduct from 'apps/modules/Dashboard/SellersPage/AddProduct'
 import OrderList from 'apps/modules/Dashboard/SellersPage/OrderList'
 import ProductList from 'apps/modules/Dashboard/SellersPage/ProductList'
 import StatisticsPage from 'apps/modules/Dashboard/SellersPage/Statistics'
+import CancelOrder from 'apps/modules/Dashboard/SellersPage/CancelOrder'
 
 export const renderPage = (key) => {
   let content = null
@@ -15,11 +16,12 @@ export const renderPage = (key) => {
       break
     case '2':
       content = <AddProduct />
-
       break
     case '5':
       content = <OrderList />
-
+      break
+    case '6':
+      content = <CancelOrder />
       break
     case '8':
       content = <StatisticsPage />

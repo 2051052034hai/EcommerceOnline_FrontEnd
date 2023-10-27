@@ -90,7 +90,7 @@ export const Purchase_History = () => {
                   </span>
                   <div>
                     {orderItem.isDelivery ? (
-                      <p>Đã giao hàng</p>
+                      <p className="text-blue-400">Đã giao hàng</p>
                     ) : (
                       <Popconfirm
                         title="Huỷ đơn hàng"
