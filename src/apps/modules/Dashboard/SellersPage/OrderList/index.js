@@ -50,7 +50,6 @@ const OrderList = () => {
     setStatus(true)
   }
 
-
   //Load data
   const columns = [
     {
@@ -81,13 +80,13 @@ const OrderList = () => {
       key: 'providerPayment',
       width: 220,
       render: (_, record) => {
+        console.log('isDelivery:', record?.isDelivery)
         let titleProvider = getTitleForProvider(record?.providerPayment)
-        return(
+        return (
           <>
-          <h3 className="font-medium text-center">{titleProvider}</h3>,
+            <h3 className="font-medium text-center">{titleProvider}</h3>,
           </>
         )
-
       },
       filters: [
         {
@@ -112,14 +111,18 @@ const OrderList = () => {
 
       render: (_, record) => {
         let color = record?.status ? 'green' : 'volcano'
-        let title = record?.status ? 'đã thanh toán' : 'chưa thanh toán'
+        let title = record?.status ? 'đã giao hàng' : 'chưa giao hàng'
         return (
           <>
             {!record?.status && (
               <Popconfirm
-                title="Chuyển trạng thái sang đã thanh toán?"
+                title="Chuyển trạng thái sang đã giao hàng?"
                 onConfirm={() =>
-                  handleUpdateStatusPayment(shop_data?._id, record?.orderId)
+                  handleUpdateStatusPayment(
+                    shop_data?._id,
+                    record?.orderId,
+                    record?.isDelivery,
+                  )
                 }
               >
                 <span>
@@ -240,10 +243,12 @@ const OrderList = () => {
     },
   }
 
-  const handleUpdateStatusPayment = (shopId, orderId) => {
+  const handleUpdateStatusPayment = (shopId, orderId, isDelivery) => {
+    console.log('orderId: ', orderId)
     const data = {
       shopId,
       orderId,
+      isDelivery,
     }
     if (data) {
       mutation.mutate(data)

@@ -69,6 +69,7 @@ const ProductList = () => {
   const [previewImage, setPreviewImage] = useState('')
   const [previewTitle, setPreviewTitle] = useState('')
   const [fileListImgs, setFileListImgs] = useState([])
+  const [uid, setUid] = useState('')
 
   const currentUser = useSelector(selectCurrentUser)
   const { mutation } = useUpdateProduct()
@@ -210,7 +211,7 @@ const ProductList = () => {
 
               <span>
                 <FontAwesomeIcon
-                  onClick={showDrawer(record_Data)}
+                  onClick={() => showDrawer(record_Data)}
                   icon={faPen}
                   style={{ color: '#1b61da', cursor: 'pointer' }}
                 />
@@ -275,25 +276,32 @@ const ProductList = () => {
 
   //Drawer
   const showDrawer = (data) => {
-    return () => {
-      setProductId(data.id)
-      setProductName(data.name)
-      setProductPrice(data.price)
-      setProductStock(data.stock)
-      setProductSubName(data.subCategory)
-      setProductDescription(data.description)
-      setProductImage(data.thumbnail)
-      setProductImages(data.images)
-      setProductSubId(data.subcategoryId)
-      setProductWeight(data.weight)
-      setOpen(true)
-    }
+    setProductId(data.id)
+    setProductName(data.name)
+    setProductPrice(data.price)
+    setProductStock(data.stock)
+    setProductSubName(data.subCategory)
+    setProductDescription(data.description)
+    setProductImage(data.thumbnail)
+    setProductImages(data.images)
+    setProductSubId(data.subcategoryId)
+    setProductWeight(data.weight)
+    setOpen(true)
+    const resetImg = [
+      {
+        status: 'done',
+        uid: uid,
+        url: data.thumbnail
+      }
+    ];
+
+    setFileList(resetImg)
   }
 
   const onClose = () => {
+    setUid(fileList[0]?.uid)
     setOpen(false)
   }
-
   // ImgProduct
   const onChange = ({ fileList: newFileList }) => {
     setFileList(newFileList)
