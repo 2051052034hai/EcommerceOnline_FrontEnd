@@ -3,7 +3,6 @@ import { create, get, remove, update } from './https'
 const pathUrl = '/order'
 
 export const getOderByShop = async (id) => {
-  console.log('shopid:', id)
   let url = `${pathUrl}-by-shop/${id}?populate=orderItems.product,userId`
 
   const result = await get(url)
@@ -12,7 +11,6 @@ export const getOderByShop = async (id) => {
 }
 
 export const getOderCancelByShop = async (id) => {
-  console.log('id', id)
   let url = `${pathUrl}-by-shop/${id}?deleted=true&populate=orderItems.product,userId`
 
   const result = await get(url)

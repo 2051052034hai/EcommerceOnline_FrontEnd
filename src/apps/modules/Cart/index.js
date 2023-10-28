@@ -5,8 +5,8 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { PayPalButton } from 'react-paypal-button-v2'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button, Divider, Input, Radio } from 'antd'
-import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
 //Components
@@ -22,6 +22,8 @@ import { useCreatePaymentUrl } from 'apps/queries/vnpay/create-payment'
 import LocationForm from 'apps/components/molecules/LocationForm'
 import { toast } from 'react-toastify'
 import axios from 'axios'
+import { handleTotalProduct } from 'apps/services/utils/cart'
+import { clear_cart } from 'store/cartSlice/cartSlice'
 
 const Cart = () => {
   const [valuePayment, setValuePayment] = useState(1)
@@ -36,6 +38,7 @@ const Cart = () => {
   const [servicesShips, setServiceShip] = useState([])
   const [servicesCode, setServiceCode] = useState('')
   const [address, setAddress] = useState('')
+  const [shipMoney, setShipMoney] = useState([])
 
   const location = {
     provinceCode,
@@ -54,9 +57,12 @@ const Cart = () => {
 
   const totalDiscount = useSelector((state) => state?.cart?.totalDiscount)
   const currentUser = useSelector(selectCurrentUser)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const { mutation } = useSaveCart()
   const { mutationUrl } = useCreatePaymentUrl()
+  var setMoney = []
 
   const handleOrder = async () => {
     if (
@@ -66,30 +72,47 @@ const Cart = () => {
       servicesCode === '' ||
       address === ''
     ) {
-      // Display an error message or handle the empty values as needed
       toast.error('Vui lòng điền đầy đủ thông tin giao hàng')
       return
     } else {
       setLoadingAdd(true)
-      const saveNewCart = []
-      for (var i = 0; i < listCart.length; i++) {
-        var item = listCart[i]
-        var newItem = {
-          product: item._id,
-          qty: item.quantity,
-          shop: item.shop._id,
-          providerPayment: 0,
+
+      const shopDataArray = Object.values(groupedCartItems)
+
+      let saveNewCart = []
+      for (let i = 0; i < shopDataArray.length; i++) {
+        let item = shopDataArray[i]
+        let itemCart = []
+
+        for (let i = 0; i < item?.products.length; i++) {
+          let newItem = {
+            product: item.products[i]._id,
+            qty: item.products[i].quantity,
+            shop: item.products[i].shop._id,
+            providerPayment: 0,
+            total: item.products[i].price * item.products[i].quantity,
+          }
+          itemCart.push(newItem)
         }
-        saveNewCart.push(newItem)
+        saveNewCart.push(itemCart)
       }
-      const data_save = {
-        userId: currentUser?._id,
-        orderItems: saveNewCart,
-        total: totalAfterDiscount,
-        totalShip: moneyShip,
+
+      for (let i = 0; i < saveNewCart.length; i++) {
+        let newTotal = handleTotalProduct(saveNewCart[i])
+        let data_save = {
+          userId: currentUser?._id,
+          orderItems: saveNewCart[i],
+          total: newTotal,
+          totalShip: shipMoney[i],
+        }
+
+        await mutation.mutateAsync(data_save)
       }
-      await mutation.mutateAsync(data_save)
+
       setLoadingAdd(false)
+      toast.success('Bạn đã đặt hàng thành công !!')
+      dispatch(clear_cart())
+      navigate('/')
     }
   }
 
@@ -233,6 +256,10 @@ const Cart = () => {
               },
             )
             .then((response) => {
+              setMoney.push(response.data.data.total)
+
+              setShipMoney(setMoney)
+
               setMoneyShip((money) => {
                 return money + response.data.data.total
               })
@@ -246,25 +273,41 @@ const Cart = () => {
   }, [provinceCode, districtCode, wardCode])
 
   const onSuccessPayment = (details, data) => {
-    const saveNewCart = []
-    for (var i = 0; i < listCart.length; i++) {
-      var item = listCart[i]
-      var newItem = {
-        product: item._id,
-        qty: item.quantity,
-        shop: item.shop._id,
-        statusPayment: true,
+    const shopDataArray = Object.values(groupedCartItems)
+    let saveNewCart = []
+    for (let i = 0; i < shopDataArray.length; i++) {
+      let item = shopDataArray[i]
+      let itemCart = []
+
+      for (let i = 0; i < item?.products.length; i++) {
+        let newItem = {
+          product: item.products[i]._id,
+          qty: item.products[i].quantity,
+          shop: item.products[i].shop._id,
+          providerPayment: 0,
+          total: item.products[i].price * item.products[i].quantity,
+        }
+        itemCart.push(newItem)
       }
-      saveNewCart.push(newItem)
+      saveNewCart.push(itemCart)
     }
-    const data_save = {
-      userId: currentUser?._id,
-      orderItems: saveNewCart,
-      total: totalAfterDiscount,
-      totalShip: moneyShip,
-      updatedAt: details.update_time,
+
+    for (let i = 0; i < saveNewCart.length; i++) {
+      let newTotal = handleTotalProduct(saveNewCart[i])
+      let data_save = {
+        userId: currentUser?._id,
+        orderItems: saveNewCart[i],
+        total: newTotal,
+        totalShip: shipMoney[i],
+        updatedAt: details.update_time,
+      }
+
+      mutation.mutateAsync(data_save)
     }
-    mutation.mutate(data_save)
+
+    toast.success('Bạn đã đặt hàng thành công !!')
+    dispatch(clear_cart())
+    navigate('/')
   }
 
   // Render the grouped cart items
@@ -322,8 +365,8 @@ const Cart = () => {
               <LocationForm data={location} />
               <h4 className="font-bold pb-2">Chọn phương thức giao hàng</h4>
               <Radio.Group onChange={onChangeChooseService}>
-                {servicesShips?.map((service) => (
-                  <Radio value={service?.service_type_id}>{service?.short_name}</Radio>
+                {servicesShips?.map((service, index) => (
+                  <Radio key={index} value={service?.service_type_id}>{service?.short_name}</Radio>
                 ))}
               </Radio.Group>
               <div className="mt-5">

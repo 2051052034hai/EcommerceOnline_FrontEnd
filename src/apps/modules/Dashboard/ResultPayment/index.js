@@ -1,13 +1,16 @@
 import { Button, Skeleton } from 'antd'
 import { useSaveCart } from 'apps/queries/cart/useSaveCart'
+import { handleTotalProduct } from 'apps/services/utils/cart'
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { clear_cart } from 'store/cartSlice/cartSlice'
 import { selectCurrentUser } from 'store/userSlice/userSelector'
 
 const ResultPayment = () => {
   const [params] = useSearchParams()
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const { mutation, isLoading } = useSaveCart()
 
@@ -17,25 +20,59 @@ const ResultPayment = () => {
 
   const vnp_ResponseCode = params.get('vnp_ResponseCode')
 
+  // Gom nhóm sản phẩm theo shop
+  const groupedCartItems = listCart.reduce((grouped, cart) => {
+    const shopId = cart.shop._id
+    if (!grouped[shopId]) {
+      grouped[shopId] = {
+        shopName: cart.shop.name,
+        products: [],
+        totalWeight: 0,
+        shopDistrictCode: cart.shop.districtCode,
+        shopWardCode: cart.shop.wardCode,
+      }
+    }
+    grouped[shopId].products.push(cart)
+    grouped[shopId].totalWeight += cart.weight
+    return grouped
+  }, {})
+
   useEffect(() => {
     if (vnp_ResponseCode === '00') {
-      const saveNewCart = []
-      for (var i = 0; i < listCart.length; i++) {
-        var item = listCart[i]
-        var newItem = {
-          product: item._id,
-          qty: item.quantity,
-          shop: item.shop._id,
-          providerPayment: 2,
+      const shopDataArray = Object.values(groupedCartItems)
+
+      let saveNewCart = []
+      for (let i = 0; i < shopDataArray.length; i++) {
+        let item = shopDataArray[i]
+        let itemCart = []
+
+        for (let i = 0; i < item?.products.length; i++) {
+          let newItem = {
+            product: item.products[i]._id,
+            qty: item.products[i].quantity,
+            shop: item.products[i].shop._id,
+            providerPayment: 0,
+            total: item.products[i].price * item.products[i].quantity,
+          }
+          itemCart.push(newItem)
         }
-        saveNewCart.push(newItem)
+        saveNewCart.push(itemCart)
       }
-      const data_save = {
-        userId: currentUser?._id,
-        orderItems: saveNewCart,
-        total: totalAfterDiscount,
+
+      for (let i = 0; i < saveNewCart.length; i++) {
+        let newTotal = handleTotalProduct(saveNewCart[i])
+        let data_save = {
+          userId: currentUser?._id,
+          orderItems: saveNewCart[i],
+          total: newTotal,
+          // totalShip: shipMoney[i],
+        }
+
+        mutation.mutateAsync(data_save)
+        toast.success('Bạn đã đặt hàng thành công !!')
+        dispatch(clear_cart())
+        navigate('/')
       }
-      mutation.mutateAsync(data_save)
     } else if (vnp_ResponseCode === '07') {
       toast.error(
         'Trừ tiền thành công. Giao dịch bị nghi ngờ (liên quan tới lừa đảo, giao dịch bất thường).!',

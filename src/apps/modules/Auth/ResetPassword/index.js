@@ -26,8 +26,6 @@ const ResetPassword = () => {
 
   const otp = useSelector((state) => state?.user?.otp)
 
-  console.log('otp:', otp)
-
   //useForm
   const {
     register,
@@ -74,7 +72,6 @@ const ResetPassword = () => {
         newPassword: password,
       }
       mutation.mutate(user)
-
     } else {
       setcheckPassword(false)
     }
