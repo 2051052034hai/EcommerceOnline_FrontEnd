@@ -46,6 +46,7 @@ const OrderList = () => {
   const dataProductByOrderId = handleArrProductByOrderId(orderData, orderId)
 
   const handleViewProductList = (orderId) => {
+
     setOrderId(orderId)
     setStatus(true)
   }
@@ -80,7 +81,6 @@ const OrderList = () => {
       key: 'providerPayment',
       width: 220,
       render: (_, record) => {
-        console.log('isDelivery:', record?.isDelivery)
         let titleProvider = getTitleForProvider(record?.providerPayment)
         return (
           <>
@@ -121,7 +121,6 @@ const OrderList = () => {
                   handleUpdateStatusPayment(
                     shop_data?._id,
                     record?.orderId,
-                    record?.isDelivery,
                   )
                 }
               >
@@ -243,12 +242,10 @@ const OrderList = () => {
     },
   }
 
-  const handleUpdateStatusPayment = (shopId, orderId, isDelivery) => {
-    console.log('orderId: ', orderId)
+  const handleUpdateStatusPayment = (shopId, orderId) => {
     const data = {
       shopId,
       orderId,
-      isDelivery,
     }
     if (data) {
       mutation.mutate(data)

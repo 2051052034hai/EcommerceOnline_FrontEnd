@@ -17,7 +17,6 @@ export const Purchase_History = () => {
     mutation.mutate(id)
   }
   const cancel = (e) => {
-    console.log(e)
     message.error('Click on No')
   }
 
@@ -70,8 +69,8 @@ export const Purchase_History = () => {
                           </p>
                         </div>
                         <div>
-                          {orderItem?.statusPayment ? (
-                            <p>{t('PURCHARE_HISTORRY.paid')}</p>
+                          {item?.statusPayment ? (
+                            <p className='text-green-400'>{t('PURCHARE_HISTORRY.paid')}</p>
                           ) : (
                             <p className="text-red-800">
                               {t('PURCHARE_HISTORRY.unpaid')}

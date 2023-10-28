@@ -164,7 +164,6 @@ export const handleArrDataTable = (data) => {
 }
 
 export const handleArrDataOrder = (data, index) => {
-  console.log('data:', data)
   let dataTable = data?.reduce((result, items) => {
     let new_Time = handleChangeTime(items?.createdAt)
     let arrProducts = []
@@ -176,7 +175,6 @@ export const handleArrDataOrder = (data, index) => {
         createdAt: new_Time,
         status: items?.data[0].statusPayment,
         providerPayment: items?.data[0].providerPayment,
-        isDelivery: items?.isDelivery,
       })
     }
 

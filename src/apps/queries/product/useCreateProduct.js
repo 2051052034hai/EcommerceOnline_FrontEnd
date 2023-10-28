@@ -9,7 +9,6 @@ export const useCreateProduct = () => {
   const mutation = useMutation({
     mutationFn: async (product) => createProduct(product),
     onSuccess: (data) => {
-      console.log(data, 'data')
       //   queryClient.invalidateQueries([
       //     QUERIES_KEYS.GET_PRODUCTS_BY_SHOPID,
       //     data.data.shop,
