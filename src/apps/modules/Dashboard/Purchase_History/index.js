@@ -99,9 +99,7 @@ export const Purchase_History = () => {
                         okText="Yes"
                         cancelText="No"
                       >
-                        <Button danger loading={isLoading}>
-                          Huỷ đơn hàng
-                        </Button>
+                        <Button danger>Huỷ đơn hàng</Button>
                       </Popconfirm>
                     )}
                   </div>
