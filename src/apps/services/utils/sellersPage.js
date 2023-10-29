@@ -344,3 +344,27 @@ export const handleGetFullEmail = (data) => {
 
   return arr
 }
+
+export const compareProduct = (obj1, obj2) => {
+  const fieldsToCompare = [
+    'name',
+    'price',
+    'stock',
+    'subcategory',
+    'image',
+    'image',
+    'weight',
+    'description',
+  ]
+
+  let isDifferent = false
+
+  for (const field of fieldsToCompare) {
+    if (obj1[field] !== obj2[field]) {
+      isDifferent = true
+      break
+    }
+  }
+
+  return isDifferent
+}
