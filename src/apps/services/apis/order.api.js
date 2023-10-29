@@ -11,10 +11,10 @@ export const getOderByShop = async (id) => {
 }
 
 export const getOderCancelByShop = async (id) => {
-  let url = `${pathUrl}-by-shop/${id}?deleted=true&populate=orderItems.product,userId`
+  let url = `${pathUrl}-cancel-by-shop/${id}?populate=orderItems.product,userId`
 
   const result = await get(url)
-  return result.data
+  return result.data.data
 }
 
 export const handleUpdateStatusPayment = async (data) => {

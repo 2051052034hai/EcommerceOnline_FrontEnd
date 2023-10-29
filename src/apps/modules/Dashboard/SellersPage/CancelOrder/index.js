@@ -36,10 +36,9 @@ const CancelOrder = () => {
 
   const { data: shop_data } = useGetShopbyUserId(currentUser?._id)
   const { data: new_data, isLoading } = useGetCancelOrderByShop(shop_data?._id)
-  const { mutation } = useUpdateStatusPayment()
 
   useEffect(() => {
-    setOrderData(new_data?.data)
+    setOrderData(new_data?.result)
     setTotal(new_data?.total)
   }, [new_data])
 
@@ -189,15 +188,6 @@ const CancelOrder = () => {
     },
   }
 
-  const handleUpdateStatusPayment = (shopId, orderId) => {
-    const data = {
-      shopId,
-      orderId,
-    }
-    if (data) {
-      mutation.mutate(data)
-    }
-  }
   return (
     <>
       <Helmet>
