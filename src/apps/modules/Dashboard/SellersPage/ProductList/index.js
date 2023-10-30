@@ -262,6 +262,9 @@ const ProductList = () => {
     total: total,
     showSizeChanger: true,
     position: ['bottomCenter'],
+    locale: {
+      items_per_page: '/ Trang',
+    },
     onChange: (page, pageSize) => {
       setPage(page)
       setPageSize(pageSize)
@@ -562,16 +565,26 @@ const ProductList = () => {
             <Col span={24} className="mb-3">
               <label>Ảnh Sản Phẩm</label>
               <ImgCrop rotationSlider>
-                <Upload
-                  className="mt-3"
-                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                  listType="picture-card"
-                  fileList={fileList}
-                  onChange={onChange}
-                  onPreview={handlePreview}
+                <Form.Item
+                  name="ProductImg"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Vui lòng tải ảnh chính của sản phẩm',
+                    },
+                  ]}
                 >
-                  {fileList.length < 1 && 'Thay đổi'}
-                </Upload>
+                  <Upload
+                    className="mt-3"
+                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                    listType="picture-card"
+                    fileList={fileList}
+                    onChange={onChange}
+                    onPreview={handlePreview}
+                  >
+                    {fileList.length < 1 && 'Thay đổi'}
+                  </Upload>
+                </Form.Item>
               </ImgCrop>
             </Col>
           </Row>
@@ -717,13 +730,14 @@ const ProductList = () => {
       <Row>
         <Modal
           open={openForm}
+          cancelText="Thoát"
           onOk={handleOk}
           closable={false}
           confirmLoading={confirmLoading}
           onCancel={handleCancelForm}
         >
           <p className="font-medium text-base">
-            Bạn có chắc muốn cập nhật thông tin sản phẩm ?
+            Bạn có muốn lưu lại những thay đổi này ?
           </p>
         </Modal>
       </Row>

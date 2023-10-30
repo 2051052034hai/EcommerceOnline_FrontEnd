@@ -3,6 +3,7 @@ import React from 'react'
 import { PieChart, ResponsiveContainer, Pie, Tooltip, Cell, Legend } from 'recharts'
 
 const PieChartWith = ({ data, loading }) => {
+
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042']
 
   const CustomTooltip = ({ active, payload }) => {

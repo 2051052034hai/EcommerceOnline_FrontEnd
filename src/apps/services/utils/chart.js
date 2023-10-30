@@ -319,6 +319,19 @@ export const handleCountDataOrder = (data, dayAt) => {
   return sum
 }
 
+export const handleCountDataOrderCandle = (data, dayAt) => {
+  let sum = 0
+  data?.forEach((item) => {
+    let newCreateAt = changeTimeChart(item.createdAt)
+    let getday = handelGetDay(newCreateAt)
+
+    if (dayAt === getday) {
+      sum += 1
+    }
+  })
+  return sum
+}
+
 export const getTitleForProvider = (providerValue) => {
   switch (providerValue) {
     case 0:
@@ -342,14 +355,19 @@ export const handleRevenueByProviderYear = (data, year) => {
       let newCreateAt = changeTimeChart(product.createdAt)
       let getYear = handelGetYear(newCreateAt)
       if (getYear === year) {
-      let providerTitle = product.provider
-      if (!revenueByPrecious[providerTitle]) {
-        revenueByPrecious.name.push(getTitleForProvider(providerTitle))
-        revenueByPrecious[providerTitle] = 0
+        let providerTitle = product.provider
+
+        for (let i = 0; i < 3; i++) {
+          revenueByPrecious.name.push(getTitleForProvider(i))
+        }
+
+        if (!revenueByPrecious[providerTitle]) {
+          revenueByPrecious.name.push(getTitleForProvider(providerTitle))
+          revenueByPrecious[providerTitle] = 0
+        }
+        revenueByPrecious[providerTitle] += product.price * product.quantity
       }
-      revenueByPrecious[providerTitle] += product.price * product.quantity
     }
-  }
   })
 
   let dataPiechart = {}
@@ -377,14 +395,19 @@ export const handleRevenueByProviderPrecious = (data, precious) => {
       let newCreateAt = changeTimeChart(product.createdAt)
       let getMonth = handelGetMonth(newCreateAt)
       if (Math.ceil(getMonth / 3) === precious) {
-      let providerTitle = product.provider
-      if (!revenueByPrecious[providerTitle]) {
-        revenueByPrecious.name.push(getTitleForProvider(providerTitle))
-        revenueByPrecious[providerTitle] = 0
+        let providerTitle = product.provider
+
+        for (let i = 0; i < 3; i++) {
+          revenueByPrecious.name.push(getTitleForProvider(i))
+        }
+
+        if (!revenueByPrecious[providerTitle]) {
+          revenueByPrecious.name.push(getTitleForProvider(providerTitle))
+          revenueByPrecious[providerTitle] = 0
+        }
+        revenueByPrecious[providerTitle] += product.price * product.quantity
       }
-      revenueByPrecious[providerTitle] += product.price * product.quantity
     }
-  }
   })
 
   let dataPiechart = {}
@@ -412,14 +435,18 @@ export const handleRevenueByProviderMonth = (data, month) => {
       let newCreateAt = changeTimeChart(product.createdAt)
       let getMonth = handelGetMonth(newCreateAt)
       if (getMonth === month) {
-      let providerTitle = product.provider
-      if (!revenueByPrecious[providerTitle]) {
-        revenueByPrecious.name.push(getTitleForProvider(providerTitle))
-        revenueByPrecious[providerTitle] = 0
+        let providerTitle = product.provider
+
+        for (let i = 0; i < 3; i++) {
+          revenueByPrecious.name.push(getTitleForProvider(i))
+        }
+
+        if (!revenueByPrecious[providerTitle]) {
+          revenueByPrecious[providerTitle] = 0
+        }
+        revenueByPrecious[providerTitle] += product.price * product.quantity
       }
-      revenueByPrecious[providerTitle] += product.price * product.quantity
     }
-  }
   })
 
   let dataPiechart = {}
@@ -434,5 +461,6 @@ export const handleRevenueByProviderMonth = (data, month) => {
   } else {
     dataPiechart = []
   }
+
   return dataPiechart
 }

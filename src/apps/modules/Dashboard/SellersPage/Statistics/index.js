@@ -31,14 +31,17 @@ import {
   handleRevenueByProviderYear,
   handleRevenueByProviderMonth,
   handleRevenueByProviderPrecious,
+  handleCountDataOrderCandle,
 } from 'apps/services/utils/chart'
 import { handleArrDataTable } from 'apps/services/utils/sellersPage'
 import { Helmet } from 'react-helmet'
+import { useGetCancelOrderByShop } from 'apps/queries/order/useGetCancelOrderByShop'
 
 const StatisticsPage = () => {
   const currentUser = useSelector(selectCurrentUser)
   const { data: shop_data } = useGetShopbyUserId(currentUser?._id)
   const { data: new_data, isLoading } = useGetOrderByShop(shop_data?._id)
+  const { data: orderCandle, isCandleLoading } = useGetCancelOrderByShop(shop_data?._id)
 
   const currentDate = useMemo(() => new Date(), [])
   const currentDay = currentDate.getDate()
@@ -46,6 +49,7 @@ const StatisticsPage = () => {
   const currentYear = currentDate.getFullYear()
 
   const [orderData, setOrderData] = useState([])
+  const [orderDataCandel, setOrderDataCandel] = useState([])
   const [monthAt, setMonthAt] = useState(currentMonth)
   const [yearAt, setYearAt] = useState(currentYear)
   const [yearPre, setYearPre] = useState(currentYear)
@@ -56,6 +60,7 @@ const StatisticsPage = () => {
   const optionsMonth = optionInputSelectChart('Tháng', 12, 1)
   const optionsYear = optionInputSelectChart('Năm', 2025, 2020)
   const dataTable = handleArrDataTable(orderData)
+  const dataTableCandel = handleArrDataTable(orderDataCandel)
   const titleTopUser = [
     {
       key: 1,
@@ -74,6 +79,10 @@ const StatisticsPage = () => {
   useEffect(() => {
     setOrderData(new_data?.data)
   }, [new_data])
+
+  useEffect(() => {
+    setOrderDataCandel(orderCandle?.result)
+  }, [orderCandle])
 
   const handleChangeMonth = (value) => {
     setMonthAt(value)
@@ -138,6 +147,10 @@ const StatisticsPage = () => {
       Math.ceil(monthAt / 3),
     )
   }
+  if (orderCandle) {
+    var countOrderCandel = handleCountDataOrderCandle(dataTableCandel, currentDay)
+  }
+
 
   return (
     <>
@@ -184,7 +197,7 @@ const StatisticsPage = () => {
             <Card bordered={false}>
               <Statistic
                 title="Đơn Huỷ"
-                value={0}
+                value={countOrderCandel}
                 precision={0}
                 valueStyle={{
                   color: '#cf1322',

@@ -101,7 +101,12 @@ const SellersPage = (key) => {
         <Col lg={19}>{renderPage(selectedKeys)}</Col>
       </Row>
 
-      <Modal open={isModalOpen} onOk={handleExcel} onCancel={handleCancel}>
+      <Modal
+        open={isModalOpen}
+        onOk={handleExcel}
+        onCancel={handleCancel}
+        cancelText="Thoát"
+      >
         <Divider
           style={{
             fontSize: '20px',
@@ -112,14 +117,14 @@ const SellersPage = (key) => {
           Báo cáo quản lý đơn hàng
         </Divider>
         <Row className="mt-3">
-          <label className="font-medium test-base">Chọn ngày: </label>
+          <label className="font-medium test-base">Ngày đặt hàng </label>
           <Space className="ml-3">
-            <RangePicker onChange={onOpenChange} />
+            <RangePicker placeholder={['Từ ngày', 'Đến ngày']} onChange={onOpenChange} />
           </Space>
         </Row>
 
         <Row className="mt-3">
-          <label className="mb-1 font-medium test-base">Khách hàng: </label>
+          <label className="mb-1 font-medium test-base">Khách hàng</label>
           <Select
             mode="tags"
             style={{
