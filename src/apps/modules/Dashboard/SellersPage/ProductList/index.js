@@ -28,7 +28,7 @@ import { selectCurrentUser } from 'store/userSlice/userSelector'
 //Queries
 import { useGetProductsByShopId } from 'apps/queries/shop'
 import { useGetSubCategories } from 'apps/queries/subcategory'
-import { NumericInput, getBase64 } from 'apps/services/utils/sellersPage'
+import { NumericInput, compareProduct, getBase64 } from 'apps/services/utils/sellersPage'
 
 //Queries
 import { useUpdateProduct } from 'apps/queries/product/useUpdateProduct'
@@ -63,6 +63,7 @@ const ProductList = () => {
   const [productImage, setProductImage] = useState('')
   const [productImages, setProductImages] = useState([])
   const [productSubName, setProductSubName] = useState('')
+  const [productTracking, setProductTracking] = useState({})
 
   //Upload Images
   const [previewOpen, setPreviewOpen] = useState(false)
@@ -70,6 +71,12 @@ const ProductList = () => {
   const [previewTitle, setPreviewTitle] = useState('')
   const [fileListImgs, setFileListImgs] = useState([])
   const [uid, setUid] = useState('')
+  const [uidList, setUidList] = useState([])
+  const [defaultImgs, setDefaultImgList] = useState([])
+
+  //load form
+  const [openForm, setOpenForm] = useState(false)
+  const [confirmLoading, setConfirmLoading] = useState(false)
 
   const currentUser = useSelector(selectCurrentUser)
   const { mutation } = useUpdateProduct()
@@ -287,38 +294,54 @@ const ProductList = () => {
     setProductSubId(data.subcategoryId)
     setProductWeight(data.weight)
     setOpen(true)
+    setDefaultImgList(data.images)
     const resetImg = [
       {
         status: 'done',
         uid: uid,
-        url: data.thumbnail
-      }
-    ];
+        url: data.thumbnail,
+      },
+    ]
+
+    let resetImgs = []
+
+    for (let i = 0; i < defaultImgs.length; i++) {
+      resetImgs.push({
+        status: 'done',
+        url: defaultImgs[i],
+        uid: uidList[i],
+      })
+    }
 
     setFileList(resetImg)
+    setFileListImgs(resetImgs)
+
+    // Lưu trữ dữ liệu ban đầu để theo dõi sự thay đổi của form
+    let productInit = {
+      name: data.name,
+      price: data.price,
+      stock: data.stock,
+      subcategory: data.subCategory,
+      image: data.thumbnail,
+      images: data.images,
+      weight: data.weight,
+      description: data.description,
+    }
+    setProductTracking(productInit)
   }
 
   const onClose = () => {
     setUid(fileList[0]?.uid)
+    let arr = []
+    fileListImgs.map((item) => {
+      arr.push(item?.uid)
+    })
+    setUidList(arr)
     setOpen(false)
   }
   // ImgProduct
   const onChange = ({ fileList: newFileList }) => {
     setFileList(newFileList)
-  }
-  const onPreview = async (file) => {
-    let src = file.url
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader()
-        reader.readAsDataURL(file.originFileObj)
-        reader.onload = () => resolve(reader.result)
-      })
-    }
-    const image = new Image()
-    image.src = src
-    const imgWindow = window.open(src)
-    imgWindow?.document.write(image.outerHTML)
   }
 
   // Reac-quill
@@ -406,7 +429,8 @@ const ProductList = () => {
     }
     setPreviewImage(file.url || file.preview)
     setPreviewOpen(true)
-    setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1))
+    // setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1))
+    setPreviewTitle('Ảnh sản phẩm')
   }
   const handleChange = ({ fileList: newFileList }) => setFileListImgs(newFileList)
 
@@ -469,6 +493,41 @@ const ProductList = () => {
     console.log('Failed:', errorInfo)
   }
 
+  //Form hiện lên khi có sự thay đổi thông tin sản phẩm
+  const showModal = () => {
+    let producPrev = {
+      name: productName,
+      price: productPrice,
+      stock: productStock,
+      subcategory: productSubName,
+      image: productImage,
+      images: fileListImgs,
+      weight: productWeight,
+      description: productDescription,
+    }
+    const isChange = compareProduct(productTracking, producPrev)
+    if (isChange) {
+      setOpenForm(true)
+    } else {
+      setOpenForm(false)
+      setOpen(false)
+    }
+  }
+
+  const handleOk = () => {
+    handelUdateProduct()
+    setConfirmLoading(true)
+    setTimeout(() => {
+      setOpenForm(false)
+      setConfirmLoading(false)
+    }, 2000)
+  }
+
+  const handleCancelForm = () => {
+    setOpenForm(false)
+    onClose()
+  }
+
   return (
     <>
       <Form
@@ -481,7 +540,7 @@ const ProductList = () => {
         <Drawer
           title={<div className="custom-drawer-title">Thông Tin Sản Phẩm</div>}
           width={720}
-          onClose={onClose}
+          onClose={showModal}
           open={open}
           bodyStyle={{
             paddingBottom: 80,
@@ -509,7 +568,7 @@ const ProductList = () => {
                   listType="picture-card"
                   fileList={fileList}
                   onChange={onChange}
-                  onPreview={onPreview}
+                  onPreview={handlePreview}
                 >
                   {fileList.length < 1 && 'Thay đổi'}
                 </Upload>
@@ -653,6 +712,20 @@ const ProductList = () => {
             loading={isLoadingGetProducts}
           />
         </Col>
+      </Row>
+
+      <Row>
+        <Modal
+          open={openForm}
+          onOk={handleOk}
+          closable={false}
+          confirmLoading={confirmLoading}
+          onCancel={handleCancelForm}
+        >
+          <p className="font-medium text-base">
+            Bạn có chắc muốn cập nhật thông tin sản phẩm ?
+          </p>
+        </Modal>
       </Row>
     </>
   )
