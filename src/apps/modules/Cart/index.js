@@ -320,6 +320,8 @@ const Cart = () => {
     </div>
   ))
 
+  console.log('cart:', listCart.length)
+
   return (
     <>
       <Helmet>
@@ -341,7 +343,9 @@ const Cart = () => {
                   </Link>
                 </styles.button__navigation_back>
                 <styles.button__navigation_remote>
-                  <button>{t('CART.remove_all')}</button>
+                  <button onClick={() => dispatch(clear_cart())}>
+                    {t('CART.remove_all')}
+                  </button>
                 </styles.button__navigation_remote>
               </styles.button__navigation>
               <div>
@@ -366,7 +370,9 @@ const Cart = () => {
               <h4 className="font-bold pb-2">Chọn phương thức giao hàng</h4>
               <Radio.Group onChange={onChangeChooseService}>
                 {servicesShips?.map((service, index) => (
-                  <Radio key={index} value={service?.service_type_id}>{service?.short_name}</Radio>
+                  <Radio key={index} value={service?.service_type_id}>
+                    {service?.short_name}
+                  </Radio>
                 ))}
               </Radio.Group>
               <div className="mt-5">
@@ -438,35 +444,41 @@ const Cart = () => {
                       }}
                       loading={loadingAdd}
                       onClick={handleOrder}
+                      disabled={listCart.length === 0 ? true : false}
                     >
                       {t('CART.order')}
                     </Button>
                   ) : valuePayment === 2 ? (
-                    <div style={{ width: '300px' }}>
-                      {provinceCode === '' ||
-                      wardCode === '' ||
-                      districtCode === '' ||
-                      servicesCode === '' ||
-                      address === '' ? (
-                        <p className="text-center">
-                          Vui lòng nhập đầy đủ thông tin nhận hàng
-                        </p>
-                      ) : (
-                        <PayPalButton
-                          amount={Math.ceil((totalAfterDiscount + moneyShip) / 30000)}
-                          onSuccess={onSuccessPayment}
-                          onError={() => {
-                            alert('Error')
-                          }}
-                        />
-                      )}
-                    </div>
+                    listCart.length === 0 ? (
+                      <p className="text-center">Vui lòng thêm sản phẩm vào giỏ hàng</p>
+                    ) : (
+                      <div style={{ width: '300px' }}>
+                        {provinceCode === '' ||
+                        wardCode === '' ||
+                        districtCode === '' ||
+                        servicesCode === '' ||
+                        address === '' ? (
+                          <p className="text-center">
+                            Vui lòng nhập đầy đủ thông tin nhận hàng
+                          </p>
+                        ) : (
+                          <PayPalButton
+                            amount={Math.ceil((totalAfterDiscount + moneyShip) / 30000)}
+                            onSuccess={onSuccessPayment}
+                            onError={() => {
+                              alert('Error')
+                            }}
+                          />
+                        )}
+                      </div>
+                    )
                   ) : (
                     <Button
                       onClick={handlePaymentVnPay}
                       style={{
                         width: '300px',
                       }}
+                      disabled={listCart.length === 0 ? true : false}
                     >
                       {t('CART.payment_by_vnpay')}
                     </Button>
