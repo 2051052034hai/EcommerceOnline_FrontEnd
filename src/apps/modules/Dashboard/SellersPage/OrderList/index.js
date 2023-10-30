@@ -46,7 +46,6 @@ const OrderList = () => {
   const dataProductByOrderId = handleArrProductByOrderId(orderData, orderId)
 
   const handleViewProductList = (orderId) => {
-
     setOrderId(orderId)
     setStatus(true)
   }
@@ -118,10 +117,7 @@ const OrderList = () => {
               <Popconfirm
                 title="Chuyển trạng thái sang đã giao hàng?"
                 onConfirm={() =>
-                  handleUpdateStatusPayment(
-                    shop_data?._id,
-                    record?.orderId,
-                  )
+                  handleUpdateStatusPayment(shop_data?._id, record?.orderId)
                 }
               >
                 <span>
@@ -237,6 +233,9 @@ const OrderList = () => {
     total: total,
     showSizeChanger: true,
     position: ['bottomCenter'],
+    locale: {
+      items_per_page: '/ Trang',
+    },
     onChange: (_, pageSize) => {
       setPageSize(pageSize)
     },

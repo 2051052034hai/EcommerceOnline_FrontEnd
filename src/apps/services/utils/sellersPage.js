@@ -267,7 +267,7 @@ export const generateExcelReport = (reportData, arrCheck) => {
   worksheet.mergeCells('A2:H2')
 
   //Thêm tiêu đề
-  worksheet.getCell('A6').value = 'Báo Cáo Thống Kê Đơn Hàng'
+  worksheet.getCell('A6').value = 'Báo Cáo Quản lý Đơn Hàng'
   worksheet.getCell('A6').alignment = { horizontal: 'center' }
   worksheet.getCell('A6').font = { bold: true, size: 28 }
   worksheet.mergeCells('A6:H6')
@@ -284,7 +284,7 @@ export const generateExcelReport = (reportData, arrCheck) => {
 
   resultFilterData.forEach((item, index) => {
     let newcreatedAt = handlegetDayAt(item.createdAt)
-    let status = item.data[0].statusPayment ? 'Đã thanh toán' : 'Chưa thanh toán'
+    let status = item.data[0].statusPayment ? 'Đã giao hàng' : 'Chưa giao hàng'
 
     for (let i = 0; i < item.data.length; i++) {
       if (item.data[i].product?.title !== undefined) {
@@ -352,7 +352,7 @@ export const compareProduct = (obj1, obj2) => {
     'stock',
     'subcategory',
     'image',
-    'image',
+    'images',
     'weight',
     'description',
   ]
@@ -360,7 +360,12 @@ export const compareProduct = (obj1, obj2) => {
   let isDifferent = false
 
   for (const field of fieldsToCompare) {
-    if (obj1[field] !== obj2[field]) {
+    if (field === 'images') {
+      if (obj1[field].length !== obj2[field].length) {
+        isDifferent = true
+        break
+      }
+    } else if (obj1[field] !== obj2[field]) {
       isDifferent = true
       break
     }

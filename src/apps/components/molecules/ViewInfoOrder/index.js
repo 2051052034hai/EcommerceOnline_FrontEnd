@@ -18,6 +18,9 @@ const ViewInfoOrder = ({ columns, data, status, onClose, total }) => {
     pageSize: pageSize,
     total: total,
     showSizeChanger: true,
+    locale: {
+      items_per_page: '/ Trang',
+    },
     position: ['bottomCenter'],
     onChange: (_, pageSize) => {
       setPageSize(pageSize)
@@ -36,7 +39,7 @@ const ViewInfoOrder = ({ columns, data, status, onClose, total }) => {
           extra={
             <Space>
               <Button type="primary" onClick={onCloseDrawer}>
-                Cancel
+                Thoát
               </Button>
             </Space>
           }
