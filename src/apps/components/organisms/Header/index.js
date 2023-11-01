@@ -237,7 +237,7 @@ export default function Header() {
   // Item current user
   const items = [
     {
-      label: <Link to="/">Thông tin cá nhân</Link>,
+      label: <Link to="/profile">Thông tin cá nhân</Link>,
       key: '0',
     },
     {

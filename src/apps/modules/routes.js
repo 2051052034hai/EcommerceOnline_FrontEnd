@@ -14,6 +14,7 @@ import Register from './Auth/Register'
 import RegisterSeller from './Dashboard/Register_Seller'
 import ResetPassword from './Auth/ResetPassword'
 import ResultPayment from './Dashboard/ResultPayment'
+import Profile from './Dashboard/Profile'
 
 export const routes = [
   {
@@ -87,5 +88,11 @@ export const routes = [
     path: ROUTER.RESULTPAYMENT.path,
     name: ROUTER.RESULTPAYMENT.name,
     component: ResultPayment,
+  },
+  {
+    key: ROUTER.PROFILE.key,
+    path: ROUTER.PROFILE.path,
+    name: ROUTER.PROFILE.name,
+    component: Profile,
   },
 ]
