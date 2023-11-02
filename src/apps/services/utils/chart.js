@@ -73,7 +73,7 @@ export const sumTotalPrecious = (data, precious) => {
 }
 
 //Change Time
-const changeTimeChart = (timer) => {
+export const changeTimeChart = (timer) => {
   const parts = timer.split(' ')
 
   const datePart = parts[0]

@@ -78,4 +78,10 @@ export const ROUTER = {
     path: '/result-payment',
     isPrivate: false,
   },
+  PROFILE: {
+    key: 'profile',
+    name: 'profile',
+    path: '/profile',
+    isPrivate: false,
+  },
 }
