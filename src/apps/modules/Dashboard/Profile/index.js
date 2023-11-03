@@ -1,25 +1,27 @@
 //Libaries
-import { useEffect, useState } from 'react'
-import { Button, Col, Divider, Drawer, Form, Input, Row, Space } from 'antd'
+import { useEffect, useRef, useState } from 'react'
+import { Button, Col, Divider, Drawer, Form, Input, Modal, Row, Space } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 
 //Queries
 import { useGetShopbyUserId } from 'apps/queries/shop/useGetShopbyUserId'
+import { useUpdateUserById } from 'apps/queries/auth/useUpdateUserById'
+import { useCheckedPassword } from 'apps/queries/auth/useCheckedPassword'
 
 //UserSlice
 import { selectCurrentUser } from 'store/userSlice/userSelector'
+import { check_Password, save_user } from 'store/userSlice/userSlice'
 
 //Utils
 import { handleChangeTime } from 'apps/services/utils/sellersPage'
-import { useUpdateUserById } from 'apps/queries/auth/useUpdateUserById'
-import { useGetUserByUserId } from 'apps/queries/auth/useGetUserByUserId'
-import { save_user } from 'store/userSlice/userSlice'
+import { compareUser } from 'apps/services/utils/user'
 
 const Profile = () => {
   const currentUser = useSelector(selectCurrentUser)
   const { data: shopData, isLoading } = useGetShopbyUserId(currentUser?._id)
-  const { data: dataUserId, isLoadingDataUserId } = useGetUserByUserId(currentUser?._id)
   const { mutation, isLoadingUser } = useUpdateUserById(currentUser?._id)
+  const { mutation: mutationCheckPass, isLoadingChedkPass } = useCheckedPassword()
+
   const [form] = Form.useForm()
   const [formInfo] = Form.useForm()
   const dispatch = useDispatch()
@@ -34,8 +36,17 @@ const Profile = () => {
   const [userName, setUserName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [titlePass, setTitlePass] = useState('********')
   const [openInfo, setOpenInfo] = useState(false)
   const [userId, setUserId] = useState('')
+  const [userTracking, setUserTracking] = useState('')
+  const [oldPassword, setOldPassword] = useState('')
+  const [openPass, setOpenPass] = useState(false)
+  const inputRef = useRef()
+
+  //load form
+  const [openForm, setOpenForm] = useState(false)
+  const [confirmLoading, setConfirmLoading] = useState(false)
 
   useEffect(() => {
     setShopProfile(shopData)
@@ -52,8 +63,9 @@ const Profile = () => {
     formInfo.setFieldsValue({
       UserName: userName,
       Email: email,
+      Password: password,
     })
-  }, [userName, email, formInfo])
+  }, [userName, email, password, formInfo])
 
   const showDrawer = (name, address) => {
     setShopName(name)
@@ -65,53 +77,88 @@ const Profile = () => {
     setUserId(currentUser?._id)
     setUserName(name)
     setEmail(email)
-    setPassword('*******')
+    setPassword(titlePass)
     setOpenInfo(true)
-  }
-  //Form hiện lên khi có sự thay đổi thông tin cửa hàng
-  const showModal = () => {
-    let shopPrev = {
-      name: shopName,
-    }
-    // const isChange = compareProduct(productTracking, producPrev)
-    // if (isChange) {
-    //   setOpenForm(true)
-    // } else {
-    //   setOpenForm(false)
-    //   setOpen(false)
-    // }
-    setOpen(false)
-  }
 
+    setUserTracking({
+      userName: name,
+      email: email,
+      password: titlePass,
+    })
+  }
   const showModalInfo = () => {
-    let shopPrev = {
-      name: shopName,
+    inputRef.current.input.disabled = true
+    inputRef.current.input.style.backgroundColor = '#d9d9d9'
+    let userPrev = {
+      userName,
+      email,
+      password,
     }
-    // const isChange = compareProduct(productTracking, producPrev)
-    // if (isChange) {
-    //   setOpenForm(true)
-    // } else {
-    //   setOpenForm(false)
-    //   setOpen(false)
-    // }
-    setOpenInfo(false)
+    const isChange = compareUser(userTracking, userPrev)
+    if (isChange) {
+      setOpenForm(true)
+    } else {
+      setOpenForm(false)
+      setOpenInfo(false)
+    }
   }
 
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo)
   }
 
-  const handelUdateUser = () => {
-    const data = {
+  const handelUdateUser = async () => {
+    let data = {
       _id: userId,
       username: userName,
       email: email,
+      role: currentUser?.role,
     }
-
+    if (password !== titlePass) {
+      data = {
+        ...data,
+        password,
+      }
+    }
     mutation.mutate(data)
     dispatch(save_user(data))
+    setOpenInfo(false)
   }
   const handelUdateShop = () => {}
+
+  const handleChangePass = () => {
+    if (password === titlePass) setOpenPass(true)
+  }
+
+  const handleCheckPass = async (_id, password) => {
+    const response = await mutationCheckPass.mutateAsync({ _id, password })
+    const isPasswordValid = response.data
+    if (isPasswordValid) {
+      setOpenPass(false)
+      console.log(inputRef.current.input)
+      inputRef.current.input.disabled = false
+      inputRef.current.input.style.backgroundColor = 'white'
+      inputRef.current.input.style.color = 'black'
+      setPassword('')
+    } else {
+      setOpenPass(true)
+    }
+  }
+
+  const handleOk = () => {
+    handelUdateUser()
+    setConfirmLoading(true)
+    setTimeout(() => {
+      setOpenInfo(false)
+      setOpenForm(false)
+      setConfirmLoading(false)
+    }, 1000)
+  }
+
+  const handleCancelForm = () => {
+    setOpenForm(false)
+    setOpenInfo(false)
+  }
 
   return (
     <>
@@ -126,19 +173,14 @@ const Profile = () => {
           <Drawer
             title={<div className="custom-drawer-title">Thông tin cửa hàng</div>}
             width={720}
-            onClose={showModal}
+            // onClose={showModal}
             open={open}
             bodyStyle={{
               paddingBottom: 80,
             }}
             extra={
               <Space>
-                <Button
-                  htmlType="submit"
-                  type="primary"
-                  //   onClick={handelUdateProduct}
-                  //   loading={isLoading}
-                >
+                <Button htmlType="submit" type="primary">
                   Thay đổi
                 </Button>
               </Space>
@@ -259,8 +301,8 @@ const Profile = () => {
                 </Form.Item>
               </Col>
             </Row>
-            <Row gutter={16}>
-              <Col span={24} className="mb-3">
+            <Row gutter={16} className="items-center">
+              <Col lg={21} className="mb-3">
                 <label>Mật khẩu</label>
                 <Form.Item
                   name="Password"
@@ -273,13 +315,58 @@ const Profile = () => {
                   initialValue={password}
                 >
                   <Input
+                    ref={inputRef}
                     className="mt-3"
                     placeholder="Nhập mật khẩu..."
                     onChange={(e) => setPassword(e.target.value)}
+                    style={{ backgroundColor: '#d9d9d9', color: 'black' }}
+                    disabled
                   />
                 </Form.Item>
               </Col>
+              <Col lg={3}>
+                <span
+                  onClick={handleChangePass}
+                  className="underline text-red-600 hover:text-blue-800 hover:decoration-blue-800 hover:cursor-pointer"
+                >
+                  Thay đổi
+                </span>
+              </Col>
             </Row>
+            {openPass && (
+              <>
+                <Row gutter={16} className="items-center">
+                  <Col lg={21} className="mb-3">
+                    <label>Mật khẩu cũ</label>
+                    <Form.Item
+                      name="OldPassword"
+                      rules={[
+                        {
+                          required: true,
+                          message: 'Vui lòng nhập mật khẩu cũ',
+                        },
+                      ]}
+                      initialValue={oldPassword}
+                    >
+                      <Input
+                        className="mt-3"
+                        placeholder="Nhập mật khẩu cũ..."
+                        type="password"
+                        onChange={(e) => setOldPassword(e.target.value)}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col lg={3}>
+                    <span
+                      onClick={() => handleCheckPass(currentUser?._id, oldPassword)}
+                      className="underline text-red-600 decoration-red-800 hover:text-blue-800 hover:decoration-blue-800 hover:cursor-pointer"
+                    >
+                      Xác nhận
+                    </span>
+                  </Col>
+                </Row>
+              </>
+            )}
           </Drawer>
         </Form>
 
@@ -330,7 +417,7 @@ const Profile = () => {
                   <label className="font-medium text-base text-left">Mật khẩu</label>
                 </Col>
                 <Col lg={20} className="mr-2">
-                  <Input className="my-2" value={'********'}></Input>
+                  <Input className="my-2" value={titlePass}></Input>
                 </Col>
               </Row>
             </Form.Item>
@@ -413,6 +500,20 @@ const Profile = () => {
               </Form>
             </>
           )}
+        </Row>
+        <Row>
+          <Modal
+            open={openForm}
+            cancelText="Thoát"
+            onOk={handleOk}
+            closable={false}
+            confirmLoading={confirmLoading}
+            onCancel={handleCancelForm}
+          >
+            <p className="font-medium text-base">
+              Bạn có muốn lưu lại những thay đổi này ?
+            </p>
+          </Modal>
         </Row>
       </div>
     </>
