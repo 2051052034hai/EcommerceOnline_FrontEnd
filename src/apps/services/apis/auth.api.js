@@ -26,3 +26,8 @@ export const handleResendMail = async (data) => {
   const result = await create('/user/resend-email', data)
   return result.data
 }
+
+export const handlecheckPassword = async (data) => {
+  const result = await create('/user/checkedPassword', data)
+  return result.data
+}

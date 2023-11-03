@@ -2,7 +2,8 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   currentUser: {},
-  otp: ''
+  otp: '',
+  checkPassword: false,
 }
 
 export const userSlice = createSlice({
@@ -28,6 +29,6 @@ export const userSlice = createSlice({
   },
 })
 
-export const { save_user, log_out, save_otp} = userSlice.actions
+export const { save_user, log_out, save_otp } = userSlice.actions
 
 export default userSlice.reducer
