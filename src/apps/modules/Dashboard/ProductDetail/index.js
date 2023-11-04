@@ -249,7 +249,10 @@ const ProductDetail = () => {
                 >
                   <div className="border border-gray-500 rounded-md p-3 ">
                     <SupplierTitle>
-                      <img src={product?.thumbnail} alt={product?.title} />
+                      <img
+                        src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=1"
+                        alt={product?.title}
+                      />
                       <SupplierTitleName>
                         <h3>{t('PRODUCT_DETAIL.store')} </h3>
                         <h3>{shop?.name}</h3>
