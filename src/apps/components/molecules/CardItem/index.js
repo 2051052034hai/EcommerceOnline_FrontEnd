@@ -25,7 +25,7 @@ const CardItem = (props) => {
             <div>
               <div className="relative ">
                 <LazyLoadImage
-                  alt={product?.title}
+                  alt={product?.title || ''}
                   src={product?.thumbnail}
                   effect="black-and-white"
                   className="w-full rounded-t-md  lg:h-52 md:h-48 "
@@ -45,12 +45,12 @@ const CardItem = (props) => {
 
             <div className="pt-3 ml-2 mr-2 mb-3 ">
               <h3 className=" text-gray-900 h-10 lg:text-sm sm:text-xs overflow-clip font-medium text-xs">
-                <span className="line-clamp-2">{product?.title}</span>
+                <span className="line-clamp-2">{product?.title || ''}</span>
               </h3>
               <div className="w-full">
                 <Rating
                   className="text-xs lg:text-sm"
-                  initialRating={product?.rating}
+                  initialRating={product?.rating || ''}
                   emptySymbol={
                     <FontAwesomeIcon icon={faStar} className="text-gray-300" />
                   }
@@ -60,7 +60,7 @@ const CardItem = (props) => {
                   readonly
                 />
                 <span className="text-xs md:text-sm  text-zinc-400 pl-1">
-                  | Đã bán {product?.sold}
+                  | Đã bán {product?.sold || ''}
                 </span>
               </div>
               {product?.discountPercentage !== 0 ? (

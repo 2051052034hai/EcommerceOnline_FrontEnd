@@ -19,7 +19,6 @@ export const Purchase_History = () => {
   const cancel = (e) => {
     message.error('Click on No')
   }
-
   return (
     <>
       <Helmet>
@@ -34,6 +33,9 @@ export const Purchase_History = () => {
       >
         {t('PURCHARE_HISTORRY.title')}
       </Divider>
+      {data?.length === 0 && (
+        <div className="h-128 text-center">Bạn chưa có đơn hàng nào</div>
+      )}
 
       {data?.map((orderItem, index) => {
         const dataCreate = new Date(orderItem?.createdAt)
@@ -70,7 +72,9 @@ export const Purchase_History = () => {
                         </div>
                         <div>
                           {item?.statusPayment ? (
-                            <p className='text-green-400'>{t('PURCHARE_HISTORRY.paid')}</p>
+                            <p className="text-green-400">
+                              {t('PURCHARE_HISTORRY.paid')}
+                            </p>
                           ) : (
                             <p className="text-red-800">
                               {t('PURCHARE_HISTORRY.unpaid')}
