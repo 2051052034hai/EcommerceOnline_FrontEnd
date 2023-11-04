@@ -3,8 +3,8 @@ import Cookies from 'js-cookie'
 import cookie from 'react-cookies'
 
 const axiosInstance = axios.create({
-  // baseURL: 'https://ecommerceht.onrender.com/v1/api/',
-  baseURL: 'http://localhost:8000/v1/api/',
+  baseURL: 'https://ecommerceht.onrender.com/v1/api/',
+  // baseURL: 'http://localhost:8000/v1/api/',
   headers: {
     'Access-Control-Allow-Origin': '*',
     'Content-Type': 'application/json',
