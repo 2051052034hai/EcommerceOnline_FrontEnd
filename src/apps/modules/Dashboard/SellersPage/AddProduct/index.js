@@ -32,6 +32,7 @@ const AddProduct = () => {
   //product
   const [productDiscount, setProductDiscount] = useState(0)
   const [productName, setProductName] = useState('')
+  const [subCategoryName, setSubCategoryName] = useState()
   const [productSub, setProductSub] = useState('')
   const [productStock, setProductStock] = useState('')
   const [productWeight, setProductWeight] = useState(0)
@@ -44,6 +45,20 @@ const AddProduct = () => {
   useEffect(() => {
     setSubdata(data)
   }, [data, isLoading])
+
+  useEffect(() => {
+    formInfo.setFieldsValue({
+      ProductName: productName,
+      ProductDescription: productDescription,
+      ProductStock: productStock,
+    })
+  }, [productName, productStock, productDescription])
+
+  useEffect(() => {
+    formInfo.setFieldsValue({
+      ProductSub: subCategoryName,
+    })
+  }, [subCategoryName])
 
   const { data: shop_data } = useGetShopbyUserId(currentUser?._id)
 
@@ -168,6 +183,7 @@ const AddProduct = () => {
 
   const handleProductSubChange = (value, option) => {
     const selectedKey = option.key
+    console.log('value:', value)
     setProductSub(selectedKey)
   }
 
@@ -198,11 +214,11 @@ const AddProduct = () => {
     buttonRef.current.click()
 
     setProductName('')
+    setSubCategoryName('')
     setProductPrice(0)
     setProductStock(0)
     setProductWeight(0)
     setProductDiscount(0)
-    setProductSub('')
     setProductDescription('')
     setFileList([])
     setFileListImgs([])
@@ -219,15 +235,6 @@ const AddProduct = () => {
     }
     return true
   }
-
-  useEffect(() => {
-    formInfo.setFieldsValue({
-      ProductName: productName,
-      ProductSub: productSub,
-      ProductDescription: productDescription,
-      ProductStock: productStock,
-    })
-  }, [productName, productSub, productStock, productDescription])
 
   return (
     <>
@@ -424,6 +431,7 @@ const AddProduct = () => {
                     message: 'Vui lòng nhập loại của sản phẩm',
                   },
                 ]}
+                initialValue={subCategoryName}
               >
                 <Select
                   onChange={handleProductSubChange}
