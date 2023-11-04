@@ -255,7 +255,7 @@ export default function Header() {
 
   const menuItems = [
     getItem(currentUser?.username, 'sub1', <UserOutlined />, [
-      getItem('Thông tin cá nhân', '1', null, null, null, '/'),
+      getItem('Thông tin cá nhân', '1', null, null, null, '/profile'),
       getItem('Lịch sử mua hàng', '2', null, null, null, '/purchase-history'),
       getItem('Đăng xuất', '3', null, null, null, null, handleLogOut),
     ]),

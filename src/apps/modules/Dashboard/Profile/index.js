@@ -10,7 +10,7 @@ import { useCheckedPassword } from 'apps/queries/auth/useCheckedPassword'
 
 //UserSlice
 import { selectCurrentUser } from 'store/userSlice/userSelector'
-import { check_Password, save_user } from 'store/userSlice/userSlice'
+import { save_user } from 'store/userSlice/userSlice'
 
 //Utils
 import { handleChangeTime } from 'apps/services/utils/sellersPage'
@@ -43,6 +43,7 @@ const Profile = () => {
   const [oldPassword, setOldPassword] = useState('')
   const [openPass, setOpenPass] = useState(false)
   const inputRef = useRef()
+  const [checkHineChange, setCheckHineChange] = useState(false)
 
   //load form
   const [openForm, setOpenForm] = useState(false)
@@ -64,8 +65,9 @@ const Profile = () => {
       UserName: userName,
       Email: email,
       Password: password,
+      OldPassword: oldPassword,
     })
-  }, [userName, email, password, formInfo])
+  }, [userName, email, oldPassword, password, formInfo])
 
   const showDrawer = (name, address) => {
     setShopName(name)
@@ -78,7 +80,9 @@ const Profile = () => {
     setUserName(name)
     setEmail(email)
     setPassword(titlePass)
+    setCheckHineChange(false)
     setOpenInfo(true)
+    setOpenPass(false)
 
     setUserTracking({
       userName: name,
@@ -127,7 +131,11 @@ const Profile = () => {
   const handelUdateShop = () => {}
 
   const handleChangePass = () => {
-    if (password === titlePass) setOpenPass(true)
+    if (password === titlePass) {
+      setOpenPass(true)
+      setCheckHineChange(true)
+    }
+    setOldPassword('')
   }
 
   const handleCheckPass = async (_id, password) => {
@@ -143,6 +151,7 @@ const Profile = () => {
     } else {
       setOpenPass(true)
     }
+    setCheckHineChange(true)
   }
 
   const handleOk = () => {
@@ -302,7 +311,7 @@ const Profile = () => {
               </Col>
             </Row>
             <Row gutter={16} className="items-center">
-              <Col lg={21} className="mb-3">
+              <Col xs={24} lg={21} className="lg:mb-3">
                 <label>Mật khẩu</label>
                 <Form.Item
                   name="Password"
@@ -313,30 +322,38 @@ const Profile = () => {
                     },
                   ]}
                   initialValue={password}
+                  style={{ marginBottom: '3px' }}
                 >
                   <Input
                     ref={inputRef}
                     className="mt-3"
                     placeholder="Nhập mật khẩu..."
                     onChange={(e) => setPassword(e.target.value)}
-                    style={{ backgroundColor: '#d9d9d9', color: 'black' }}
+                    style={{
+                      backgroundColor: '#d9d9d9',
+                      color: 'black',
+                    }}
                     disabled
                   />
                 </Form.Item>
               </Col>
-              <Col lg={3}>
-                <span
-                  onClick={handleChangePass}
-                  className="underline text-red-600 hover:text-blue-800 hover:decoration-blue-800 hover:cursor-pointer"
-                >
-                  Thay đổi
-                </span>
-              </Col>
+              {!checkHineChange && (
+                <>
+                  <Col lg={3} className="mt-0">
+                    <span
+                      onClick={handleChangePass}
+                      className="underline text-red-600 hover:text-blue-800 hover:decoration-blue-800 hover:cursor-pointer"
+                    >
+                      Thay đổi
+                    </span>
+                  </Col>
+                </>
+              )}
             </Row>
             {openPass && (
               <>
-                <Row gutter={16} className="items-center">
-                  <Col lg={21} className="mb-3">
+                <Row gutter={16} className="items-center mt-3 lg:mt-0">
+                  <Col xs={24} lg={21} className="lg:mb-3">
                     <label>Mật khẩu cũ</label>
                     <Form.Item
                       name="OldPassword"
@@ -347,19 +364,21 @@ const Profile = () => {
                         },
                       ]}
                       initialValue={oldPassword}
+                      style={{ marginBottom: '3px' }}
                     >
                       <Input
                         className="mt-3"
                         placeholder="Nhập mật khẩu cũ..."
                         type="password"
                         onChange={(e) => setOldPassword(e.target.value)}
+                        style={{ marginBottom: '3px' }}
                       />
                     </Form.Item>
                   </Col>
                   <Col lg={3}>
                     <span
                       onClick={() => handleCheckPass(currentUser?._id, oldPassword)}
-                      className="underline text-red-600 decoration-red-800 hover:text-blue-800 hover:decoration-blue-800 hover:cursor-pointer"
+                      className="mt-0 underline text-red-600 decoration-red-800 hover:text-blue-800 hover:decoration-blue-800 hover:cursor-pointer"
                     >
                       Xác nhận
                     </span>
@@ -370,7 +389,7 @@ const Profile = () => {
           </Drawer>
         </Form>
 
-        <Row className="w-8/12 bg-white" style={{ margin: 'auto' }}>
+        <Row className="lg:w-8/12 bg-white" style={{ margin: 'auto' }}>
           <Divider
             style={{
               fontSize: '20px',
@@ -404,7 +423,7 @@ const Profile = () => {
             <Form.Item>
               <Row className="items-center">
                 <Col lg={4}>
-                  <label className="font-medium text-base text-left">Email</label>
+                  <label className="font-medium text-base text-left mr-4">Email</label>
                 </Col>
                 <Col lg={20} className="mr-2">
                   <Input className="my-2" value={currentUser?.email}></Input>
@@ -422,19 +441,6 @@ const Profile = () => {
               </Row>
             </Form.Item>
 
-            {/* <Form.Item>
-              <Row className="items-center">
-                <Col lg={4}>
-                  <label className="font-medium text-base text-left">Ngày tạo</label>
-                </Col>
-                <Col lg={20} className="mr-2">
-                  <Input
-                    className="my-2"
-                    value={handleChangeTime(currentUser?.createdAt)}
-                  ></Input>
-                </Col>
-              </Row>
-            </Form.Item> */}
             <Button
               onClick={() => showDrawerInfo(currentUser?.username, currentUser?.email)}
               type="primary"
@@ -469,15 +475,14 @@ const Profile = () => {
                 </Form.Item>
                 <Form.Item>
                   <Row className="items-center">
-                    <Col lg={4}>
+                    <Col xs={5} lg={4}>
                       <label className="font-medium text-base text-left">Địa chỉ</label>
                     </Col>
-                    <Col lg={20} className="mr-2">
+                    <Col xs={19} lg={20} className="mr-2">
                       <Input className="my-2" value={shopProfile?.address}></Input>
                     </Col>
                   </Row>
                 </Form.Item>
-
                 <Form.Item>
                   <Row className="items-center">
                     <Col lg={4}>
@@ -501,6 +506,7 @@ const Profile = () => {
             </>
           )}
         </Row>
+
         <Row>
           <Modal
             open={openForm}
