@@ -39,6 +39,7 @@ const AddProduct = () => {
   const [productDescription, setProductDescription] = useState('')
   const [productImage, setProductImage] = useState({})
   const [productImages, setProductImages] = useState([])
+  const [formInfo] = Form.useForm()
 
   useEffect(() => {
     setSubdata(data)
@@ -195,6 +196,16 @@ const AddProduct = () => {
     setFileList([])
     setFileListImgs([])
     buttonRef.current.click()
+
+    setProductName('')
+    setProductPrice(0)
+    setProductStock(0)
+    setProductWeight(0)
+    setProductDiscount(0)
+    setProductSub('')
+    setProductDescription('')
+    setFileList([])
+    setFileListImgs([])
   }
 
   const onFinishFailed = (errorInfo) => {
@@ -208,6 +219,15 @@ const AddProduct = () => {
     }
     return true
   }
+
+  useEffect(() => {
+    formInfo.setFieldsValue({
+      ProductName: productName,
+      ProductSub: productSub,
+      ProductDescription: productDescription,
+      ProductStock: productStock,
+    })
+  }, [productName, productSub, productStock, productDescription])
 
   return (
     <>
@@ -227,6 +247,7 @@ const AddProduct = () => {
 
         <Form
           name="basic"
+          form={formInfo}
           autoComplete="off"
           onFinish={handleAddProduct}
           onFinishFailed={onFinishFailed}
