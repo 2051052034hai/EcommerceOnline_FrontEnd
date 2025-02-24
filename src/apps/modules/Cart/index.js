@@ -320,8 +320,6 @@ const Cart = () => {
     </div>
   ))
 
-  console.log('cart:', listCart.length)
-
   return (
     <>
       <Helmet>

@@ -20,7 +20,6 @@ export const getProductsPage = async (page, pageSize, keyWord, subcategory, shop
   if (shopId !== undefined) {
     url += `shop=${shopId}`
   }
-
   const result = await get(url)
   return result.data
 }

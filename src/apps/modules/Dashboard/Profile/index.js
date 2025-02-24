@@ -143,7 +143,6 @@ const Profile = () => {
     const isPasswordValid = response.data
     if (isPasswordValid) {
       setOpenPass(false)
-      console.log(inputRef.current.input)
       inputRef.current.input.disabled = false
       inputRef.current.input.style.backgroundColor = 'white'
       inputRef.current.input.style.color = 'black'

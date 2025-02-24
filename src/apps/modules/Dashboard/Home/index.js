@@ -96,7 +96,7 @@ const Home = () => {
               <img
                 src="https://i.ibb.co/rGfP7mp/Rectangle-59-1.png"
                 alt=""
-                class="md:w-20 md:h-20 lg:w-full lg:h-full"
+                className="md:w-20 md:h-20 lg:w-full lg:h-full"
               />
             </div>
           </div>
@@ -135,7 +135,7 @@ const Home = () => {
         </div>
         <div className="button-container mx-auto mt-8 sm:mt-0 z-10">
           <div className="inline">
-            <label className="" for="email"></label>
+            <label className="" htmlFor="email"></label>
             <input
               required=""
               placeholder="Enter your email"

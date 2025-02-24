@@ -183,7 +183,6 @@ const AddProduct = () => {
 
   const handleProductSubChange = (value, option) => {
     const selectedKey = option.key
-    console.log('value:', value)
     setProductSub(selectedKey)
   }
 

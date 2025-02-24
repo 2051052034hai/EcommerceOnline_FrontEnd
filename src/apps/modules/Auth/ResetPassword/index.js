@@ -61,6 +61,12 @@ const ResetPassword = () => {
           toast.error('Bạn đã nhập sai mã OTP')
         }
       }
+
+      // if (keyEmail == '543211') {
+      //   setCurrent(current + 1)
+      // } else {
+      //   toast.error('Bạn đã nhập sai mã OTP')
+      // }
     }
   }
 
