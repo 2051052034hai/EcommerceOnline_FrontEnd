@@ -47,7 +47,6 @@ const SellersPage = (key) => {
     getItem('Quản Lý Đơn Hàng', 'sub2', <BorderInnerOutlined />, [
       getItem('Tất Cả ', '5'),
       getItem('Đơn Huỷ', '6'),
-      getItem('Trả Hàng/Hoàn Tiền', '7'),
     ]),
     getItem('Dữ Liệu', 'sub3', <AreaChartOutlined />, [
       getItem('Phân Tích Bán Hàng ', '8'),

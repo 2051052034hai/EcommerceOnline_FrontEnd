@@ -54,6 +54,12 @@ export const ROUTER = {
     path: '/searchpage',
     isPrivate: false,
   },
+  CONFIRMREGISTER: {
+    key: 'ConfirmRegister',
+    name: 'ConfirmRegister',
+    path: '/ConfirmRegister',
+    isPrivate: false,
+  },
   REGISTER: {
     key: 'register',
     name: 'register',

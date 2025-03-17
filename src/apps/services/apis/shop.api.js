@@ -22,6 +22,7 @@ export const getProductsByShopId = async (id, page, pageSize) => {
 }
 
 export const getShopbyUserId = async (id) => {
+  console.log('id', id)
   if (id) {
     let url = `${pathUrl}${id}`
     const result = await get(url)

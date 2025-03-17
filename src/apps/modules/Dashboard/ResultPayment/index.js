@@ -40,6 +40,7 @@ const ResultPayment = () => {
   useEffect(() => {
     if (vnp_ResponseCode === '00') {
       const shopDataArray = Object.values(groupedCartItems)
+      const accessId = localStorage.getItem('access-id')
 
       let saveNewCart = []
       for (let i = 0; i < shopDataArray.length; i++) {
@@ -51,7 +52,7 @@ const ResultPayment = () => {
             product: item.products[i]._id,
             qty: item.products[i].quantity,
             shop: item.products[i].shop._id,
-            providerPayment: 0,
+            providerPayment: 2,
             total: item.products[i].price * item.products[i].quantity,
           }
           itemCart.push(newItem)
@@ -62,7 +63,7 @@ const ResultPayment = () => {
       for (let i = 0; i < saveNewCart.length; i++) {
         let newTotal = handleTotalProduct(saveNewCart[i])
         let data_save = {
-          userId: currentUser?._id,
+          userId: currentUser?._id ?? accessId,
           orderItems: saveNewCart[i],
           total: newTotal,
           // totalShip: shipMoney[i],

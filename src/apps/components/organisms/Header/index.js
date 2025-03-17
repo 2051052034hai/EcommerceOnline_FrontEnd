@@ -217,6 +217,8 @@ export default function Header() {
   const handleLogOut = () => {
     cookie.remove('access-token')
     cookie.remove('refresh_token')
+    localStorage.removeItem('persist:root')
+    localStorage.removeItem('access-id')
     dispatch(log_out())
     navigate('/')
     window.location.href = '/'
@@ -358,7 +360,7 @@ export default function Header() {
                   onChange={changeLanguage}
                   options={['en', 'vi'].map((lang) => ({ label: lang, value: lang }))}
                 />
-                <Dropdown menu={{ items }} trigger={['click']} placement="bottom">
+                <Dropdown menu={{ items }}>
                   <Link onClick={(e) => e.preventDefault()}>
                     <Space>
                       <div style={{ marginTop: '-10px', paddingLeft: '10px' }}>

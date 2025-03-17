@@ -13,7 +13,7 @@ export const useGetShopbyUserId = (id) => {
     () => getShopbyUserId(id),
     {
       keepPreviousData: true,
-      staleTime: 5 * 1000,
+      staleTime: 5 * 2000,
     },
   )
   return { data, isLoading, error }

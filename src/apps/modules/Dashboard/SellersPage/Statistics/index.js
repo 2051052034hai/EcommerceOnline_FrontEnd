@@ -329,7 +329,7 @@ const StatisticsPage = () => {
             )}
           </Col>
         </Row>
-        <Row>
+        {/* <Row>
           <Col lg={12} xs={24}>
             <Divider
               orientation="center"
@@ -358,7 +358,7 @@ const StatisticsPage = () => {
               <PieChartWith data={revenueByProviderMonth} loading={isLoading} />
             )}
           </Col>
-        </Row>
+        </Row> */}
       </div>
     </>
   )

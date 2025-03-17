@@ -1,101 +1,99 @@
 {
-    "title": "Chào bạn",
-    "HOME": {
-      "login": "Đăng nhập",
-      "men_fashion":"Thời Trang Nam",
-      "women_fashion":"Thời Trang Nữ",
-      "electronic_device":"Thiết Bị Điện Tử",
-      "beauty":"Sắc đẹp",
-      "women_purse":"Túi ví nữ",
-      "selling_products":"SẢN PHẨM BÁN CHẠY",
-      "all_products":"TẤT CẢ SẢN PHẨM",
-      "banner":"Nhập thông tin cá nhân để nhận ngay ưu đãi độc quyền!"
-    },
-    "CART":{
-      "add_discount": "Thêm mã giảm giá",
-      "apply":"Áp dụng",
-      "total_amount":"Tổng tiền",
-      "discount":"Giảm giá",  
-      "transport_fee":"Phí vận chuyển",
-      "total_amount_payable":"Tổng tiền phải trả",
-      "order":"Đặt hàng",
-      "back_home":"Quay về trang chủ",
-      "remove_all":"Xoá tất cả",
-      "payment_on_delivery":"Thanh toán khi nhận hàng",
-      "payment_by_paypal":"Thanh toán bằng Paypal",
-      "payment_by_vnpay":"Thanh toán bằng VNPAY",
-      "enter_discount_code":"Nhập mã giảm giá"
-    },
-    "SEARCHPRODUCT":{
-      "search_products":"TÌM KIẾM SẢN PHẨM",
-      "search_by_type":"Tìm kiếm theo loại",
-      "enter_product_name":"Nhập tên sản phẩm",
-      "product_type":"Loại sản phẩm",
-      "shop_type":"Cửa hàng",
-      "result":"Kết quả",
-      "clear_filter":"Xoá bộ lọc"
-    },
-    "LOGIN":{
-      "title":"Đăng nhập",
-      "no_account":"Chưa có tài khoản",
-      "register":"Đăng kí",
-      "password":"Mật khẩu"
-
-    },
-    "PRODUCT_DETAIL":{
-      "Product":"Sản phẩm",
-      "stocking":"Còn hàng",
-      "out_of_stock":"Hết hàng",
-      "no_reviews":"Chưa có đánh giá",
-      "sold":"Đã bán",
-      "still":"Còn",
-      "product":"sản phẩm",
-      "store":"Cửa hàng",
-      "add_to_cart": "Thêm vào giỏ",
-      "view_store":"Xem cửa hàng",
-      "favourite":"Yêu thích",
-      "product_introduction":"GIỚI THIỆU SẢN PHẨM",
-      "see_more":"Xem thêm",
-      "product_comments":"BÌNH LUẬN SẢN PHẨM",
-      "content":"Nội dung",
-      "rating":"Đánh giá",
-      "post_comment":"Đăng bình luận",
-      "no_comment":"Không có bình luận nào cho sản phẩm",
-      "related_product":"SẢN PHẨM LIÊN QUAN",
-      "please_rate":"Vui lòng đánh giá",
-      "please_enter_comment_content":"Vui lòng nhập nội dung bình luận"
-    },
-    "SELLER_REGISTER":{
-      "title":"ĐĂNG KÝ BÁN HÀNG",
-      "name_of_your_shop":"Tên cửa hàng",
-      "address": "Địa chỉ",
-      "register":"Đăng ký",
-      "please_enter_this_field":"Vui lòng nhập trường này"
-    },
-    "PURCHARE_HISTORRY":{
-      "title":"Lịch sử mua hàng",
-      "purchase_date":"Ngày mua hàng",
-      "quantity":"Số lượng",
-      "paid":"Đã thanh toán",
-      "unpaid":" Chưa thanh toán",
-      "total_amount":"Tổng tiền"
-    },
-    "PRODUCT_CATEGORY":{
-      "price_range":"Khoảng giá",
-      "all":"Tất cả",
-      "from_below":"Giá từ",
-      "from":"Từ",
-      "default":"Mặc định",
-      "good_promotion":"Khuyến mãi tốt",
-      "prices_gradually_decrease":"Giá giảm dần",
-      "prices_gradually_increase":"Giá tăng dần",
-      "product_portfolio":"Danh mục sản phẩm",
-      "according_to_price":"Theo giá",
-      "clear_filter":"Xoá bộ lọc",
-      "close":"Đóng",
-      "filter":"Bộ lọc",
-      "sorted_by":"Sắp xếp theo",
-      "million":"triệu"
-
-    }
+  "title": "Chào bạn",
+  "HOME": {
+    "login": "Đăng nhập",
+    "men_fashion": "Thời Trang Nam",
+    "women_fashion": "Thời Trang Nữ",
+    "electronic_device": "Thiết Bị Điện Tử",
+    "beauty": "Sắc đẹp",
+    "women_purse": "Túi ví nữ",
+    "selling_products": "SẢN PHẨM BÁN CHẠY",
+    "all_products": "TẤT CẢ SẢN PHẨM",
+    "banner": "Nhập thông tin cá nhân để nhận ngay ưu đãi độc quyền!"
+  },
+  "CART": {
+    "add_discount": "Thêm mã giảm giá",
+    "apply": "Áp dụng",
+    "total_amount": "Tổng tiền",
+    "discount": "Giảm giá",
+    "transport_fee": "Phí vận chuyển",
+    "total_amount_payable": "Tổng tiền phải trả",
+    "order": "Đặt hàng",
+    "back_home": "Quay về trang chủ",
+    "remove_all": "Xoá tất cả",
+    "payment_on_delivery": "Thanh toán khi nhận hàng",
+    "payment_by_paypal": "Thanh toán bằng Paypal",
+    "payment_by_vnpay": "Thanh toán bằng VNPAY",
+    "enter_discount_code": "Nhập mã giảm giá"
+  },
+  "SEARCHPRODUCT": {
+    "search_products": "TÌM KIẾM SẢN PHẨM",
+    "search_by_type": "Tìm kiếm theo loại",
+    "enter_product_name": "Nhập tên sản phẩm",
+    "product_type": "Loại sản phẩm",
+    "shop_type": "Cửa hàng",
+    "result": "Kết quả",
+    "clear_filter": "Xoá bộ lọc"
+  },
+  "LOGIN": {
+    "title": "Đăng nhập",
+    "no_account": "Chưa có tài khoản",
+    "register": " Đăng kí",
+    "password": "Mật khẩu"
+  },
+  "PRODUCT_DETAIL": {
+    "Product": "Sản phẩm",
+    "stocking": "Còn hàng",
+    "out_of_stock": "Hết hàng",
+    "no_reviews": "Chưa có đánh giá",
+    "sold": "Đã bán",
+    "still": "Còn",
+    "product": "sản phẩm",
+    "store": "Cửa hàng",
+    "add_to_cart": "Thêm vào giỏ",
+    "view_store": "Xem cửa hàng",
+    "favourite": "Yêu thích",
+    "product_introduction": "GIỚI THIỆU SẢN PHẨM",
+    "see_more": "Xem thêm",
+    "product_comments": "BÌNH LUẬN SẢN PHẨM",
+    "content": "Nội dung",
+    "rating": "Đánh giá",
+    "post_comment": "Đăng bình luận",
+    "no_comment": "Không có bình luận nào cho sản phẩm",
+    "related_product": "SẢN PHẨM LIÊN QUAN",
+    "please_rate": "Vui lòng đánh giá",
+    "please_enter_comment_content": "Vui lòng nhập nội dung bình luận"
+  },
+  "SELLER_REGISTER": {
+    "title": "ĐĂNG KÝ BÁN HÀNG",
+    "name_of_your_shop": "Tên cửa hàng",
+    "address": "Địa chỉ",
+    "register": "Đăng ký",
+    "please_enter_this_field": "Vui lòng nhập trường này"
+  },
+  "PURCHARE_HISTORRY": {
+    "title": "Lịch sử mua hàng",
+    "purchase_date": "Ngày mua hàng",
+    "quantity": "Số lượng",
+    "paid": "Đã thanh toán",
+    "unpaid": " Chưa thanh toán",
+    "total_amount": "Tổng tiền"
+  },
+  "PRODUCT_CATEGORY": {
+    "price_range": "Khoảng giá",
+    "all": "Tất cả",
+    "from_below": "Giá từ",
+    "from": "Từ",
+    "default": "Mặc định",
+    "good_promotion": "Khuyến mãi tốt",
+    "prices_gradually_decrease": "Giá giảm dần",
+    "prices_gradually_increase": "Giá tăng dần",
+    "product_portfolio": "Danh mục sản phẩm",
+    "according_to_price": "Theo giá",
+    "clear_filter": "Xoá bộ lọc",
+    "close": "Đóng",
+    "filter": "Bộ lọc",
+    "sorted_by": "Sắp xếp theo",
+    "million": "triệu"
   }
+}

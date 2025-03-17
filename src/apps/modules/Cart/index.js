@@ -105,7 +105,6 @@ const Cart = () => {
           total: newTotal,
           totalShip: shipMoney[i],
         }
-
         await mutation.mutateAsync(data_save)
       }
 
@@ -349,7 +348,7 @@ const Cart = () => {
               <div>
                 <Radio.Group onChange={onChange} value={valuePayment}>
                   <Radio value={1}>{t('CART.payment_on_delivery')}</Radio>
-                  <Radio value={2}>{t('CART.payment_by_paypal')}</Radio>
+                  {/* <Radio value={2}>{t('CART.payment_by_paypal')}</Radio> */}
                   <Radio value={3}>{t('CART.payment_by_vnpay')}</Radio>
                 </Radio.Group>
               </div>
@@ -379,7 +378,7 @@ const Cart = () => {
             </div>
           </div>
           <div className="lg:col-span-3 md:col-span-5 items-end p-4  ">
-            <styles.block__coupons>
+            {/* <styles.block__coupons>
               <h3>Thêm mã giảm giá?</h3>
               <div>
                 <styles.InputCoupon
@@ -400,7 +399,7 @@ const Cart = () => {
                   Áp dụng
                 </button>
               </div>
-            </styles.block__coupons>
+            </styles.block__coupons> */}
 
             <styles.block__pay>
               <styles.block__pay_caculator>
@@ -435,7 +434,7 @@ const Cart = () => {
 
               <styles.block__pay_checout>
                 {currentUser?._id ? (
-                  valuePayment === 1 && skdReady ? (
+                  valuePayment === 1 ? (
                     <Button
                       style={{
                         width: '300px',

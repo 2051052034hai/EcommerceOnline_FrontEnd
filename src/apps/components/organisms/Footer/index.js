@@ -40,16 +40,6 @@ const Footer = () => {
           <Col lg={4} md={4} className="p-3">
             <h3 className="font-bold mb-3">THANH TOÁN </h3>
             <ul>
-              <li className="font-normal text-base flex  mt-2">
-                <span>
-                  <img
-                    className="lg:w-8 sm:w-6 w-6"
-                    src="https://img.upanh.tv/2023/10/07/pay3.png"
-                    alt="zalo"
-                  />
-                </span>
-                <span className="ml-3">PayPal </span>
-              </li>
               <li className="font-normal text-base flex mt-2">
                 <span>
                   <img

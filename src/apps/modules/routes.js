@@ -15,6 +15,7 @@ import RegisterSeller from './Dashboard/Register_Seller'
 import ResetPassword from './Auth/ResetPassword'
 import ResultPayment from './Dashboard/ResultPayment'
 import Profile from './Dashboard/Profile'
+import ConfirmRegister from './Auth/ConfirmRegister'
 
 export const routes = [
   {
@@ -70,6 +71,12 @@ export const routes = [
     path: ROUTER.REGISTER.path,
     name: ROUTER.REGISTER.name,
     component: Register,
+  },
+  {
+    key: ROUTER.CONFIRMREGISTER.key,
+    path: ROUTER.CONFIRMREGISTER.path,
+    name: ROUTER.CONFIRMREGISTER.name,
+    component: ConfirmRegister,
   },
   {
     key: ROUTER.REGISTERSELLER.key,

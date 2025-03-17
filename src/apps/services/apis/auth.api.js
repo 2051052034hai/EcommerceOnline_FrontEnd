@@ -27,6 +27,12 @@ export const handleResendMail = async (data) => {
   return result.data
 }
 
+export const handleResendMailRegister = async (data) => {
+  const result = await create('/user/sendEmailRegister', data)
+  console.log('result', result)
+  return result.data
+}
+
 export const handlecheckPassword = async (data) => {
   const result = await create('/user/checkedPassword', data)
   return result.data

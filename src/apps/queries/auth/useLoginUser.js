@@ -25,6 +25,7 @@ export const useLoginUser = () => {
 
         cookie.save('access-token', access_token)
         cookie.save('refresh_token', refresh_token)
+        localStorage.setItem('access-id', data?._id)
 
         dispatch(save_user(other))
 
